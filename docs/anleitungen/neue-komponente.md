@@ -73,7 +73,19 @@ Fehlt dir in einem Modul eine Komponente, baust du sie hier – nie im Modul (CL
 
    _Ergebnis:_ Alles grün. Der Playwright-Test prüft jede Story in Deutsch und Englisch mit axe.
 
-8. **Doku nachziehen**
+8. **Referenzbild erzeugen lassen**
+
+   Jede Story bekommt ein Referenzbild unter `packages/ui/e2e/__screenshots__/`. Fehlt es, erzeugt die CI es
+   beim nächsten Push auf `main` und committet es. Vorhandene Bilder werden nie überschrieben.
+
+   _Ergebnis:_ Nach dem CI-Lauf liegt ein Commit „test(ui): referenzbilder für neue stories“ auf `main`
+   (`git pull`).
+
+   Ändert sich die Optik einer Komponente gewollt, das betroffene Referenzbild löschen und pushen. Lokal
+   vergleichen lässt sich nur im Playwright-Docker-Image (Linux), z. B.
+   `VISUAL=1 pnpm exec playwright test visual.spec --project=ui`.
+
+9. **Doku nachziehen**
 
    Komponente in die Tabelle unter [Design-System](/architektur/design-system) eintragen, Changelog-Eintrag
    schreiben.

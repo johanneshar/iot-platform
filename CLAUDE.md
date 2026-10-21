@@ -291,7 +291,8 @@ Aus dem Mockup abgeleitet, jede Komponente mit Storybook-Story:
 (für Bilder/Videos), `SearchInput`.
 
 Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`;
-`Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). Feste Texte der Bibliothek stehen
+`Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). `LineSwitch` ist eine Auswahlliste
+(Dropdown), weil Kunden mehr als zwei Linien haben. Feste Texte der Bibliothek stehen
 im i18n-Namespace `ui`, den die Shell mit registriert. Storybook läuft auf Port 5182.
 
 **Regel:** Gibt es eine Komponente noch nicht, wird sie in `@iot/ui` gebaut (mit Story und Doku), nicht im
@@ -457,5 +458,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 ist abgeschlossen, M1 ist umgesetzt und wartet auf die optische Abnahme in Storybook (siehe
-`docs/changelog.md`). Danach werden die Ansichten als Screenshots eingefroren; dann Plan für **M2**.
+M0 und M1 sind abgeschlossen (siehe `docs/changelog.md`). Die Optik ist über Referenzbilder aller Stories
+eingefroren. Neue Anforderung A-01 (3D-Ansicht der Linie) steht in `docs/offene-punkte.md`. Nächster Schritt:
+Plan für **M2** vorlegen und auf Freigabe warten.

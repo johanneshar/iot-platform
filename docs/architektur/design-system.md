@@ -68,7 +68,7 @@ Komponenten aus CLAUDE.md 7.4 hinzugekommen, weil das Mockup diese Muster mehrfa
 
 ## Bewusste Abweichungen vom Mockup
 
-Zur Bestätigung offen, siehe [offene Punkte](/offene-punkte) O-13 bis O-15.
+Mit der Abnahme von M1 am 2026-10-22 bestätigt (E-21, E-22).
 
 | Stelle                                 | Mockup                            | Umsetzung                        | Grund                                                    |
 | -------------------------------------- | --------------------------------- | -------------------------------- | -------------------------------------------------------- |
@@ -76,4 +76,5 @@ Zur Bestätigung offen, siehe [offene Punkte](/offene-punkte) O-13 bis O-15.
 | Zähler „Baukasten“ im aktiven Eintrag  | halbtransparent auf Petrol        | dunkler Chip                     | Kontrast im Mockup unter 4,5:1                           |
 | Fokus                                  | nicht gezeigt                     | Petrol-Umriss 2 px               | Tastaturbedienung (DoD)                                  |
 | Schmale Bildschirme                    | Seitenleiste über dem Inhalt      | Seitenleiste unter dem Inhalt    | CLAUDE.md 7.3                                            |
+| Linienwahl                             | Segment-Schalter                  | Auswahlliste mit Pfeil           | Platz bei mehr als zwei Linien (E-22)                    |
 | Gesperrter Eintrag, Alarmpunkt         | nur optisch                       | zusätzlich Text für Screenreader | Bedeutung nicht nur über Farbe                           |

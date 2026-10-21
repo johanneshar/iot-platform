@@ -16,8 +16,11 @@ Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-No
 - axe-Prüfung jeder Story in Deutsch und Englisch (Playwright, auch in der CI)
 - Doku: [Design-System](/architektur/design-system), [Neue Komponente](/anleitungen/neue-komponente)
 
-**Abweichungen vom Mockup** (zur Bestätigung, O-13): volle Deckkraft der Haupt-KPI-Texte und dunkler Zähler
-im aktiven Navigationseintrag wegen Kontrast; sichtbarer Fokus.
+**Abnahme 2026-10-22:** Optik abgenommen. Bestätigte Abweichungen vom Mockup: volle Deckkraft der
+Haupt-KPI-Texte und dunkler Zähler im aktiven Navigationseintrag (Kontrast), sichtbarer Fokus, Linienwahl als
+Auswahlliste statt Segment-Schalter (mehr als zwei Linien).
+
+- Referenzbilder aller Stories; die CI meldet jede optische Abweichung
 
 **Demo**
 
