@@ -1,0 +1,119 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  height: 100%;
+  padding: var(--space-24) var(--space-16);
+  background: var(--color-sidebar);
+  color: var(--color-on-primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: 0 var(--space-6);
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--size-brand-mark);
+  height: var(--size-brand-mark);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+}
+
+.markIcon {
+  color: var(--color-accent);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--font-size-emphasis);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-brand);
+}
+
+.subtitle {
+  font-size: var(--font-size-caption);
+  color: var(--color-sidebar-text-subtle);
+}
+
+.nav,
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionLabel {
+  padding: var(--space-18) var(--space-14) var(--space-8);
+  font-size: var(--font-size-overline);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--color-sidebar-section);
+}
+
+.section:first-child .sectionLabel {
+  padding-top: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-sidebar-overlay);
+}
+
+.statusTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-table);
+  font-weight: var(--font-weight-semibold);
+}
+
+.dotOnline,
+.dotOffline {
+  flex-shrink: 0;
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  border-radius: var(--radius-round);
+}
+
+.dotOnline {
+  background: var(--color-accent);
+}
+
+.dotOffline {
+  background: var(--color-fault);
+}
+
+.statusLines {
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-compact);
+  color: var(--color-sidebar-text-muted);
+}

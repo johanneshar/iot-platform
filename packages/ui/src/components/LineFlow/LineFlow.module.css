@@ -1,0 +1,44 @@
+.legend {
+  display: flex;
+  gap: var(--space-16);
+  font-size: var(--font-size-label);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.swatchOwn {
+  width: var(--size-swatch);
+  height: var(--size-swatch);
+  border-radius: var(--radius-swatch);
+  background: var(--color-primary);
+}
+
+.swatchForeign {
+  width: var(--size-swatch);
+  height: var(--size-swatch);
+  border-radius: var(--radius-swatch);
+  background: var(--color-surface);
+  border: var(--border-width-strong) dashed var(--color-icon-muted);
+}
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  align-items: stretch;
+}
+
+.step {
+  display: flex;
+  flex: 1 1 var(--grid-machine-min);
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.arrow {
+  color: var(--color-icon-muted);
+}

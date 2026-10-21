@@ -17,6 +17,7 @@ export default tseslint.config(
       '**/.vitepress/cache/**',
       '**/.vitepress/dist/**',
       'playwright-report/**',
+      '**/storybook-static/**',
       'test-results/**',
     ],
   },
@@ -61,7 +62,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.test.tsx', '**/e2e/**'],
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/e2e/**', '**/*.stories.tsx', '**/stories/**'],
     rules: {
       'i18next/no-literal-string': 'off',
     },

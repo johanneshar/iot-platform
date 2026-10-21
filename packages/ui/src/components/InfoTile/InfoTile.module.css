@@ -1,0 +1,44 @@
+.tile {
+  padding: var(--space-14);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.compact {
+  padding: var(--space-12) var(--space-14);
+}
+
+.withAside {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.value {
+  margin-top: var(--space-4);
+}
+
+.sm {
+  font-size: var(--font-size-table);
+  font-weight: var(--font-weight-semibold);
+}
+
+.md {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-card-value);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.lg {
+  font-size: var(--font-size-detail-title-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}

@@ -1,0 +1,44 @@
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  align-items: flex-start;
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-card-value);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.machine {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+}
+
+.value {
+  font-size: var(--font-size-figure-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.unit {
+  font-size: var(--font-size-table);
+}
+
+.hint {
+  flex-grow: 1;
+  font-size: var(--font-size-table);
+}
+
+.action {
+  align-self: flex-start;
+}

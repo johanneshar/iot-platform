@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "locked": "not booked"
+  },
+  "machine": {
+    "own": "Own machine",
+    "foreign": "Third-party · {{level}}",
+    "bottleneck": "Bottleneck",
+    "rate": "Output",
+    "perMinute": "/min",
+    "oee": "OEE",
+    "percent": "%"
+  },
+  "lineFlow": {
+    "legendOwn": "Own machine",
+    "legendForeign": "Third-party machine"
+  },
+  "locked": {
+    "title": "“{{name}}” is not booked for this line",
+    "text": "{{description}}. The module is distributed as an Edge App via the IEM to the Edge Device of this line – without any intervention in the machine control.",
+    "activate": "Activate module",
+    "toCatalog": "Go to module catalog"
+  },
+  "module": {
+    "gxp": "GxP",
+    "alwaysIncluded": "Always included",
+    "book": "Book module",
+    "deactivate": "Active – deactivate",
+    "open": "Open"
+  },
+  "health": {
+    "unit": "% condition",
+    "status": {
+      "ok": "OK",
+      "watch": "Monitor",
+      "replace": "Plan replacement"
+    }
+  },
+  "alarm": {
+    "severity": {
+      "fault": "Fault",
+      "warning": "Warning",
+      "info": "Info"
+    }
+  },
+  "step": {
+    "done": "done",
+    "current": "current step"
+  }
+}

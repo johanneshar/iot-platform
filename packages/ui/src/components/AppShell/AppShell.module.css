@@ -1,0 +1,55 @@
+.shell {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.sidebar {
+  display: flex;
+  flex: 1 1 var(--size-sidebar-width);
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.main {
+  display: flex;
+  flex: 999 1 var(--size-main-min-width);
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  width: 100%;
+  max-width: var(--size-content-max-width);
+  padding: var(--space-28) var(--space-32) var(--space-40);
+}
+
+/* Umbruchpunkt = Seitenleiste 260 px + Inhalt 560 px: Seitenleiste unter den Inhalt */
+@media (width < 820px) {
+  .sidebar {
+    order: 2;
+  }
+}
+
+.stack-16,
+.stack-20,
+.stack-24 {
+  display: flex;
+  flex-direction: column;
+}
+
+.stack-16 {
+  gap: var(--space-16);
+}
+
+.stack-20 {
+  gap: var(--space-20);
+}
+
+.stack-24 {
+  gap: var(--space-24);
+}

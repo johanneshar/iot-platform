@@ -6,3 +6,5 @@ docs/.vitepress/dist
 docs/referenz
 playwright-report
 test-results
+storybook-static
+packages/design-tokens/tokens.css

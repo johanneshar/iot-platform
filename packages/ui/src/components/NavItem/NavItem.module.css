@@ -1,0 +1,32 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  min-height: var(--size-control-height);
+  padding: var(--space-10) var(--space-14);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.active {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.idle {
+  background: transparent;
+  color: var(--color-sidebar-text);
+}
+
+.locked {
+  background: transparent;
+  color: var(--color-sidebar-text-locked);
+}
+
+.label {
+  flex-grow: 1;
+}

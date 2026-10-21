@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "locked": "nicht gebucht"
+  },
+  "machine": {
+    "own": "Eigene Maschine",
+    "foreign": "Fremd · {{level}}",
+    "bottleneck": "Engpass",
+    "rate": "Leistung",
+    "perMinute": "/min",
+    "oee": "OEE",
+    "percent": "%"
+  },
+  "lineFlow": {
+    "legendOwn": "Eigene Maschine",
+    "legendForeign": "Fremdmaschine"
+  },
+  "locked": {
+    "title": "„{{name}}“ ist für diese Linie nicht gebucht",
+    "text": "{{description}}. Das Modul wird als Edge App über das IEM auf das Edge Device dieser Linie verteilt – ohne Eingriff in die Maschinensteuerung.",
+    "activate": "Modul aktivieren",
+    "toCatalog": "Zum Baukasten"
+  },
+  "module": {
+    "gxp": "GxP",
+    "alwaysIncluded": "Immer enthalten",
+    "book": "Modul buchen",
+    "deactivate": "Aktiv – deaktivieren",
+    "open": "Öffnen"
+  },
+  "health": {
+    "unit": "% Zustand",
+    "status": {
+      "ok": "In Ordnung",
+      "watch": "Beobachten",
+      "replace": "Tausch planen"
+    }
+  },
+  "alarm": {
+    "severity": {
+      "fault": "Störung",
+      "warning": "Warnung",
+      "info": "Info"
+    }
+  },
+  "step": {
+    "done": "erledigt",
+    "current": "aktueller Schritt"
+  }
+}

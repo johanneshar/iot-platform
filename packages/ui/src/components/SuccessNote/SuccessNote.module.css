@@ -1,0 +1,15 @@
+.note {
+  display: flex;
+  gap: var(--space-10);
+  align-items: flex-start;
+  padding: var(--space-14);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  font-size: var(--font-size-table);
+  line-height: var(--line-height-relaxed);
+}
+
+.icon {
+  margin-top: var(--space-1);
+  color: var(--color-primary);
+}

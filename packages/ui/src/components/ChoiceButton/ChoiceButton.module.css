@@ -1,0 +1,57 @@
+.choice {
+  display: flex;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  text-align: left;
+  cursor: pointer;
+}
+
+.row {
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-12);
+  min-height: var(--size-choice-height);
+  padding: var(--space-12) var(--space-16);
+}
+
+.row.withSubtitle {
+  min-height: var(--size-choice-height-lg);
+}
+
+.card {
+  flex-direction: column;
+  gap: var(--space-6);
+  min-height: var(--size-choice-card-height);
+  padding: var(--space-18);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.card .text {
+  gap: var(--space-6);
+}
+
+.card .title {
+  font-size: var(--font-size-emphasis);
+}
+
+.subtitle {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+}
+
+.row .subtitle {
+  margin-top: var(--space-2);
+}
+
+.arrow {
+  color: var(--color-primary);
+}

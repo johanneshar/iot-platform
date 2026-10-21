@@ -1,0 +1,68 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-18) var(--space-32);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-page-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding-left: var(--space-8);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-avatar);
+  height: var(--size-avatar);
+  border-radius: var(--radius-round);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+}
+
+.userText {
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-snug);
+}
+
+.userName {
+  font-weight: var(--font-weight-semibold);
+}
+
+.userRole {
+  color: var(--color-text-muted);
+}

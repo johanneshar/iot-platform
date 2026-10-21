@@ -1,0 +1,85 @@
+.card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-10);
+  min-width: 0;
+  padding: var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-body);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.own {
+  border: var(--border-width) solid var(--color-border);
+}
+
+.foreign {
+  border: var(--border-width-foreign) dashed var(--color-border-foreign);
+}
+
+.selected {
+  background: var(--color-primary-tint-2);
+  border: var(--border-width-strong) solid var(--color-primary);
+}
+
+.top {
+  display: flex;
+  align-self: stretch;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.kind {
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+}
+
+.kind-own {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.kind-foreign {
+  background: var(--color-control-bg);
+  color: var(--color-text-body);
+}
+
+.name {
+  min-height: var(--size-machine-name-min-height);
+  font-size: var(--font-size-card-value);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+.metrics {
+  display: flex;
+  gap: var(--space-20);
+  margin-top: var(--space-4);
+}
+
+.metricLabel {
+  display: block;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.metricValue {
+  display: block;
+  font-size: var(--font-size-emphasis);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.metricUnit {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-regular);
+}

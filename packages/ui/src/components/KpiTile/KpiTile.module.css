@@ -1,0 +1,52 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-18) var(--space-20);
+  border-radius: var(--radius-xl);
+}
+
+.default {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: var(--border-width) solid var(--color-border);
+}
+
+.main {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-bottom: var(--border-width-accent) solid var(--color-accent);
+}
+
+.label {
+  font-size: var(--font-size-label);
+  letter-spacing: var(--letter-spacing-kpi);
+  opacity: var(--opacity-label);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+}
+
+.value {
+  font-size: var(--font-size-kpi);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.unit {
+  font-size: var(--font-size-body);
+}
+
+.sub {
+  font-size: var(--font-size-label);
+  opacity: var(--opacity-sub);
+}
+
+/* Auf Petrol volle Deckkraft: mit 0,9/0,85 läge der Kontrast unter 4,5:1 (offene-punkte O-13) */
+.main .label,
+.main .sub {
+  opacity: 1;
+}

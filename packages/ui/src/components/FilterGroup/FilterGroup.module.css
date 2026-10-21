@@ -1,0 +1,26 @@
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.option {
+  min-height: var(--size-control-height-sm);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.on {
+  background: var(--color-sidebar);
+  color: var(--color-on-primary);
+  border: var(--border-width) solid var(--color-sidebar);
+}
+
+.off {
+  background: var(--color-surface);
+  color: var(--color-text-body);
+  border: var(--border-width) solid var(--color-border-control);
+}
