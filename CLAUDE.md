@@ -220,8 +220,9 @@ Checkliste für ein neues Modul:
 
 ## 7. Design-System – exakt wie im Mockup
 
-Alle Werte stehen als Tokens in `packages/design-tokens/tokens.css`. **Kein Modul verwendet Werte
-außerhalb dieser Tokens.**
+Alle Werte stehen als Tokens in `packages/design-tokens/src/tokens.ts` (daraus erzeugt: `tokens.css`).
+**Kein Modul verwendet Werte außerhalb dieser Tokens** – Stylelint lehnt Hex-Farben und Pixelwerte ab.
+Die vollständige Liste inklusive der zusätzlichen Mockup-Farben steht in `docs/architektur/design-system.md`.
 
 ### 7.1 Farben
 
@@ -288,6 +289,10 @@ Aus dem Mockup abgeleitet, jede Komponente mit Storybook-Story:
 `FilterGroup`, `DataTable`, `ProgressBar`, `StepList` (Formatwechsel, Batch-Verlauf), `MachineCard`,
 `LineFlow`, `AlarmItem`, `HealthCard`, `ModuleCard`, `LockedModule`, `SuccessNote`, `Placeholder`
 (für Bilder/Videos), `SearchInput`.
+
+Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`;
+`Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). Feste Texte der Bibliothek stehen
+im i18n-Namespace `ui`, den die Shell mit registriert. Storybook läuft auf Port 5182.
 
 **Regel:** Gibt es eine Komponente noch nicht, wird sie in `@iot/ui` gebaut (mit Story und Doku), nicht im
 Modul.
@@ -437,7 +442,7 @@ Jeder Meilenstein endet mit: Doku aktualisiert, Changelog, kurze Demo-Notiz in `
 # Voraussetzungen: Node.js 22 LTS, pnpm 12, Docker Desktop, VS Code mit Dev-Containers-Erweiterung
 pnpm install
 pnpm dev            # startet MQTT-Broker, Simulator, Core und alle Module
-pnpm storybook      # Komponentenbibliothek (ab M1)
+pnpm storybook      # Komponentenbibliothek (Port 5182)
 pnpm docs           # Dokumentation als Website (Port 5181)
 pnpm test           # alle Unit-Tests
 pnpm test:e2e       # E2E + axe (Playwright)
@@ -452,5 +457,5 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 ist umgesetzt (siehe `docs/changelog.md`). Nächster Schritt: Plan für **M1** vorlegen und auf Freigabe
-warten.
+M0 ist abgeschlossen, M1 ist umgesetzt und wartet auf die optische Abnahme in Storybook (siehe
+`docs/changelog.md`). Danach werden die Ansichten als Screenshots eingefroren; dann Plan für **M2**.
