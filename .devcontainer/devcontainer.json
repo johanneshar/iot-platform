@@ -1,0 +1,33 @@
+{
+  "name": "IoT-Plattform",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "postCreateCommand": "corepack enable && pnpm install",
+  "forwardPorts": [1883, 4000, 5180, 5181],
+  "portsAttributes": {
+    "1883": { "label": "MQTT-Broker" },
+    "4000": { "label": "Core-Backend" },
+    "5180": { "label": "Shell" },
+    "5181": { "label": "Doku" }
+  },
+  "containerEnv": {
+    "CORE_HOST": "0.0.0.0"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vitest.explorer",
+        "ms-playwright.playwright",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# Lokale Entwicklungsumgebung. Ersetzt den Databus des Edge Device durch Mosquitto.
+# Simulator, Core und Module kommen mit den jeweiligen Meilensteinen dazu.
+name: iot-dev
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - '1883:1883'
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    restart: unless-stopped
