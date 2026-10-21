@@ -1,0 +1,16 @@
+{
+  "name": "@iot/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Entwickler-, Anwender- und Schulungsdokumentation als VitePress-Website",
+  "scripts": {
+    "dev": "vitepress dev . --port 5181",
+    "build": "vitepress build .",
+    "preview": "vitepress preview . --port 5181",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4"
+  }
+}
