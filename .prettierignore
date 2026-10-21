@@ -1,0 +1,8 @@
+dist
+.turbo
+pnpm-lock.yaml
+docs/.vitepress/cache
+docs/.vitepress/dist
+docs/referenz
+playwright-report
+test-results

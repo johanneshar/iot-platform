@@ -1,0 +1,12 @@
+packages:
+  - apps/core/*
+  - apps/normalizer
+  - modules/*
+  - packages/*
+  - tooling/*
+  - docs
+
+# Nur diese Abhängigkeiten dürfen bei der Installation Skripte ausführen.
+allowBuilds:
+  esbuild: true
+  lefthook: true
