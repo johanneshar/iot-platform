@@ -121,6 +121,11 @@ const ICONS = {
     strokeWidth: 2,
     paths: <path d="M5 12h14M13 6l6 6-6 6" />,
   },
+  // Nicht im Mockup: Linienwahl als Auswahlliste (Änderung vom 2026-10-22)
+  'chevron-down': {
+    strokeWidth: 2,
+    paths: <path d="m6 9 6 6 6-6" />,
+  },
 } satisfies Record<string, IconDefinition>;
 
 export type IconName = keyof typeof ICONS;
