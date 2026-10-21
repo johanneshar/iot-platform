@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "IoT-Plattform",
+    "navigation": "Hauptnavigation",
+    "noModules": "Noch keine Module registriert.",
+    "noModulesHint": "Module erscheinen hier, sobald sie sich mit ihrem Manifest beim Core anmelden."
+  },
+  "language": {
+    "label": "Sprache"
+  }
+}

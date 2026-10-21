@@ -1,0 +1,20 @@
+{
+  "name": "@iot/core-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Core Edge App – Backend (Modul-Registry, Auth, Audit Trail, Lizenz)",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "fastify": "5.12.7"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
+  }
+}

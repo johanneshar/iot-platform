@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "IoT Platform",
+    "navigation": "Main navigation",
+    "noModules": "No modules registered yet.",
+    "noModulesHint": "Modules appear here as soon as they register with the core using their manifest."
+  },
+  "language": {
+    "label": "Language"
+  }
+}
