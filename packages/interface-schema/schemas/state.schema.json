@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/state.schema.json",
+  "title": "StateData",
+  "description": "Topic state (retained): bei jeder Änderung",
+  "type": "object",
+  "required": ["state", "mode", "reason"],
+  "properties": {
+    "state": { "$ref": "common.schema.json#/$defs/packmlState" },
+    "mode": {
+      "description": "Betriebsart nach PackML, z. B. Production, Maintenance, Manual",
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "description": "Grund des Zustands im Klartext, sonst null",
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/alarms.schema.json",
+  "title": "AlarmData",
+  "description": "Topic alarms: eine Nachricht pro Ereignis. Stufe basic meldet nur die Sammelstörung COMMON-FAULT ohne Text (S-04).",
+  "type": "object",
+  "required": ["alarmId", "event", "class", "user"],
+  "properties": {
+    "alarmId": {
+      "description": "Stabil über alle Softwarestände – daran hängen Fehlerbäume und Auswertungen",
+      "type": "string",
+      "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$",
+      "maxLength": 64
+    },
+    "event": { "type": "string", "enum": ["raised", "cleared", "acknowledged"] },
+    "class": { "type": "string", "enum": ["fault", "warning", "info"] },
+    "textKey": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)+$" },
+    "text": { "$ref": "common.schema.json#/$defs/localizedText" },
+    "subsystem": { "type": "string", "minLength": 1 },
+    "user": {
+      "description": "Benutzer, der quittiert hat; nur bei acknowledged gesetzt",
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "alarmId": { "const": "COMMON-FAULT" } } },
+      "then": { "properties": { "class": { "const": "fault" } } },
+      "else": { "required": ["textKey", "text"] }
+    },
+    {
+      "if": { "properties": { "event": { "const": "acknowledged" } } },
+      "then": { "properties": { "user": { "type": "string", "minLength": 1 } } },
+      "else": { "properties": { "user": { "type": "null" } } }
+    }
+  ]
+}

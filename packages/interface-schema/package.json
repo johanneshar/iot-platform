@@ -3,12 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "JSON Schemas der Schnittstelle Maschinendaten und generierte TS-Typen",
+  "description": "JSON Schemas der Schnittstelle Maschinendaten, generierte Typen und Prüfer",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./schemas/*": "./schemas/*"
   },
   "scripts": {
+    "generate": "tsx scripts/generate-types.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "16.0.0",
+    "tsx": "4.23.15"
   }
 }

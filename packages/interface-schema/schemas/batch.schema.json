@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/batch.schema.json",
+  "title": "BatchData",
+  "description": "Topic batch: Batch- und Rezeptereignisse (Stufe full)",
+  "type": "object",
+  "required": ["event", "batchId", "recipe", "formatParts"],
+  "properties": {
+    "event": { "type": "string", "enum": ["started", "paused", "resumed", "ended"] },
+    "batchId": { "type": "string", "minLength": 1 },
+    "recipe": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "formatParts": {
+      "description": "Teilenummern der eingesetzten Formatteile",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false
+}

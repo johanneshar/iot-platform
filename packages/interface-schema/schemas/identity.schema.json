@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/identity.schema.json",
+  "title": "IdentityData",
+  "description": "Topic identity (retained): einmal beim Start und bei Änderung",
+  "type": "object",
+  "required": [
+    "type",
+    "manufacturer",
+    "serial",
+    "lineId",
+    "position",
+    "interfaceVersion",
+    "conformance",
+    "nominalRate"
+  ],
+  "properties": {
+    "type": { "description": "Maschinentyp im Klartext", "type": "string", "minLength": 1 },
+    "manufacturer": {
+      "description": "own für eigene Maschinen, sonst der Herstellername",
+      "type": "string",
+      "minLength": 1
+    },
+    "serial": { "type": "string", "minLength": 1 },
+    "lineId": { "$ref": "common.schema.json#/$defs/id" },
+    "position": {
+      "description": "Position in der Linie, beginnend bei 1",
+      "type": "integer",
+      "minimum": 1
+    },
+    "interfaceVersion": {
+      "description": "Version der Schnittstellenspezifikation",
+      "type": "string",
+      "pattern": "^1\\.[0-9]+$"
+    },
+    "conformance": { "$ref": "common.schema.json#/$defs/conformance" },
+    "nominalRate": {
+      "description": "Sollleistung in Stück pro Minute – Grundlage der OEE-Leistung (S-03)",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "additionalProperties": false
+}

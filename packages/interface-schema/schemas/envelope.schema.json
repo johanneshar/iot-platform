@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/envelope.schema.json",
+  "title": "Envelope",
+  "description": "Nachrichtenumschlag – für alle Datenklassen gleich. `data` wird durch das Schema der Datenklasse geprüft.",
+  "type": "object",
+  "required": ["schema", "machineId", "ts", "tsEdge", "quality", "data"],
+  "properties": {
+    "schema": {
+      "description": "Datenklasse und Schemaversion, z. B. iot.state/1.0",
+      "type": "string",
+      "pattern": "^iot\\.(identity|meta|state|counters|alarms|values|batch)/1\\.[0-9]+$"
+    },
+    "machineId": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "ts": {
+      "$ref": "common.schema.json#/$defs/utcTimestamp",
+      "description": "Zeitstempel der Quelle (Steuerung) in UTC – maßgeblich für GxP-Daten"
+    },
+    "tsEdge": {
+      "$ref": "common.schema.json#/$defs/utcTimestamp",
+      "description": "Empfangszeit auf dem Edge Device, setzt der Normalizer"
+    },
+    "quality": {
+      "description": "Datenqualität; bad z. B. bei unterbrochener Verbindung zur Steuerung",
+      "type": "string",
+      "enum": ["good", "uncertain", "bad"]
+    },
+    "data": {
+      "description": "Inhalt nach dem Schema der Datenklasse",
+      "type": "object",
+      "tsType": "Record<string, unknown>"
+    }
+  },
+  "additionalProperties": false
+}

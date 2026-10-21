@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/meta.schema.json",
+  "title": "MetaData",
+  "description": "Topic meta (retained): Katalog der Prozesswerte. Nur Schlüssel aus diesem Katalog sind in values zulässig.",
+  "type": "object",
+  "required": ["values"],
+  "properties": {
+    "values": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/valueDefinition" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "valueDefinition": {
+      "type": "object",
+      "required": ["key", "name", "unit", "gxp", "sampling"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$", "maxLength": 64 },
+        "name": { "$ref": "common.schema.json#/$defs/localizedText" },
+        "unit": { "description": "Einheit, leer bei einheitenlosen Werten", "type": "string" },
+        "min": { "description": "Untere Grenze, optional (S-06)", "type": "number" },
+        "max": { "description": "Obere Grenze, optional (S-06)", "type": "number" },
+        "gxp": { "type": "boolean" },
+        "sampling": { "type": "string", "enum": ["onChange", "cyclic"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}

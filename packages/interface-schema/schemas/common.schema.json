@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/common.schema.json",
+  "title": "Common",
+  "$defs": {
+    "id": {
+      "description": "lineId oder machineId: kleingeschrieben, ohne Leerzeichen, eindeutig je Standort (z. B. l1, l1-fill)",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "utcTimestamp": {
+      "description": "Zeitstempel in UTC nach RFC 3339 mit Z",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "localizedText": {
+      "description": "Text je Sprache; Deutsch ist Pflicht",
+      "type": "object",
+      "required": ["de"],
+      "properties": {
+        "de": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "propertyNames": {
+        "pattern": "^[a-z]{2}$"
+      }
+    },
+    "conformance": {
+      "description": "Konformitätsstufe der Maschine",
+      "type": "string",
+      "enum": ["basic", "standard", "full"]
+    },
+    "packmlState": {
+      "description": "Zustand nach PackML (ISA-TR88.00.02); alle Stufen dürfen alle Zustände melden (S-02)",
+      "type": "string",
+      "enum": [
+        "Idle",
+        "Starting",
+        "Execute",
+        "Completing",
+        "Complete",
+        "Resetting",
+        "Holding",
+        "Held",
+        "Unholding",
+        "Suspending",
+        "Suspended",
+        "Unsuspending",
+        "Stopping",
+        "Stopped",
+        "Aborting",
+        "Aborted",
+        "Clearing"
+      ]
+    }
+  },
+  "description": "Gemeinsame Definitionen"
+}
