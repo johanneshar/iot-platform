@@ -1,5 +1,6 @@
 # Lokale Entwicklungsumgebung. Ersetzt den Databus des Edge Device durch Mosquitto.
-# Simulator, Core und Module kommen mit den jeweiligen Meilensteinen dazu.
+# Simulator, Core und Module laufen im Dev-Betrieb direkt über `pnpm dev` (Turborepo);
+# als Container kommen sie mit der Edge-Paketierung (M10).
 name: iot-dev
 
 services:

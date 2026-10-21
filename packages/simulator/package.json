@@ -9,7 +9,16 @@
     "./fixtures/mockup": "./fixtures/mockup.ts"
   },
   "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@iot/interface-schema": "workspace:*",
+    "mqtt": "5.16.1"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
   }
 }
