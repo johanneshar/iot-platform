@@ -1,0 +1,14 @@
+{
+  "name": "@iot/normalizer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Edge App: Mapping auf kanonische Topics iot/v1/…",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

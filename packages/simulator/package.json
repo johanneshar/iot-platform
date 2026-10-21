@@ -1,0 +1,14 @@
+{
+  "name": "@iot/simulator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Erzeugt Linien- und Maschinendaten nach Spezifikation",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

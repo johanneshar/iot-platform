@@ -1,0 +1,14 @@
+{
+  "name": "@iot/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Komponentenbibliothek nach Mockup, mit Storybook",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}
