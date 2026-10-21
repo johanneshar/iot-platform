@@ -8,6 +8,9 @@ export default defineConfig({
   forbidOnly: CI,
   retries: CI ? 1 : 0,
   reporter: CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  // Referenzbilder ohne Plattform-Suffix: sie werden ausschließlich unter Linux (CI) erzeugt
+  snapshotPathTemplate: '{testFileDir}/__screenshots__/{arg}{ext}',
+  expect: { toHaveScreenshot: { maxDiffPixels: 0 } },
   use: {
     locale: 'de-DE',
     trace: 'retain-on-failure',

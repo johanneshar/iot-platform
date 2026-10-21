@@ -32,8 +32,10 @@ jobs:
       - run: pnpm docs:build
 
   e2e:
-    name: E2E und Barrierefreiheit
+    name: E2E, Barrierefreiheit und Optik
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # fehlende Referenzbilder auf main zurückschreiben
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -44,7 +46,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm storybook:build
-      - run: pnpm test:e2e
+      # Fehlende Referenzbilder werden auf main erzeugt; vorhandene nie überschrieben –
+      # eine optische Abweichung lässt den Lauf fehlschlagen.
+      - run: pnpm test:e2e --update-snapshots=${{ github.ref == 'refs/heads/main' && 'missing' || 'none' }}
+      - name: Neue Referenzbilder committen
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git add -A -- ':(glob)**/__screenshots__/**'
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'test(ui): referenzbilder für neue stories'
+          git push
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
