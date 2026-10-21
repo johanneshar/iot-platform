@@ -1,0 +1,25 @@
+{
+  "name": "@iot/module-sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Alles, was ein Modul vom System braucht: Manifest-Typen, Hooks, Navigation, Audit, Lizenz, i18n",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "i18next": "26.5.3",
+    "react-i18next": "17.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.31",
+    "react": "18.3.1"
+  }
+}
