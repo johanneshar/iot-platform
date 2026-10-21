@@ -1,7 +1,7 @@
 # Schnittstellenspezifikation Maschinendaten (Entwurf)
 
 ::: warning Kopie zur Ansicht
-Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie wurde am 2026-10-21 übernommen und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
+Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie entspricht Entwurf 0.2 vom 2026-10-22 und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
 :::
 
 Oct 21, 2026 · @Johannes
@@ -13,7 +13,7 @@ Diese Spezifikation ist der Vertrag zwischen Automatisierung und Plattform: Jede
 - **Gilt für:** alle neuen eigenen Maschinen, nachgerüstete Bestandsmaschinen und Fremdmaschinen in einer Linie
 - **Regelt:** welche Daten in welcher Struktur, mit welchen Metadaten und in welcher Qualität auf dem Edge Device ankommen
 - **Regelt nicht:** wie die Daten in der Steuerung erzeugt werden (Sache der Automatisierung) und wie die Module sie darstellen (Sache der Plattform)
-- **Status:** Entwurf, Version 0.1 – zur Abstimmung mit der Automatisierung
+- **Status:** Entwurf, Version 0.2 (Stand 2026-10-22) – zur Abstimmung mit der Automatisierung; Änderungen gegenüber 0.1 im Abschnitt „Änderungen in Entwurf 0.2“
 
 ## Verantwortlichkeiten und Schnittstellengrenze
 
@@ -36,9 +36,9 @@ Jede Maschine erfüllt eine von drei Stufen; jedes Modul nennt die Mindeststufe,
 | Datenklasse | Basis | Standard | Voll |
 | --- | --- | --- | --- |
 | Identität | Pflicht | Pflicht | Pflicht |
-| Zustand | Läuft / Steht / Störung | PackML-State und Mode | PackML-State und Mode |
+| Zustand | PackML-State und Mode | PackML-State und Mode | PackML-State und Mode |
 | Zähler | Gut, Gesamt | Gut, Schlecht, Gesamt | Gut, Schlecht, Gesamt |
-| Alarme | Sammelstörung | Einzelalarme mit Klasse und Text | Einzelalarme inkl. Quittierung und Benutzer |
+| Alarme | Sammelstörung (COMMON-FAULT, ohne Text) | Einzelalarme mit Klasse und Text | Einzelalarme inkl. Quittierung und Benutzer |
 | Prozesswerte | – | Ausgewählte Werte mit Metadaten | Alle GxP-relevanten Werte mit Metadaten |
 | Batch und Rezept | – | – | Pflicht |
 
@@ -94,6 +94,8 @@ iot/v1/{lineId}/{machineId}/{datenklasse}
 - `tsEdge`: Empfangszeit auf dem Edge Device, setzt der Normalizer
 - `quality`: `good`, `uncertain` oder `bad` (z. B. Verbindung zur Steuerung unterbrochen)
 
+Alle Zeitstempel sind RFC 3339 in UTC mit `Z`, z. B. `2026-10-21T12:14:03.120Z`.
+
 ## Datenklassen
 
 Gezeigt ist jeweils nur der Inhalt von `data`; der Umschlag ist immer gleich.
@@ -108,11 +110,14 @@ Gezeigt ist jeweils nur der Inhalt von `data`; der Umschlag ist immer gleich.
   "lineId": "l1",
   "position": 3,
   "interfaceVersion": "1.0",
-  "conformance": "full"
+  "conformance": "full",
+  "nominalRate": 320
 }
 ```
 
 `manufacturer` ist `own` oder der Herstellername; `conformance` ist `basic`, `standard` oder `full`.
+
+`nominalRate` ist die Sollleistung in Stück pro Minute und Pflicht – Grundlage der OEE-Leistung. Die geplante Produktionszeit (Schichtmodell) gehört nicht zur Maschine, sondern zur Linienkonfiguration der Plattform.
 
 **state**
 
@@ -120,13 +125,15 @@ Gezeigt ist jeweils nur der Inhalt von `data`; der Umschlag ist immer gleich.
 { "state": "Execute", "mode": "Production", "reason": null }
 ```
 
-Zustände nach PackML (ISA-TR88.00.02). Stufe Basis meldet nur `Execute`, `Stopped` oder `Aborted`.
+Zustände nach PackML (ISA-TR88.00.02). Alle Stufen dürfen alle 17 PackML-Zustände melden.
 
 **counters** – kumulativ seit `resetAt`
 
 ```json
 { "good": 61880, "bad": 2580, "total": 64460, "resetAt": "2026-10-21T04:14:00Z" }
 ```
+
+Stufe Basis liefert `good` und `total`; `bad` gibt es ab Stufe Standard.
 
 **alarms** – eine Nachricht pro Ereignis
 
@@ -144,6 +151,8 @@ Zustände nach PackML (ISA-TR88.00.02). Stufe Basis meldet nur `Execute`, `Stopp
 
 `event` ist `raised`, `cleared` oder `acknowledged` (dann mit `user`). `class` ist `fault`, `warning` oder `info`. Die `alarmId` ist stabil über alle Softwarestände – daran hängen Fehlerbäume und Auswertungen.
 
+Stufe Basis meldet nur die Sammelstörung: `alarmId` `COMMON-FAULT`, Klasse `fault`, ohne `textKey` und `text`. Ab Stufe Standard sind `textKey` und `text` Pflicht; `text` enthält je Sprache einen Eintrag, Deutsch (`de`) ist Pflicht. `user` ist bei `acknowledged` Pflicht und sonst `null`.
+
 **meta** – Katalog der Prozesswerte
 
 ```json
@@ -155,6 +164,8 @@ Zustände nach PackML (ISA-TR88.00.02). Stufe Basis meldet nur `Execute`, `Stopp
 }
 ```
 
+`min` und `max` sind optional.
+
 **values**
 
 ```json
@@ -162,6 +173,8 @@ Zustände nach PackML (ISA-TR88.00.02). Stufe Basis meldet nur `Execute`, `Stopp
 ```
 
 Nur Schlüssel, die im `meta`-Katalog stehen, sind zulässig.
+
+`value` ist immer eine Zahl; Klartext wie ein Stillstandsgrund gehört in `state.reason`.
 
 **batch**
 
@@ -198,7 +211,7 @@ Die Spezifikation wird nach Semantic Versioning geführt; eine Maschine gilt ers
 
 - Kleine Version (1.0 → 1.1): nur Ergänzungen, z. B. neue optionale Felder. Bestehende Maschinen bleiben gültig.
 - Große Version (1.x → 2.0): Brüche. Die Topic-Wurzel wechselt (`iot/v2/…`), die Plattform unterstützt beide Versionen für eine Übergangszeit.
-- Die Schemas liegen maschinenlesbar als JSON Schema im Plattform-Repository und sind die einzige verbindliche Quelle.
+- Die Schemas liegen maschinenlesbar als JSON Schema im Plattform-Repository und sind die einzige verbindliche Quelle (packages/interface-schema/schemas/). Bis zur ersten angebundenen Maschine bleibt die Schemaversion 1.0, auch mit den Änderungen aus Entwurf 0.2.
 
 **Konformitätsprüfung**
 
@@ -212,6 +225,19 @@ Die Plattform stellt ein Prüfwerkzeug bereit, das die Topics einer Maschine ein
 - [ ] Jeder Alarm hat Kommt und Geht
 
 Der Prüfbericht wird Teil der Inbetriebnahmedokumentation der Maschine.
+
+## Änderungen in Entwurf 0.2
+
+Entwurf 0.2 übernimmt die Entscheidungen vom 21. und 22.10.2026; die JSON Schemas im Plattform-Repository setzen sie um (ADR-003).
+
+| Nr. | Änderung | Datenklasse |
+| --- | --- | --- |
+| S-02 | Alle Stufen dürfen alle 17 PackML-Zustände melden | `state` |
+| S-03 | `nominalRate` (Sollleistung in Stück/min) ist Pflicht | `identity` |
+| S-04 | Stufe Basis: Sammelstörung als `alarmId` `COMMON-FAULT`, Klasse `fault`, ohne Text | `alarms` |
+| S-05 | Geplante Produktionszeit gehört zur Linienkonfiguration der Plattform | – |
+| S-06 | `min`/`max` im Katalog sind optional | `meta` |
+| – | Zeitstempel RFC 3339 in UTC mit `Z`; Texte je Sprache, Deutsch Pflicht; `value` immer Zahl | alle |
 
 ## Offene Punkte
 
