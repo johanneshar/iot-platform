@@ -5,10 +5,15 @@
   "type": "module",
   "description": "Design Tokens aus dem Mockup (tokens.css + tokens.ts)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./tokens.css": "./tokens.css"
   },
   "scripts": {
+    "generate": "tsx scripts/generate.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
   }
 }
