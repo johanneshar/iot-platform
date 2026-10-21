@@ -393,21 +393,22 @@ Datum: JJJJ-MM-TT
 
 ## 10. Meilensteine
 
-| Nr. | Ergebnis                                                                               | Abnahme                                                          |
-| --- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| M0  | Monorepo, Linting, Formatierung, CI, Dev-Container, Doku-Gerüst, ADR-001               | `pnpm dev` startet leere Shell, `pnpm docs` startet Doku         |
-| M1  | Design Tokens + `@iot/ui` mit allen Komponenten aus 7.4 in Storybook                   | Komponenten pixelgleich zum Mockup                               |
-| M2  | `interface-schema` + Simulator (Linie 1 Vials, Linie 2 Spritzen wie im Mockup)         | Simulator erzeugt schemakonforme Daten                           |
-| M3  | Core: Shell, Linienwahl, Modul-Registry, Sperrbildschirm, Baukasten, Audit-API, Rollen | Module erscheinen nur per Manifest; Abschalten sperrt Navigation |
-| M4  | Modul Linien-Dashboard                                                                 | entspricht Mockup-Ansicht „Linienübersicht“                      |
-| M5  | Module Alarme + Geführte Fehlersuche (inkl. Fehlerbaum-Format)                         | Alarm → Fehlersuche per Deep Link                                |
-| M6  | Modul Batch-Reporting inkl. e-Signatur                                                 | Audit-Einträge über Core                                         |
-| M7  | Formatwechsel, Ersatzteilkatalog                                                       | Deep Links aus Fehlersuche/Instandhaltung                        |
-| M8  | Condition Monitoring, Predictive Maintenance                                           |                                                                  |
-| M9  | Normalizer + Konformitätsprüfer                                                        | Prüfbericht für eine echte Maschine                              |
-| M10 | Edge-Paketierung, Deployment auf Virtual Device über IEM                               | Alle Apps laufen auf dem Virtual Device                          |
-| M11 | Module Integration MES/ERP, Datenexport (Data Act)                                     |                                                                  |
-| M12 | Module Remote-Service, Energie-Monitoring                                              |                                                                  |
+| Nr. | Ergebnis                                                                                                  | Abnahme                                                          |
+| --- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| M0  | Monorepo, Linting, Formatierung, CI, Dev-Container, Doku-Gerüst, ADR-001                                  | `pnpm dev` startet leere Shell, `pnpm docs` startet Doku         |
+| M1  | Design Tokens + `@iot/ui` mit allen Komponenten aus 7.4 in Storybook                                      | Komponenten pixelgleich zum Mockup                               |
+| M2  | `interface-schema` + Simulator (Linie 1 Vials, Linie 2 Spritzen wie im Mockup)                            | Simulator erzeugt schemakonforme Daten                           |
+| M3  | Core: Shell, Linienwahl, Modul-Registry, Sperrbildschirm, Baukasten, Audit-API, Rollen                    | Module erscheinen nur per Manifest; Abschalten sperrt Navigation |
+| M4  | Modul Linien-Dashboard                                                                                    | entspricht Mockup-Ansicht „Linienübersicht“                      |
+| M5  | Module Alarme + Geführte Fehlersuche (inkl. Fehlerbaum-Format)                                            | Alarm → Fehlersuche per Deep Link                                |
+| M5a | 3D-Ansicht der Linie (A-01): Modell aus CAD, Alarmmarkierung → Fehlersuche, Klick → Maschinen-Detailseite | Alarm im 3D-Bild markiert, Berühren öffnet die Fehlersuche       |
+| M6  | Modul Batch-Reporting inkl. e-Signatur                                                                    | Audit-Einträge über Core                                         |
+| M7  | Formatwechsel, Ersatzteilkatalog                                                                          | Deep Links aus Fehlersuche/Instandhaltung                        |
+| M8  | Condition Monitoring, Predictive Maintenance                                                              |                                                                  |
+| M9  | Normalizer + Konformitätsprüfer                                                                           | Prüfbericht für eine echte Maschine                              |
+| M10 | Edge-Paketierung, Deployment auf Virtual Device über IEM                                                  | Alle Apps laufen auf dem Virtual Device                          |
+| M11 | Module Integration MES/ERP, Datenexport (Data Act)                                                        |                                                                  |
+| M12 | Module Remote-Service, Energie-Monitoring                                                                 |                                                                  |
 
 Jeder Meilenstein endet mit: Doku aktualisiert, Changelog, kurze Demo-Notiz in `docs/changelog.md`.
 

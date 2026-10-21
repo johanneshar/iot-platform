@@ -68,16 +68,25 @@ Werden in M2 per ADR in `packages/interface-schema` und in der Spezifikation in 
 Die Linie wird als 3D-Bild dargestellt. Bei einem Alarm wird die betroffene Stelle im Modell markiert. Ein
 Klick auf eine Maschine im 3D-Bild öffnet eine Detailseite dieser Maschine.
 
-Noch offen, bevor die Umsetzung geplant wird:
+**Entschieden (2026-10-22)**
 
-| Nr.    | Frage                                                                                                                                           |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| A-01.1 | Woher kommen die 3D-Modelle (Format, z. B. glTF/GLB aus CAD oder PLM), wer erstellt sie, je Maschinentyp oder je Linie?                         |
-| A-01.2 | Fremdmaschinen: Modell vom Hersteller, vereinfachter Körper oder gar nicht?                                                                     |
-| A-01.3 | Zuordnung Alarm → Stelle im Modell: Vorschlag als Konfiguration in der Plattform über die stabile `alarmId`, ohne Änderung der Schnittstelle    |
-| A-01.4 | Ersetzt das 3D-Bild den Linienfluss oder kommt es als zweite Ansicht dazu? Was gilt, wenn kein Modell vorliegt oder das HMI kein WebGL schafft? |
-| A-01.5 | Inhalt und Gestaltung der Maschinen-Detailseite – im Mockup gibt es dafür noch keine Ansicht                                                    |
-| A-01.6 | Einordnung: Teil des Linien-Dashboards (M4) oder eigener Meilenstein bzw. eigenes Modul?                                                        |
+| Nr.    | Thema                      | Entscheidung                                                                                                                                     |
+| ------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A-01.1 | Herkunft der Modelle       | Export aus dem CAD                                                                                                                               |
+| A-01.2 | Fremdmaschinen             | Modell vom jeweiligen Hersteller                                                                                                                 |
+| A-01.3 | Alarm → Stelle             | Konfiguration in der Plattform über die stabile `alarmId`, keine Änderung der Schnittstelle                                                      |
+| A-01.4 | Verhältnis zum Linienfluss | 3D-Bild oben, Linienfluss bleibt darunter; ohne Modell nur der Linienfluss                                                                       |
+| A-01.6 | Einordnung                 | eigener Meilenstein M5a, nach M5, weil die Markierung die Fehlersuche voraussetzt                                                                |
+| A-01.7 | Markierung und Fehlersuche | Alarmmarkierungen nur, wenn „Geführte Fehlersuche“ gebucht ist; Berühren der Markierung springt per Deep Link in die Fehlersuche zu diesem Alarm |
+
+**Noch offen**
+
+| Nr.     | Frage                                                                                                                                                |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A-01.5  | Maschinen-Detailseite: zuerst in Claude Design entwerfen? Inhalt (z. B. Werte, Alarme, Zustandsverlauf)?                                             |
+| A-01.8  | Eigenes buchbares Modul (z. B. `line-3d`) oder Teil des Linien-Dashboards?                                                                           |
+| A-01.9  | Alarm ohne hinterlegten Fehlerbaum: trotzdem markieren? Wohin führt dann das Berühren?                                                               |
+| A-01.10 | CAD-Exportformat und Umwandlung: Vorschlag glTF/GLB als Format der Plattform. Wer wandelt um, wer ordnet Bauteile den Maschinen und Alarmstellen zu? |
 
 ## Offen aus dem Konzept und der Spezifikation
 
