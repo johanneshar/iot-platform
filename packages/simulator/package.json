@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Erzeugt Linien- und Maschinendaten nach Spezifikation",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./fixtures/mockup": "./fixtures/mockup.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
