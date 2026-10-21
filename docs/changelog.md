@@ -2,6 +2,24 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M2 – Schnittstellen-Schema und Simulator (2026-10-22)
+
+**Neu**
+
+- `@iot/interface-schema`: JSON Schemas (Draft 2020-12) für Umschlag und alle sieben Datenklassen,
+  daraus erzeugte TypeScript-Typen, Prüfer `validateMessage()` und Topic-Hilfen
+- Spezifikation Entwurf 0.2 mit S-02 bis S-06 ([ADR-003](/adr/ADR-003-schnittstelle-v0-2))
+- `@iot/simulator`: veröffentlicht Linie 1 · Vials und Linie 2 · Spritzen aus dem Mockup über MQTT, je
+  Maschine passend zu ihrer Konformitätsstufe; startet mit `pnpm dev`
+- Tests: jede Nachricht des Simulators ist schemakonform; Stufen, Zählerverlauf, Zeitumrechnung
+- Doku: [Simulator nutzen](/anleitungen/simulator) mit allen Annahmen, Schnittstellen-Seite ausgebaut
+
+**Demo**
+
+1. Docker Desktop starten, `pnpm dev`
+2. `docker exec -it iot-dev-mosquitto-1 mosquitto_sub -t 'iot/v1/#' -v` → Nachrichten beider Linien, Zähler
+   alle 5 s
+
 ## M1 – Design Tokens und @iot/ui (2026-10-21)
 
 **Neu**

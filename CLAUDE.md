@@ -128,7 +128,8 @@ des Maschinenstandorts anzeigen.
 
 ## 5. Schnittstelle Maschinendaten (Kurzfassung)
 
-Verbindlich ist die Spezifikation in Claude Docs; maschinenlesbar liegt sie in `packages/interface-schema/`.
+Maschinenlesbar und für die Struktur verbindlich: `packages/interface-schema/schemas/` (ADR-003). Der Text
+der Spezifikation in Claude Docs (Entwurf 0.2) wird bei jeder Schemaänderung nachgezogen.
 
 - Topics: `iot/v1/{lineId}/{machineId}/{identity|meta|state|counters|alarms|values|batch}`
 - Einheitlicher Umschlag: `schema`, `machineId`, `ts` (Quelle, UTC), `tsEdge`, `quality`, `data`
@@ -459,6 +460,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 und M1 sind abgeschlossen (siehe `docs/changelog.md`). Die Optik ist über Referenzbilder aller Stories
-eingefroren. Neue Anforderung A-01 (3D-Ansicht der Linie) steht in `docs/offene-punkte.md`. Nächster Schritt:
-Plan für **M2** vorlegen und auf Freigabe warten.
+M0 bis M2 sind abgeschlossen (siehe `docs/changelog.md`). Die Optik ist über Referenzbilder aller Stories
+eingefroren; die Schnittstelle liegt als JSON Schema vor (ADR-003), der Simulator liefert beide Linien.
+Nächster Schritt: Plan für **M3** vorlegen und auf Freigabe warten.

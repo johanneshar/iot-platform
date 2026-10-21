@@ -19,11 +19,14 @@ Für alle im Projekt: Hier stehen die Fachbegriffe, die in Code, Doku und Gespr�
 | **IEM**                     | Industrial Edge Management – verteilt Apps und Updates auf die Edge Devices und liefert den Lizenzstatus                               |
 | **IIH**                     | Industrial Information Hub – Siemens-Dienst für Asset-Modell und Datenzugriff                                                          |
 | **Import-Map**              | Browser-Mechanismus, über den die Shell die Oberflächen der Module lädt (siehe ADR-002)                                                |
+| **JSON Schema**             | Maschinenlesbare Beschreibung der Nachrichten; verbindliche Fassung der Schnittstelle in `packages/interface-schema/schemas/`          |
 | **Kanonisches Datenmodell** | Herstellerneutrales Linienmodell der Schnittstellenspezifikation; einzige Datenquelle für Module                                       |
 | **Konformitätsstufe**       | Datenumfang einer Maschine: `basic`, `standard` oder `full`. Jedes Modul nennt seine Mindeststufe                                      |
 | **Manifest**                | Beschreibung eines Moduls (ID, Name, Navigation, Rechte …), mit der es sich beim Core registriert                                      |
 | **Normalizer**              | Edge App, die Connector-Daten anhand der Mapping-Datei auf die kanonischen Topics `iot/v1/…` abbildet                                  |
 | **OEE**                     | Overall Equipment Effectiveness = Verfügbarkeit × Leistung × Qualität                                                                  |
 | **PackML**                  | Standard für Maschinenzustände (ISA-TR88.00.02), z. B. `Execute`, `Held`, `Suspended`                                                  |
+| **Sammelstörung**           | Einzige Alarminformation der Stufe `basic`: `alarmId` `COMMON-FAULT` – die Maschine hat eine Störung, ohne Meldungstext                |
 | **SBOM**                    | Software Bill of Materials – Liste aller Abhängigkeiten, gefordert vom Cyber Resilience Act                                            |
+| **Simulator**               | Erzeugt die Daten der Beispiellinien aus dem Mockup über MQTT, damit ohne Maschine entwickelt werden kann                              |
 | **Sperrbildschirm**         | Anzeige der Shell für ein Modul, das auf dieser Linie nicht gebucht ist                                                                |

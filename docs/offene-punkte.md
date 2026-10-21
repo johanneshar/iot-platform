@@ -32,7 +32,7 @@ Spezifikation umgesetzt sind, und alle offenen Fragen mit Verantwortlichem und Z
 
 ## Beschlossene Änderungen an der Spezifikation (Umsetzung in M2) {#spec-aenderungen}
 
-Werden in M2 per ADR in `packages/interface-schema` und in der Spezifikation in Claude Docs nachgezogen.
+In M2 umgesetzt: [ADR-003](/adr/ADR-003-schnittstelle-v0-2), `packages/interface-schema`, Spezifikation Entwurf 0.2.
 
 | Nr.  | Änderung                                                                                                    |
 | ---- | ----------------------------------------------------------------------------------------------------------- |
@@ -43,23 +43,25 @@ Werden in M2 per ADR in `packages/interface-schema` und in der Spezifikation in 
 
 ## Offene Fragen
 
-| Nr.  | Frage                                                                                                                                                                                                                                                      | Wer klärt | Bis         |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| O-01 | Fehlerbaum-System: welches System, welche Schnittstelle, welches Format?                                                                                                                                                                                   | Johannes  | M5          |
-| O-02 | PLM-Anbindung für Ersatzteile: System, Schnittstelle, Bestand und Lieferzeit verfügbar?                                                                                                                                                                    | Johannes  | M7          |
-| O-03 | Ticketsystem für Ersatzteilanfragen: welches System, welche API?                                                                                                                                                                                           | Johannes  | M7          |
-| O-04 | LDAP: welche Verzeichnisse (AD, OpenLDAP), Gruppen-zu-Rollen-Zuordnung?                                                                                                                                                                                    | Johannes  | M3          |
-| O-05 | Rechte je Rolle (Matrix Rolle × Permission)                                                                                                                                                                                                                | Johannes  | M3          |
-| O-06 | Lizenzstatus vom IEM: über welche Schnittstelle liest der Core ihn aus?                                                                                                                                                                                    | Plattform | M3          |
-| O-07 | Mindeststufe Ersatzteilkatalog („Identität“) und Formatwechsel (gemischt) passen nicht in das Manifest-Feld `minConformance` – eigene Stufe oder Sonderregel?                                                                                              | Plattform | M3          |
-| O-08 | Mindeststufen für MES/ERP, Datenexport, Remote-Service, Energie-Monitoring                                                                                                                                                                                 | Johannes  | M11         |
-| O-09 | S-03: Ist die geplante Produktionszeit (Schichtmodell) eine Eigenschaft der Maschine oder der Linie?                                                                                                                                                       | Johannes  | M2          |
-| O-10 | Lizenz der Firmenschrift Helvetica Neue LT Pro für Web-Einsatz, Schriftdateien und Logo                                                                                                                                                                    | Johannes  | vor Release |
-| O-11 | ~~Repository auf GitHub~~ – erledigt: github.com/johanneshar/iot-platform                                                                                                                                                                                  | –         | M0          |
-| O-12 | Farben der übrigen PackML-Zustände (Starting, Completing, Aborted …): festgelegt sind nur Execute, Suspended, Held, Idle, Stopped; die übrigen sind vorerst neutral                                                                                        | Johannes  | M4          |
-| O-13 | ~~Kontrast: Haupt-KPI-Beschriftung und Zähler im aktiven Navigationseintrag weichen vom Mockup ab, weil der Kontrast im Mockup unter 4,5:1 liegt (siehe [Design-System](/architektur/design-system#bewusste-abweichungen-vom-mockup))~~ – bestätigt (E-21) | Johannes  | Abnahme M1  |
-| O-14 | ~~Weitere Farben aus dem Mockup als Tokens, über die fünf aus E-11 hinaus (u. a. `#8a9190`, `#b4bcbb`, Grautöne der Seitenleiste)~~ – bestätigt (E-21)                                                                                                     | Johannes  | Abnahme M1  |
-| O-15 | Statusblock „Edge Device“: Darstellung im Zustand offline fehlt im Mockup; vorerst roter Punkt                                                                                                                                                             | Johannes  | M3          |
+| Nr.  | Frage                                                                                                                                                                                                                                                      | Wer klärt       | Bis         |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------- |
+| O-01 | Fehlerbaum-System: welches System, welche Schnittstelle, welches Format?                                                                                                                                                                                   | Johannes        | M5          |
+| O-02 | PLM-Anbindung für Ersatzteile: System, Schnittstelle, Bestand und Lieferzeit verfügbar?                                                                                                                                                                    | Johannes        | M7          |
+| O-03 | Ticketsystem für Ersatzteilanfragen: welches System, welche API?                                                                                                                                                                                           | Johannes        | M7          |
+| O-04 | LDAP: welche Verzeichnisse (AD, OpenLDAP), Gruppen-zu-Rollen-Zuordnung?                                                                                                                                                                                    | Johannes        | M3          |
+| O-05 | Rechte je Rolle (Matrix Rolle × Permission)                                                                                                                                                                                                                | Johannes        | M3          |
+| O-06 | Lizenzstatus vom IEM: über welche Schnittstelle liest der Core ihn aus?                                                                                                                                                                                    | Plattform       | M3          |
+| O-07 | Mindeststufe Ersatzteilkatalog („Identität“) und Formatwechsel (gemischt) passen nicht in das Manifest-Feld `minConformance` – eigene Stufe oder Sonderregel?                                                                                              | Plattform       | M3          |
+| O-08 | Mindeststufen für MES/ERP, Datenexport, Remote-Service, Energie-Monitoring                                                                                                                                                                                 | Johannes        | M11         |
+| O-09 | ~~S-03: Ist die geplante Produktionszeit (Schichtmodell) eine Eigenschaft der Maschine oder der Linie?~~ – entschieden: Linie (S-05)                                                                                                                       | Johannes        | M2          |
+| O-10 | Lizenz der Firmenschrift Helvetica Neue LT Pro für Web-Einsatz, Schriftdateien und Logo                                                                                                                                                                    | Johannes        | vor Release |
+| O-11 | ~~Repository auf GitHub~~ – erledigt: github.com/johanneshar/iot-platform                                                                                                                                                                                  | –               | M0          |
+| O-12 | Farben der übrigen PackML-Zustände (Starting, Completing, Aborted …): festgelegt sind nur Execute, Suspended, Held, Idle, Stopped; die übrigen sind vorerst neutral                                                                                        | Johannes        | M4          |
+| O-13 | ~~Kontrast: Haupt-KPI-Beschriftung und Zähler im aktiven Navigationseintrag weichen vom Mockup ab, weil der Kontrast im Mockup unter 4,5:1 liegt (siehe [Design-System](/architektur/design-system#bewusste-abweichungen-vom-mockup))~~ – bestätigt (E-21) | Johannes        | Abnahme M1  |
+| O-14 | ~~Weitere Farben aus dem Mockup als Tokens, über die fünf aus E-11 hinaus (u. a. `#8a9190`, `#b4bcbb`, Grautöne der Seitenleiste)~~ – bestätigt (E-21)                                                                                                     | Johannes        | Abnahme M1  |
+| O-15 | Statusblock „Edge Device“: Darstellung im Zustand offline fehlt im Mockup; vorerst roter Punkt                                                                                                                                                             | Johannes        | M3          |
+| O-16 | GxP-Kennzeichnung der Prozesswerte im `meta`-Katalog: Der Simulator markiert nur Füllgewicht/-volumen und Standardabweichung; die echte Kennzeichnung liefert die Automatisierung je Maschinentyp                                                          | Automatisierung | M6          |
+| O-17 | Simulator-Annahmen bestätigen oder ersetzen (Zeitzone, Sollleistung je Maschine, alarmIds, Schlechtzähler Waschmaschine) – siehe [Simulator](/anleitungen/simulator#annahmen-nicht-im-mockup-enthalten)                                                    | Johannes        | M4          |
 
 ## Neue Anforderungen
 
@@ -70,23 +72,18 @@ Klick auf eine Maschine im 3D-Bild öffnet eine Detailseite dieser Maschine.
 
 **Entschieden (2026-10-22)**
 
-| Nr.    | Thema                      | Entscheidung                                                                                                                                     |
-| ------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| A-01.1 | Herkunft der Modelle       | Export aus dem CAD                                                                                                                               |
-| A-01.2 | Fremdmaschinen             | Modell vom jeweiligen Hersteller                                                                                                                 |
-| A-01.3 | Alarm → Stelle             | Konfiguration in der Plattform über die stabile `alarmId`, keine Änderung der Schnittstelle                                                      |
-| A-01.4 | Verhältnis zum Linienfluss | 3D-Bild oben, Linienfluss bleibt darunter; ohne Modell nur der Linienfluss                                                                       |
-| A-01.6 | Einordnung                 | eigener Meilenstein M5a, nach M5, weil die Markierung die Fehlersuche voraussetzt                                                                |
-| A-01.7 | Markierung und Fehlersuche | Alarmmarkierungen nur, wenn „Geführte Fehlersuche“ gebucht ist; Berühren der Markierung springt per Deep Link in die Fehlersuche zu diesem Alarm |
-
-**Noch offen**
-
-| Nr.     | Frage                                                                                                                                                |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A-01.5  | Maschinen-Detailseite: zuerst in Claude Design entwerfen? Inhalt (z. B. Werte, Alarme, Zustandsverlauf)?                                             |
-| A-01.8  | Eigenes buchbares Modul (z. B. `line-3d`) oder Teil des Linien-Dashboards?                                                                           |
-| A-01.9  | Alarm ohne hinterlegten Fehlerbaum: trotzdem markieren? Wohin führt dann das Berühren?                                                               |
-| A-01.10 | CAD-Exportformat und Umwandlung: Vorschlag glTF/GLB als Format der Plattform. Wer wandelt um, wer ordnet Bauteile den Maschinen und Alarmstellen zu? |
+| Nr.     | Thema                      | Entscheidung                                                                                                                                     |
+| ------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A-01.1  | Herkunft der Modelle       | Export aus dem CAD                                                                                                                               |
+| A-01.2  | Fremdmaschinen             | Modell vom jeweiligen Hersteller                                                                                                                 |
+| A-01.3  | Alarm → Stelle             | Konfiguration in der Plattform über die stabile `alarmId`, keine Änderung der Schnittstelle                                                      |
+| A-01.4  | Verhältnis zum Linienfluss | 3D-Bild oben, Linienfluss bleibt darunter; ohne Modell nur der Linienfluss                                                                       |
+| A-01.6  | Einordnung                 | eigener Meilenstein M5a, nach M5, weil die Markierung die Fehlersuche voraussetzt                                                                |
+| A-01.7  | Markierung und Fehlersuche | Alarmmarkierungen nur, wenn „Geführte Fehlersuche“ gebucht ist; Berühren der Markierung springt per Deep Link in die Fehlersuche zu diesem Alarm |
+| A-01.5  | Maschinen-Detailseite      | wird vor der Umsetzung zuerst in Claude Design entworfen                                                                                         |
+| A-01.8  | Modulschnitt               | Teil des Linien-Dashboards (`dashboard`), kein eigenes Modul                                                                                     |
+| A-01.9  | Alarm ohne Fehlerbaum      | wird nicht markiert                                                                                                                              |
+| A-01.10 | Format und Zuständigkeit   | glTF/GLB; Umwandlung aus CAD und Zuordnung der Bauteile zu Maschinen und Alarmstellen durch Konstruktion und Automatisierung                     |
 
 ## Offen aus dem Konzept und der Spezifikation
 

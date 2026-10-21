@@ -41,6 +41,7 @@ export default defineConfig({
           { text: 'ADR-000 Vorlage', link: '/adr/ADR-000-vorlage' },
           { text: 'ADR-001 Tech-Stack', link: '/adr/ADR-001-tech-stack' },
           { text: 'ADR-002 Einbindung der Modul-UIs', link: '/adr/ADR-002-modul-einbindung' },
+          { text: 'ADR-003 Schnittstelle 0.2', link: '/adr/ADR-003-schnittstelle-v0-2' },
         ],
       },
       {
@@ -52,6 +53,7 @@ export default defineConfig({
         items: [
           { text: 'Neues Modul', link: '/anleitungen/neues-modul' },
           { text: 'Neue Komponente', link: '/anleitungen/neue-komponente' },
+          { text: 'Simulator nutzen', link: '/anleitungen/simulator' },
           { text: 'Maschine anbinden', link: '/anleitungen/maschine-anbinden' },
           { text: 'Deployment auf Edge', link: '/anleitungen/deployment-edge' },
         ],
