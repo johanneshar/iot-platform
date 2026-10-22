@@ -73,6 +73,8 @@ export function App() {
   const [pending, setPending] = useState<PendingSignature | null>(null);
   const [signError, setSignError] = useState<string | null>(null);
   const [signBusy, setSignBusy] = useState(false);
+  // Titel, den eine Modulseite setzt (usePageTitle), gilt nur für die Route, auf der er gesetzt wurde
+  const [pageTitle, setPageTitle] = useState<{ key: string; title: string } | null>(null);
 
   const reload = useCallback(() => {
     setVersion((v) => v + 1);
@@ -184,6 +186,7 @@ export function App() {
   const modules = useMemo(() => state?.modules ?? [], [state]);
   const moduleId = route.moduleId || homeModuleId(modules);
   const current = modules.find((m) => m.id === moduleId);
+  const routeKey = `${moduleId}|${route.path}|${JSON.stringify(route.params)}`;
 
   const shell = useMemo<ShellApi | null>(
     () =>
@@ -213,9 +216,12 @@ export function App() {
                   m.installed &&
                   (m.targets[kind] ?? []).includes(id),
               ),
+            setPageTitle: (title) => {
+              setPageTitle(title === null ? null : { key: routeKey, title });
+            },
           }
         : null,
-    [state, user, route.params, go, modules, dataSource],
+    [state, user, route.params, go, modules, dataSource, routeKey],
   );
 
   if (user === undefined) return <p>{t('app.loading')}</p>;
@@ -241,12 +247,14 @@ export function App() {
       ? t('catalog.title')
       : moduleId === AUDIT_ROUTE && canAudit
         ? t('audit.title')
-        : current
-          ? localized(
-              current.manifest?.routes.find((r) => r.path === route.path)?.title ?? current.name,
-              language,
-            )
-          : t('module.notFound');
+        : pageTitle?.key === routeKey
+          ? pageTitle.title
+          : current
+            ? localized(
+                current.manifest?.routes.find((r) => r.path === route.path)?.title ?? current.name,
+                language,
+              )
+            : t('module.notFound');
 
   const sections = buildSections({
     modules,

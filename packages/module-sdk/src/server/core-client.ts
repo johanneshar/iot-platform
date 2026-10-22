@@ -1,4 +1,5 @@
 import { validateManifest, type ModuleManifest } from '../manifest';
+import type { ShiftDefinition } from '../time';
 
 export interface CoreConnection {
   coreUrl: string;
@@ -61,4 +62,30 @@ export async function publishDeepLinkTargets(
     `/api/registry/modules/${encodeURIComponent(moduleId)}/targets`,
     targets,
   );
+}
+
+/** Linie dieses Edge Device aus der Konfiguration des Core: Zeitzone, Schichtmodell, OEE-Ziel. */
+export interface LineConfig {
+  id: string;
+  name: string;
+  timeZone: string;
+  shifts: ShiftDefinition[];
+  oeeTarget: number | null;
+}
+
+/** Holt die Linienkonfiguration beim Core (Dienst-Token); versucht es alle 5 s, bis der Core antwortet. */
+export async function fetchLineConfig(connection: CoreConnection): Promise<LineConfig> {
+  const log = connection.log ?? console.log;
+  for (;;) {
+    try {
+      const response = await fetch(`${connection.coreUrl}/api/registry/line`, {
+        headers: { authorization: `Bearer ${connection.token}` },
+      });
+      if (response.ok) return (await response.json()) as LineConfig;
+      log(`Core lehnt GET /api/registry/line ab: ${String(response.status)}`);
+    } catch {
+      log(`Core ${connection.coreUrl} nicht erreichbar – neuer Versuch in 5 s`);
+    }
+    await wait(5_000);
+  }
 }

@@ -57,6 +57,8 @@ export {
   useDeepLinkAvailable,
   useDeepLinkTargets,
   useModuleApi,
+  useModuleData,
+  usePageTitle,
   useAudit,
   useDeepLinkParams,
   useIsModuleBooked,

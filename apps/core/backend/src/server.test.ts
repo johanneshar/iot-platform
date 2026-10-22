@@ -455,3 +455,19 @@ describe('Deep-Link-Ziele', () => {
     });
   });
 });
+
+describe('Linienkonfiguration für Modul-Backends', () => {
+  it('liefert Zeitzone und Schichtmodell nur mit Dienst-Token', async () => {
+    expect((await server.inject({ url: '/api/registry/line' })).statusCode).toBe(401);
+    const response = await server.inject({
+      url: '/api/registry/line',
+      headers: { authorization: `Bearer ${TOKEN}` },
+    });
+    expect(response.json()).toMatchObject({
+      id: 'l1',
+      timeZone: 'Europe/Berlin',
+      oeeTarget: 82,
+      shifts: expect.arrayContaining([{ start: '06:00', end: '14:00' }]) as unknown,
+    });
+  });
+});

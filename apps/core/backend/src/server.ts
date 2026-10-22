@@ -196,6 +196,23 @@ export async function buildServer({
     return reply.code(204).send();
   });
 
+  // Linienkonfiguration für Modul-Backends (Zeitzone, Schichtmodell, OEE-Ziel) – mit Dienst-Token
+  server.get('/api/registry/line', async (request, reply) => {
+    if (request.headers.authorization !== `Bearer ${config.registryToken}`) {
+      return reply.code(401).send({ errors: ['Dienst-Token fehlt oder ist falsch'] });
+    }
+    const line = config.site.find((l) => l.id === config.lineId);
+    if (!line)
+      return reply.code(500).send({ errors: ['Linie fehlt in der Standortkonfiguration'] });
+    return {
+      id: line.id,
+      name: line.name,
+      timeZone: line.timeZone,
+      shifts: line.shifts,
+      oeeTarget: line.oeeTarget ?? null,
+    };
+  });
+
   // Deep-Link-Ziele eines Moduls (z. B. Alarme mit Fehlerbaum) – mit Dienst-Token
   server.put<{ Params: { id: string }; Body: unknown }>(
     '/api/registry/modules/:id/targets',

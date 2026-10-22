@@ -76,3 +76,36 @@ export function currentShift(
   }
   return null;
 }
+
+/**
+ * Geplante Produktionszeit im Zeitraum [from, to): alle Schichten des Schichtmodells (E-29), auf den
+ * Zeitraum zugeschnitten und zusammengefasst. Grundlage der Verfügbarkeit über längere Zeiträume.
+ */
+export function plannedIntervals(
+  shifts: readonly ShiftDefinition[],
+  timeZone: string,
+  from: Date,
+  to: Date,
+): { start: Date; end: Date }[] {
+  const day = 86_400_000;
+  const raw: { start: number; end: number }[] = [];
+  for (let t = from.getTime() - day; t <= to.getTime() + day; t += day) {
+    const reference = new Date(t);
+    for (const shift of shifts) {
+      const start = localTimeToUtc(shift.start, timeZone, reference).getTime();
+      let end = localTimeToUtc(shift.end, timeZone, reference).getTime();
+      if (end <= start) end += day;
+      const s = Math.max(start, from.getTime());
+      const e = Math.min(end, to.getTime());
+      if (e > s) raw.push({ start: s, end: e });
+    }
+  }
+  raw.sort((a, b) => a.start - b.start);
+  const merged: { start: number; end: number }[] = [];
+  for (const r of raw) {
+    const last = merged.at(-1);
+    if (last && r.start <= last.end) last.end = Math.max(last.end, r.end);
+    else merged.push({ ...r });
+  }
+  return merged.map((m) => ({ start: new Date(m.start), end: new Date(m.end) }));
+}

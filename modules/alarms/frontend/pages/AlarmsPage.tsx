@@ -3,6 +3,7 @@ import {
   useDeepLinkTargets,
   useLine,
   useMachines,
+  useModuleData,
   useNavigate,
   useTranslation,
   type LocalizedText,
@@ -23,7 +24,6 @@ import { useMemo, useState } from 'react';
 import type { AlarmClass, AlarmOccurrence, TopFault } from '../../shared/alarm-history';
 import { MODULE_ID } from '../module-id';
 import { filterAlarms, mergeAlarms, type AlarmFilter, type AlarmRow } from '../rows';
-import { useModuleData } from '../useModuleData';
 import styles from './AlarmsPage.module.css';
 
 const TROUBLESHOOTING_MODULE = 'troubleshooting';

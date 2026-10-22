@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { LineSnapshot } from '../data/types';
 import type { LocalizedText } from '../manifest/manifest';
 
@@ -76,6 +76,8 @@ export interface ShellApi {
   data: LineDataSource;
   /** Hat das (gebuchte, installierte) Modul einen Einsprungpunkt, z. B. `('troubleshooting', 'alarm', id)`? */
   hasDeepLinkTarget: (moduleId: string, kind: string, id: string) => boolean;
+  /** Seitentitel im Kopf statt des Routentitels aus dem Manifest; `null` = Routentitel */
+  setPageTitle: (title: string | null) => void;
 }
 
 export const ShellContext = createContext<ShellApi | null>(null);
@@ -146,6 +148,17 @@ export function useDeepLinkTargets(): ShellApi['hasDeepLinkTarget'] {
   return useShell().hasDeepLinkTarget;
 }
 
+/** Seitentitel im Kopf, z. B. der Name der Maschine auf ihrer Detailseite; `null` = Routentitel. */
+export function usePageTitle(title: string | null): void {
+  const { setPageTitle } = useShell();
+  useEffect(() => {
+    setPageTitle(title);
+    return () => {
+      setPageTitle(null);
+    };
+  }, [title, setPageTitle]);
+}
+
 /** Fehler eines Aufrufs an das eigene Modul-Backend. */
 export class ModuleApiError extends Error {
   constructor(readonly status: number) {
@@ -181,4 +194,46 @@ function moduleApi(moduleId: string): ModuleApi {
     return (response.status === 204 ? undefined : await response.json()) as T;
   };
   return { get: (path) => call('GET', path), post: (path, body) => call('POST', path, body) };
+}
+
+/**
+ * Lädt einen Pfad des eigenen Backends und aktualisiert ihn regelmäßig. `path: null` lädt nichts.
+ * Bei einem Fehler bleiben die letzten Daten stehen und `failed` wird gesetzt.
+ */
+// T beschreibt die Antwort des Backends – wie bei useModuleApi().get<T>
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+export function useModuleData<T>(
+  path: string | null,
+  refreshMs = 30_000,
+): { data: T | null; failed: boolean } {
+  const api = useModuleApi();
+  const [state, setState] = useState<{ path: string | null; data: T | null; failed: boolean }>({
+    path,
+    data: null,
+    failed: false,
+  });
+  useEffect(() => {
+    if (path === null) return;
+    let cancelled = false;
+    const load = () => {
+      api.get<T>(path).then(
+        (data) => {
+          if (!cancelled) setState({ path, data, failed: false });
+        },
+        () => {
+          if (!cancelled) setState((s) => ({ ...s, path, failed: true }));
+        },
+      );
+    };
+    load();
+    const timer = setInterval(load, refreshMs);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [api, path, refreshMs]);
+  // Daten eines anderen Pfads (z. B. vorheriger Zeitraum) nicht als aktuelle ausgeben
+  return state.path === path
+    ? { data: state.data, failed: state.failed }
+    : { data: null, failed: false };
 }
