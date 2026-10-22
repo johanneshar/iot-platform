@@ -13,12 +13,25 @@ client.on('error', (error) => {
   warned = true;
 });
 
-const simulator = new Simulator((outgoing) => {
-  client.publish(outgoing.topic, JSON.stringify(outgoing.message), {
-    qos: 1,
-    retain: outgoing.retain,
-  });
-});
+// Batch-Zyklus kürzer, z. B. für E2E-Tests (SIM_BATCH_RUN_MS, SIM_BATCH_PAUSE_MS)
+const ms = (name: string) => {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : undefined;
+};
+const batchRunMs = ms('SIM_BATCH_RUN_MS');
+const batchPauseMs = ms('SIM_BATCH_PAUSE_MS');
+const simulator = new Simulator(
+  (outgoing) => {
+    client.publish(outgoing.topic, JSON.stringify(outgoing.message), {
+      qos: 1,
+      retain: outgoing.retain,
+    });
+  },
+  {
+    ...(batchRunMs ? { batchRunMs } : {}),
+    ...(batchPauseMs ? { batchPauseMs } : {}),
+  },
+);
 
 client.once('connect', () => {
   console.log(

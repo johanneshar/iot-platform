@@ -22,6 +22,13 @@ export const SHIFT_START = '06:00';
  */
 export const STOP_PHASE_MS = 60_000;
 export const RUN_PHASE_MS = 9 * 60_000;
+/**
+ * Annahme (M6): Batch-Zyklus für die Entwicklung – ein Batch läuft 15 min, nach 2 min Pause beginnt der
+ * nächste mit fortlaufender Nummer (B-2026-1042 → B-2026-1043); die Zähler der eigenen Maschinen beginnen
+ * dann bei null (resetAt = Batchstart).
+ */
+export const BATCH_RUN_MS = 15 * 60_000;
+export const BATCH_PAUSE_MS = 2 * 60_000;
 
 const LEVEL: Record<string, Conformance> = {
   Basis: 'basic',

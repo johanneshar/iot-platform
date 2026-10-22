@@ -2,7 +2,7 @@ import { parseTopic, validateMessage, type DataClass } from '@iot/interface-sche
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildLines, type SimMachine } from './config';
 import { countersMessage, startupMessages, valuesMessage, type Outgoing } from './messages';
-import { Simulator } from './simulator';
+import { nextBatchId, Simulator } from './simulator';
 
 const NOW = new Date('2026-10-21T12:20:00.000Z');
 const lines = buildLines();
@@ -283,6 +283,50 @@ describe('Zustandswechsel (O-24)', () => {
       const parsed = parseTopic(o.topic);
       expect(validateMessage(parsed?.dataClass as DataClass, o.message).errors).toEqual([]);
     }
+    sim.stop();
+  });
+});
+
+describe('Batch-Zyklus (M6)', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('nummeriert fortlaufend', () => {
+    expect(nextBatchId('B-2026-1042')).toBe('B-2026-1043');
+    expect(nextBatchId('B-2026-0999')).toBe('B-2026-1000');
+  });
+
+  it('beendet den Batch nach 15 min und startet nach 2 min den nächsten mit Zählerreset', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+    const published: Outgoing[] = [];
+    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 0, cycle: false });
+    sim.start();
+    const since = published.length;
+    const batchEvents = () =>
+      published
+        .slice(since)
+        .filter((o) => o.topic.endsWith('/batch'))
+        .map((o) => {
+          const d = o.message.data as { event: string; batchId: string };
+          return `${o.topic.split('/')[3] ?? ''} ${d.event} ${d.batchId}`;
+        });
+    vi.advanceTimersByTime(15 * 60_000);
+    expect(batchEvents()).toContain('l1-fill ended B-2026-1042');
+    vi.advanceTimersByTime(2 * 60_000);
+    expect(batchEvents()).toContain('l1-fill started B-2026-1043');
+    // alle Maschinen der Flexfill (Stufe Voll) gehören zum Batch der Linie
+    expect(
+      batchEvents().filter((e) => e.startsWith('l3-') && e.includes(' started ')),
+    ).toHaveLength(5);
+    const counters = published
+      .slice(since)
+      .filter((o) => o.topic === 'iot/v1/l1/l1-fill/counters')
+      .at(-1);
+    const data = counters?.message.data as { total: number; resetAt: string };
+    expect(data.resetAt).toBe(new Date(NOW.getTime() + 17 * 60_000).toISOString());
+    expect(data.total).toBe(0);
     sim.stop();
   });
 });

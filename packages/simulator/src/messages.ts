@@ -82,11 +82,27 @@ export function countersMessage(machine: SimMachine, elapsedMs: number, now: Dat
   return countersFor(machine, producing, now);
 }
 
-/** Zählerstand nach `produced` Stück seit Start (Anteil Schlechtteile wie im Mockup). */
-export function countersFor(machine: SimMachine, produced: number, now: Date): Outgoing {
-  const good = machine.counters.good + Math.floor(produced * (1 - machine.rejectShare));
-  const bad = machine.counters.bad + Math.floor(produced * machine.rejectShare);
-  const resetAt = local(machine.counters.resetAt, now).toISOString();
+/** Ausgangsstand der Zähler: aus dem Mockup oder nach einem Reset (neuer Batch) bei null. */
+export interface CounterBase {
+  good: number;
+  bad: number;
+  resetAt: Date;
+}
+
+/** Zählerstand nach `produced` Stück seit `base` (Anteil Schlechtteile wie im Mockup). */
+export function countersFor(
+  machine: SimMachine,
+  produced: number,
+  now: Date,
+  base: CounterBase = {
+    good: machine.counters.good,
+    bad: machine.counters.bad,
+    resetAt: local(machine.counters.resetAt, now),
+  },
+): Outgoing {
+  const good = base.good + Math.floor(produced * (1 - machine.rejectShare));
+  const bad = base.bad + Math.floor(produced * machine.rejectShare);
+  const resetAt = base.resetAt.toISOString();
   // Stufe basic liefert nur gut und gesamt (Spezifikation, Konformitätsstufen)
   const data =
     machine.conformance === 'basic'
@@ -179,6 +195,18 @@ export function batchMessage(machine: SimMachine, now: Date): Outgoing | null {
     { event: 'started', batchId: id, recipe, formatParts },
     local(start, now),
   );
+}
+
+/** Batch-Ereignis zu einem beliebigen Batch (Batch-Zyklus des Simulators). */
+export function batchEvent(
+  machine: SimMachine,
+  event: 'started' | 'ended',
+  batchId: string,
+  at: Date,
+): Outgoing | null {
+  if (!machine.batch) return null;
+  const { recipe, formatParts } = machine.batch;
+  return envelope(machine, 'batch', { event, batchId, recipe, formatParts }, at);
 }
 
 /** Alle Nachrichten beim Start einer Maschine, in sinnvoller Reihenfolge. */

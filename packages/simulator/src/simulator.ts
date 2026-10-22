@@ -1,7 +1,17 @@
-import { buildLines, RUN_PHASE_MS, STOP_PHASE_MS, type SimLine, type SimMachine } from './config';
+import {
+  BATCH_PAUSE_MS,
+  BATCH_RUN_MS,
+  buildLines,
+  RUN_PHASE_MS,
+  STOP_PHASE_MS,
+  type SimLine,
+  type SimMachine,
+} from './config';
 import {
   alarmEvent,
+  batchEvent,
   countersFor,
+  type CounterBase,
   local,
   stateChange,
   startupMessages,
@@ -23,6 +33,11 @@ export interface SimulatorOptions {
    * retained; so sieht auch ein später gestarteter Core oder ein Modul, was ansteht (O-25).
    */
   alarmRepeatMs?: number;
+  /** Batch-Zyklus (M6); aus = nur der Batch aus dem Mockup */
+  batchCycle?: boolean;
+  /** Laufzeit und Pause im Batch-Zyklus (Standard: BATCH_RUN_MS, BATCH_PAUSE_MS) */
+  batchRunMs?: number;
+  batchPauseMs?: number;
   /** Uhr – in Tests ersetzbar */
   now?: () => Date;
 }
@@ -35,13 +50,28 @@ interface Runtime {
   produced: number;
   lastTick: number;
   phaseStart: number;
+  /** Zählerstand nach dem letzten Reset; ohne Angabe die Stände aus dem Mockup */
+  counterBase?: CounterBase;
 }
+
+interface LineBatch {
+  line: SimLine;
+  batchId: string;
+  running: boolean;
+  /** Beginn der aktuellen Phase (Lauf oder Pause) */
+  since: number;
+}
+
+/** Nächste Batchnummer: letzte Zahl um eins erhöht (B-2026-1042 → B-2026-1043). */
+export const nextBatchId = (id: string) =>
+  id.replace(/(\d+)(?!.*\d)/, (n) => String(Number(n) + 1).padStart(n.length, '0'));
 
 /** Erzeugt die Daten der Beispiellinien (Mockup und Flexfill) und gibt sie über `publish` aus. */
 export class Simulator {
   readonly lines: SimLine[] = buildLines();
   private timers: ReturnType<typeof setInterval>[] = [];
   private runtimes: Runtime[] = [];
+  private batches: LineBatch[] = [];
   /** anstehende Alarme mit Zeitpunkt des Kommens */
   private readonly active = new Map<
     string,
@@ -98,6 +128,22 @@ export class Simulator {
         }, repeat),
       );
     }
+    if (this.options.batchCycle ?? true) {
+      this.batches = this.lines
+        .map((line) => ({ line, batch: line.machines.find((m) => m.batch)?.batch }))
+        .filter((x) => x.batch !== undefined)
+        .map(({ line, batch }) => ({
+          line,
+          batchId: batch?.id ?? '',
+          running: true,
+          since: now.getTime(),
+        }));
+      this.timers.push(
+        setInterval(() => {
+          this.tickBatches();
+        }, 1_000),
+      );
+    }
     if (this.options.cycle ?? true) {
       this.timers.push(
         setInterval(() => {
@@ -122,7 +168,7 @@ export class Simulator {
     const now = this.now();
     for (const runtime of this.runtimes) {
       this.advance(runtime, now.getTime());
-      this.publish(countersFor(runtime.machine, runtime.produced, now));
+      this.publish(countersFor(runtime.machine, runtime.produced, now, runtime.counterBase));
     }
   }
 
@@ -155,6 +201,38 @@ export class Simulator {
         const key = `${machine.id}/${alarm.alarmId}`;
         if (running) this.active.set(key, { machine, alarm, at: now });
         else this.active.delete(key);
+      }
+    }
+  }
+
+  /** Batch-Zyklus (M6): Ende nach BATCH_RUN_MS, neuer Batch nach BATCH_PAUSE_MS mit Zählerreset. */
+  tickBatches(): void {
+    const now = this.now();
+    for (const b of this.batches) {
+      const elapsed = now.getTime() - b.since;
+      const machines = b.line.machines.filter((m) => m.batch);
+      if (b.running && elapsed >= (this.options.batchRunMs ?? BATCH_RUN_MS)) {
+        for (const m of machines) {
+          const out = batchEvent(m, 'ended', b.batchId, now);
+          if (out) this.publish(out);
+        }
+        b.running = false;
+        b.since = now.getTime();
+      } else if (!b.running && elapsed >= (this.options.batchPauseMs ?? BATCH_PAUSE_MS)) {
+        b.batchId = nextBatchId(b.batchId);
+        b.running = true;
+        b.since = now.getTime();
+        for (const runtime of this.runtimes.filter((r) => machines.includes(r.machine))) {
+          // Zähler der Maschine beginnen mit dem neuen Batch bei null
+          this.advance(runtime, now.getTime());
+          runtime.produced = 0;
+          runtime.counterBase = { good: 0, bad: 0, resetAt: now };
+          this.publish(countersFor(runtime.machine, 0, now, runtime.counterBase));
+        }
+        for (const m of machines) {
+          const out = batchEvent(m, 'started', b.batchId, now);
+          if (out) this.publish(out);
+        }
       }
     }
   }
