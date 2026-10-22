@@ -1,0 +1,147 @@
+{
+  "$comment": "Produktkatalog des Baukastens (Texte aus dem UI-Mockup). Kernbausteine sind Teil des Core (E-08).",
+  "modules": [
+    {
+      "id": "core",
+      "category": "Kern",
+      "core": true,
+      "gxp": true,
+      "name": { "de": "Datenkern", "en": "Data core" },
+      "description": {
+        "de": "Connectoren, Databus, IIH-Asset-Modell und kanonisches Linienmodell",
+        "en": "Connectors, Databus, IIH asset model and canonical line model"
+      }
+    },
+    {
+      "id": "audit",
+      "category": "Kern",
+      "core": true,
+      "gxp": true,
+      "name": { "de": "Benutzer & Audit Trail", "en": "Users & audit trail" },
+      "description": {
+        "de": "Rollen, Anmeldung, unveränderbarer Audit Trail, Zeitsynchronisation",
+        "en": "Roles, login, immutable audit trail, time synchronisation"
+      }
+    },
+    {
+      "id": "dashboard",
+      "category": "Produktion",
+      "gxp": false,
+      "name": { "de": "Linien-Dashboard", "en": "Line dashboard" },
+      "description": {
+        "de": "PackML-Zustände, Linien-OEE und Engpassanalyse",
+        "en": "PackML states, line OEE and bottleneck analysis"
+      }
+    },
+    {
+      "id": "alarms",
+      "category": "Produktion",
+      "gxp": false,
+      "name": { "de": "Alarm-Analytics", "en": "Alarm analytics" },
+      "description": {
+        "de": "Alarmliste, Häufigkeit, Dauer und Top-Störungen",
+        "en": "Alarm list, frequency, duration and top faults"
+      }
+    },
+    {
+      "id": "batch",
+      "category": "Produktion",
+      "gxp": true,
+      "name": { "de": "Batch-Reporting", "en": "Batch reporting" },
+      "description": {
+        "de": "Batchdaten über die ganze Linie, Bericht mit elektronischer Signatur",
+        "en": "Batch data across the whole line, report with electronic signature"
+      }
+    },
+    {
+      "id": "format",
+      "category": "Produktion",
+      "gxp": true,
+      "name": { "de": "Geführter Formatwechsel", "en": "Guided format change" },
+      "description": {
+        "de": "Schritt-für-Schritt-Anleitung mit Formatteil-Prüfung und Signatur",
+        "en": "Step-by-step guidance with format part check and signature"
+      }
+    },
+    {
+      "id": "condition-monitoring",
+      "category": "Instandhaltung",
+      "gxp": false,
+      "name": { "de": "Condition Monitoring", "en": "Condition monitoring" },
+      "description": {
+        "de": "Aktueller Zustand von Pumpen, Servos und Verschleißteilen",
+        "en": "Current condition of pumps, servos and wear parts"
+      }
+    },
+    {
+      "id": "predictive-maintenance",
+      "category": "Instandhaltung",
+      "gxp": false,
+      "name": { "de": "Predictive Maintenance", "en": "Predictive maintenance" },
+      "description": {
+        "de": "Ausfallprognosen mit Empfehlung für das passende Wartungsfenster",
+        "en": "Failure forecasts with a recommended maintenance window"
+      }
+    },
+    {
+      "id": "troubleshooting",
+      "category": "Instandhaltung",
+      "gxp": false,
+      "name": { "de": "Geführte Fehlersuche", "en": "Guided troubleshooting" },
+      "description": {
+        "de": "Fehlerbäume zu Alarmen, Schritt für Schritt bis zur Lösung",
+        "en": "Fault trees for alarms, step by step to the solution"
+      }
+    },
+    {
+      "id": "spares",
+      "category": "Instandhaltung",
+      "gxp": false,
+      "name": { "de": "Ersatzteilkatalog", "en": "Spare parts catalogue" },
+      "description": {
+        "de": "Teile suchen, Bestand sehen und Anfrage direkt an den Service senden",
+        "en": "Search parts, see stock and send a request directly to service"
+      }
+    },
+    {
+      "id": "remote-service",
+      "category": "Instandhaltung",
+      "gxp": false,
+      "name": { "de": "Remote-Service", "en": "Remote service" },
+      "description": {
+        "de": "Sicherer Fernzugriff und Diagnose durch unseren Service",
+        "en": "Secure remote access and diagnostics by our service"
+      }
+    },
+    {
+      "id": "energy-monitoring",
+      "category": "Integration",
+      "gxp": false,
+      "name": { "de": "Energie-Monitoring", "en": "Energy monitoring" },
+      "description": {
+        "de": "Verbräuche je Maschine und Linie",
+        "en": "Consumption per machine and line"
+      }
+    },
+    {
+      "id": "mes-integration",
+      "category": "Integration",
+      "gxp": false,
+      "name": { "de": "Integration MES/ERP", "en": "MES/ERP integration" },
+      "description": {
+        "de": "Datenabgabe an MES, SAP und LIMS über REST, GraphQL, OPC UA",
+        "en": "Data delivery to MES, SAP and LIMS via REST, GraphQL, OPC UA"
+      }
+    },
+    {
+      "id": "data-export",
+      "category": "Integration",
+      "gxp": false,
+      "name": { "de": "Datenexport (Data Act)", "en": "Data export (Data Act)" },
+      "description": {
+        "de": "Kundenzugriff auf alle erzeugten Daten in offenen Formaten",
+        "en": "Customer access to all generated data in open formats"
+      }
+    }
+  ]
+}

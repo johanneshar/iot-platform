@@ -6,15 +6,17 @@
   "description": "Core Edge App – Backend (Modul-Registry, Auth, Audit Trail, Lizenz)",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/main.js",
+    "start": "tsx src/main.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
+    "@iot/module-sdk": "workspace:*",
+    "better-sqlite3": "13.0.3",
     "fastify": "5.12.7"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "9.6.0",
     "tsx": "4.23.15"
   }
 }

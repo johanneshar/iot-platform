@@ -1,0 +1,14 @@
+{
+  "$comment": "Buchungsstand für die Entwicklung, wie im UI-Mockup. Im Betrieb kommt der Lizenzstatus vom IEM (E-14, O-06).",
+  "booked": [
+    "dashboard",
+    "alarms",
+    "batch",
+    "format",
+    "troubleshooting",
+    "spares",
+    "mes-integration",
+    "data-export",
+    "example"
+  ]
+}

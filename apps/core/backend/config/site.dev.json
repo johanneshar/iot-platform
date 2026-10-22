@@ -1,0 +1,7 @@
+{
+  "$comment": "Linien des Standorts (Entwicklung). Jede Linie hat ein eigenes Edge Device mit eigenem Core (E-23); die Linienwahl wechselt zu dessen Adresse.",
+  "lines": [
+    { "id": "l1", "name": "Linie 1 · Vials", "url": "http://localhost:5180" },
+    { "id": "l2", "name": "Linie 2 · Spritzen", "url": "http://localhost:5190" }
+  ]
+}
