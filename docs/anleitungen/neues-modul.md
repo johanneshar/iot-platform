@@ -34,6 +34,7 @@ in der Navigation der Shell gesehen.
    - Linie, Navigation und Deep Links aus dem `module-sdk`: `useLine()`, `useNavigate()`,
      `useDeepLinkParams()`, `useIsModuleBooked()`.
    - Maschinendaten nur über das SDK: `useMachines()`, `useAlarms()`, `useValues()` ([ADR-005](/adr/ADR-005-datenzugriff)).
+   - Seitentitel im Kopf (z. B. Name einer Maschine): `usePageTitle(titel)`.
    - Jede Seite in `frontend/entry.tsx` unter ihrem Routenpfad eintragen; einen Zähler in der Navigation
      liefert `badge(line)` im selben Einstiegsmodul.
 
@@ -42,9 +43,11 @@ in der Navigation der Shell gesehen.
 4. **Eigene API (optional)** (`backend/`)
    - Routen in Fastify anlegen; Benutzer und Rechte mit `readProxyUser` und `userCan` aus
      `@iot/module-sdk/server` prüfen. Aufrufe ohne gültiges Dienst-Token mit 401 ablehnen.
-   - In der Oberfläche nur über `useModuleApi()` aufrufen (`get('pfad')`, `post('pfad', body)`) – der Core
+   - In der Oberfläche nur über `useModuleApi()` aufrufen (`get('pfad')`, `post('pfad', body)`) oder mit
+     `useModuleData(pfad, refreshMs)` laden und regelmäßig aktualisieren – der Core
      leitet `/api/modules/<id>/…` weiter ([ADR-008](/adr/ADR-008-modul-backends-proxy)).
    - Eigener Verlauf aus dem Databus: `subscribeLine` (nur kanonische, schemakonforme Nachrichten).
+   - Zeitzone und Schichtmodell der Linie: `fetchLineConfig`; geplante Zeit im Zeitraum: `plannedIntervals`.
    - Einsprungpunkte für andere Module: `publishDeepLinkTargets(…, { alarm: [...] })`; andere Module prüfen
      sie mit `useDeepLinkTargets()`.
 

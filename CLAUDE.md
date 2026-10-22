@@ -301,7 +301,8 @@ Aus dem Mockup abgeleitet, jede Komponente mit Storybook-Story:
 `LineFlow`, `AlarmItem`, `HealthCard`, `ModuleCard`, `LockedModule`, `SuccessNote`, `Placeholder`
 (für Bilder/Videos), `SearchInput`.
 
-Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`;
+Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`,
+`Panel` (M5), `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend` (M5a);
 `Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). `LineSwitch` ist eine Auswahlliste
 (Dropdown), weil Kunden mehr als zwei Linien haben. Feste Texte der Bibliothek stehen
 im i18n-Namespace `ui`, den die Shell mit registriert. Storybook läuft auf Port 5182.
@@ -475,6 +476,7 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M5 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: **M5a** (3D-Ansicht) – zuerst
-den Entwurf der Maschinen-Detailseite in Claude Design abstimmen (A-01.5), dann Plan vorlegen und auf
-Freigabe warten.
+M0 bis M5 und M5a-1 (Maschinen-Detailseite) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
+Schritt: **M5a-2** (3D-Ansicht mit three.js, GLB-Modell vom Nutzer, Zuordnungsdatei Bauteil → Maschine/Alarm)
+nach dem freigegebenen Plan; Entwürfe: Claude Design „M5a · Linienübersicht mit 3D-Ansicht“ und
+„M5a · Maschinendetail“.

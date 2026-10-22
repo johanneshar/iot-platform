@@ -25,6 +25,10 @@ Alarmen mit Fehlerbaum (E-36, ursprünglich für M10 geplant).
    (`useDeepLinkAvailable`, `useDeepLinkTargets`); für nicht gebuchte oder nicht installierte Module gibt es
    keine Ziele.
 
+**Ergänzung (M5a):** Modul-Backends lesen die Linienkonfiguration (Zeitzone, Schichtmodell, OEE-Ziel) mit
+`GET /api/registry/line` und Dienst-Token (`fetchLineConfig`). Eine Modulseite kann den Titel im Kopf der
+Shell setzen (`usePageTitle`, z. B. Name der Maschine).
+
 ## Alternativen
 
 - **Module direkt aufrufen (CORS):** Anmeldung und Rechte müssten in jedem Modul geprüft werden; der

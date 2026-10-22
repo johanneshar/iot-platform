@@ -14,5 +14,6 @@ Kontext, Alternativen und Konsequenzen.
 | [ADR-006](./ADR-006-identity-source)          | Optionales Feld `identity.source` (Datenquelle)                        | angenommen |
 | [ADR-007](./ADR-007-fehlerbaum-format)        | Format der Fehlerbäume                                                 | angenommen |
 | [ADR-008](./ADR-008-modul-backends-proxy)     | Modul-Backends über den Proxy des Core, Einsprungpunkte für Deep Links | angenommen |
+| [ADR-009](./ADR-009-verlauf-dashboard)        | Verlauf und Auswertungen im Dashboard-Modul                            | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.

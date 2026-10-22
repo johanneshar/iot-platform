@@ -2,6 +2,26 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M5a-1 – Maschinen-Detailseite (2026-10-22)
+
+**Neu**
+
+- Entwürfe in Claude Design abgenommen: „M5a · Linienübersicht mit 3D-Ansicht“ und „M5a · Maschinendetail“
+  (A-01.5, A-01.11)
+- Dashboard: Detailseite je Maschine mit Kennzahlen, Zustandsverlauf, Stillständen samt Ursache, Leistung
+  und Ausschuss je Abschnitt, Prozesswerten mit Grenzen und Alarmen; Zeiträume vom Kunden einstellbar
+  (E-37); Tipp auf eine Maschine öffnet sie (E-38); Fremdmaschinen reduziert (E-39)
+- Verlauf im Dashboard-Modul (SQLite), Auswertung im Backend ([ADR-009](/adr/ADR-009-verlauf-dashboard))
+- Core: `GET /api/registry/line` für Modul-Backends; SDK: `fetchLineConfig`, `plannedIntervals`,
+  `usePageTitle`, `useModuleData`
+- `@iot/ui`: `StateTimeline`, `BarChart`, `ValueTrend`, `BackLink`
+
+**Demo**
+
+1. `pnpm dev`, anmelden, „Linienübersicht“ → Karte „Füll- und Verschließmaschine“ antippen.
+2. Zeitraum wechseln; „Daten seit …“ zeigt, ab wann aufgezeichnet wurde.
+3. „Sterilisationstunnel“ öffnen: Stufe Basis ohne Prozesswerte.
+
 ## M5 – Alarme und geführte Fehlersuche (2026-10-22)
 
 **Neu**

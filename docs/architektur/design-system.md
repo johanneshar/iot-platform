@@ -62,9 +62,15 @@ Port 5182).
 | `Placeholder`                | Platzhalter für Bilder und Videos                                    |
 | `SearchInput`                | Suchfeld                                                             |
 | `Icon`                       | Icons aus dem Mockup                                                 |
+| `Panel`                      | Frage bzw. Lösung der Fehlersuche (M5)                               |
+| `BackLink`                   | „← Linienübersicht“: zurück zur übergeordneten Seite (M5a)           |
+| `StateTimeline`              | Zeitbalken der PackML-Zustände (M5a)                                 |
+| `BarChart`                   | Balken je Zeitabschnitt mit Soll- oder Grenzlinie (M5a)              |
+| `ValueTrend`                 | Prozesswert mit Verlauf und Grenzband (M5a)                          |
 
 `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack` und `Icon` sind zu den 23
-Komponenten aus CLAUDE.md 7.4 hinzugekommen, weil das Mockup diese Muster mehrfach verwendet.
+Komponenten aus CLAUDE.md 7.4 hinzugekommen, weil das Mockup diese Muster mehrfach verwendet. `Panel` kam mit
+M5 dazu, `BackLink`, `StateTimeline`, `BarChart` und `ValueTrend` mit der Maschinen-Detailseite (M5a).
 
 ## Bewusste Abweichungen vom Mockup
 

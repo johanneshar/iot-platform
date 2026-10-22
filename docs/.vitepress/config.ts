@@ -51,6 +51,7 @@ export default defineConfig({
           { text: 'ADR-006 Datenquelle', link: '/adr/ADR-006-identity-source' },
           { text: 'ADR-007 Fehlerbäume', link: '/adr/ADR-007-fehlerbaum-format' },
           { text: 'ADR-008 Proxy und Einsprungpunkte', link: '/adr/ADR-008-modul-backends-proxy' },
+          { text: 'ADR-009 Verlauf im Dashboard', link: '/adr/ADR-009-verlauf-dashboard' },
         ],
       },
       {
