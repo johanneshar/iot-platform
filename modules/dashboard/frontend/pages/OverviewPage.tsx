@@ -1,6 +1,7 @@
 import {
   findBottleneck,
   useAlarms,
+  useDeepLinkTargets,
   useLine,
   useLineData,
   useMachines,
@@ -36,6 +37,9 @@ const ALARMS_MODULE = 'alarms';
 const SPARES_MODULE = 'spares';
 const FORMAT_MODULE = 'format';
 const PREDICTION_MODULE = 'predictive-maintenance';
+const TROUBLESHOOTING_MODULE = 'troubleshooting';
+// Einsprungpunkt der Fehlersuche: Alarme mit Fehlerbaum
+const ALARM_TARGET = 'alarm';
 
 const qualityNotice = (machine: MachineSnapshot, t: T): LineFlowMachine['notice'] =>
   machine.quality === 'good'
@@ -150,6 +154,7 @@ export function OverviewPage() {
           machines={machines}
           timeZone={line.timeZone}
           onShowAll={showAllAlarms}
+          onNavigate={navigate}
         />
       </div>
     </div>
@@ -263,10 +268,12 @@ interface ActiveAlarmsProps {
   machines: MachineSnapshot[];
   timeZone: string;
   onShowAll: () => void;
+  onNavigate: ReturnType<typeof useNavigate>;
 }
 
-function ActiveAlarms({ alarms, machines, timeZone, onShowAll }: ActiveAlarmsProps) {
+function ActiveAlarms({ alarms, machines, timeZone, onShowAll, onNavigate }: ActiveAlarmsProps) {
   const { t, i18n } = useTranslation(MODULE_ID);
+  const hasTarget = useDeepLinkTargets();
   const name = (id: string) => machines.find((m) => m.machineId === id)?.identity?.type ?? id;
   const text = (a: LineAlarm) =>
     a.alarmId === 'COMMON-FAULT'
@@ -290,6 +297,25 @@ function ActiveAlarms({ alarms, machines, timeZone, onShowAll }: ActiveAlarmsPro
           severity={a.class}
           text={text(a)}
           meta={`${name(a.machineId)} · ${formatTime(a.raisedAt, timeZone)}`}
+          {...(hasTarget(TROUBLESHOOTING_MODULE, ALARM_TARGET, a.alarmId)
+            ? {
+                action: (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    aria-label={t('alarms.troubleshootLabel', { text: text(a) })}
+                    onClick={() => {
+                      onNavigate(TROUBLESHOOTING_MODULE, {
+                        alarmId: a.alarmId,
+                        machine: a.machineId,
+                      });
+                    }}
+                  >
+                    {t('alarms.troubleshoot')}
+                  </Button>
+                ),
+              }
+            : {})}
         />
       ))}
       <a

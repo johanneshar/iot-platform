@@ -14,6 +14,8 @@ liegt und welche Alarme anstehen.
 4. **Weiter zu anderen Modulen:** Bei eigenen Maschinen führen die Schaltflächen zu Ersatzteilen,
    Formatwechsel und Wartungsprognose; „Alle Alarme anzeigen“ führt zur Alarmliste.
    _Ergebnis:_ Ist das Modul nicht gebucht, erklärt der Sperrbildschirm, was es kann.
+5. **Fehlersuche starten:** Bei einem anstehenden Alarm mit Fehlerbaum „Fehlersuche starten“ antippen.
+   _Ergebnis:_ Die geführte Fehlersuche öffnet den passenden Fehlerbaum.
 
 **Hinweise**
 

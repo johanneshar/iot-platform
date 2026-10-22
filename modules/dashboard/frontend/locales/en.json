@@ -51,6 +51,8 @@
     "active": "{{count}} active",
     "none": "No active alarms.",
     "all": "Show all alarms →",
-    "commonFault": "Common fault"
+    "commonFault": "Common fault",
+    "troubleshoot": "Start troubleshooting",
+    "troubleshootLabel": "Start troubleshooting: {{text}}"
   }
 }

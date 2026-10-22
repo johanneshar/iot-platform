@@ -33,15 +33,16 @@ Engpass nach E-28 (`findBottleneck` im SDK). Erst nach 10 s Beobachtung erschein
 
 ## Deep Links
 
-| Schaltfläche                | Ziel                                              |
-| --------------------------- | ------------------------------------------------- |
-| Ersatzteile dieser Maschine | `navigate('spares', { machine })`                 |
-| Formatwechsel starten       | `navigate('format')`                              |
-| Wartungsprognose            | `navigate('predictive-maintenance', { machine })` |
-| Alle Alarme anzeigen        | `navigate('alarms')`                              |
+| Schaltfläche                | Ziel                                                |
+| --------------------------- | --------------------------------------------------- |
+| Ersatzteile dieser Maschine | `navigate('spares', { machine })`                   |
+| Formatwechsel starten       | `navigate('format')`                                |
+| Wartungsprognose            | `navigate('predictive-maintenance', { machine })`   |
+| Alle Alarme anzeigen        | `navigate('alarms')`                                |
+| Fehlersuche starten         | `navigate('troubleshooting', { alarmId, machine })` |
 
-„Fehlersuche starten“ an einem Alarm folgt mit M5, sobald bekannt ist, zu welchen Alarmen ein Fehlerbaum
-existiert.
+„Fehlersuche starten“ erscheint nur an Alarmen, zu denen die Fehlersuche einen Einsprungpunkt gemeldet hat
+(`useDeepLinkTargets`, [ADR-008](../../../docs/adr/ADR-008-modul-backends-proxy.md)).
 
 ## Abweichungen vom Mockup
 

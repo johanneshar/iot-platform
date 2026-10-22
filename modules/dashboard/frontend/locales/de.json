@@ -51,6 +51,8 @@
     "active": "{{count}} aktiv",
     "none": "Keine aktiven Alarme.",
     "all": "Alle Alarme anzeigen →",
-    "commonFault": "Sammelstörung"
+    "commonFault": "Sammelstörung",
+    "troubleshoot": "Fehlersuche starten",
+    "troubleshootLabel": "Fehlersuche starten: {{text}}"
   }
 }
