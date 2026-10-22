@@ -42,7 +42,7 @@ export function buildSections({
       .map((m): NavEntry => ({
         id: m.id,
         icon: m.manifest?.nav?.icon ?? 'overview',
-        label: localized(m.name, language),
+        label: localized(m.manifest?.nav?.label ?? m.name, language),
         active: activeId === m.id,
         locked: !m.booked,
         badge: m.booked ? (entries.get(m.id)?.badge?.() ?? null) : null,

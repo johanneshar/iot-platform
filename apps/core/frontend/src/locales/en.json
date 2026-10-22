@@ -18,7 +18,8 @@
     "audit": "Audit trail"
   },
   "line": {
-    "select": "Select line"
+    "select": "Select line",
+    "state": "Line:"
   },
   "language": {
     "label": "Language"

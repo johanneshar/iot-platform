@@ -2,6 +2,7 @@ import {
   SUPPORTED_LANGUAGES,
   ShellContext,
   isSupportedLanguage,
+  lineState,
   useTranslation,
   type ModuleEntry,
   type ShellApi,
@@ -19,9 +20,11 @@ import {
   Sidebar,
   SidebarStatus,
   SignatureDialog,
+  StateChip,
   UserBadge,
 } from '@iot/ui';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { closeLineDataSource, sharedLineDataSource } from '../data-source';
 import * as api from '../api';
 import { ApiError, type ShellModule, type ShellState } from '../api';
 import { initials } from '../format';
@@ -32,6 +35,9 @@ import { AuditPage } from './AuditPage';
 import { Catalog } from './Catalog';
 import { ModulePage } from './ModulePage';
 import { buildSections, homeModuleId } from './navigation';
+
+const noSubscribe = () => () => undefined;
+const noSnapshot = () => null;
 
 const can = (user: ShellUser, permission: string) =>
   user.permissions.includes('*') || user.permissions.includes(permission);
@@ -71,6 +77,13 @@ export function App() {
   const reload = useCallback(() => {
     setVersion((v) => v + 1);
   }, []);
+
+  // Datenstrom nur für angemeldete Benutzer; neu bei jeder Anmeldung
+  const dataSource = user ? sharedLineDataSource() : null;
+  const lineData = useSyncExternalStore(
+    dataSource?.subscribe ?? noSubscribe,
+    dataSource?.getSnapshot ?? noSnapshot,
+  );
 
   // Angemeldet? Ohne Sitzung erscheint die Anmeldung
   useEffect(() => {
@@ -143,6 +156,7 @@ export function App() {
 
   const signOut = useCallback(async () => {
     await api.logout();
+    closeLineDataSource();
     setUser(null);
     setState(null);
   }, []);
@@ -173,7 +187,7 @@ export function App() {
 
   const shell = useMemo<ShellApi | null>(
     () =>
-      state && user
+      state && user && dataSource
         ? {
             line: state.line,
             user,
@@ -190,9 +204,10 @@ export function App() {
                 setSignError(null);
                 setPending({ moduleId: module, request, resolve });
               }),
+            data: dataSource,
           }
         : null,
-    [state, user, route.params, go, modules],
+    [state, user, route.params, go, modules, dataSource],
   );
 
   if (user === undefined) return <p>{t('app.loading')}</p>;
@@ -210,6 +225,7 @@ export function App() {
   if (!state || !shell) return <p>{t('app.loading')}</p>;
 
   const canBook = can(user, 'core.modules.book');
+  const currentLineState = lineData ? lineState(lineData) : null;
   const canAudit = can(user, 'core.audit.view');
 
   const title =
@@ -289,6 +305,9 @@ export function App() {
                   if (target) window.location.assign(`${target.url}${window.location.pathname}`);
                 }}
               />
+            )}
+            {currentLineState && (
+              <StateChip state={currentLineState} prefix={t('line.state')} dot="md" />
             )}
             <LineSwitch
               label={t('language.label')}
