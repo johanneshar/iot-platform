@@ -54,18 +54,19 @@ zur Adresse des Core der anderen Linie (`config/site.dev.json`).
 
 ## Benutzer und Rollen
 
-Anmeldung lokal am Core oder – wenn der Kunde es wünscht – über LDAP.
+Anmeldung lokal am Core oder – wenn der Kunde es wünscht – über LDAP ([ADR-004](/adr/ADR-004-anmeldung-audit-signatur)).
 
 | Rolle       | Wer                                                                        |
 | ----------- | -------------------------------------------------------------------------- |
 | Operator    | Bedienung an der Linie                                                     |
 | Maintenance | Instandhaltung                                                             |
 | Setup Man   | Einrichter, z. B. Formatwechsel                                            |
+| QA          | Qualitätssicherung des Kunden; signiert den Batchbericht                   |
 | Admin       | Administrator des Kunden; bucht als Einziger Module                        |
 | IT Admin    | IT des Kunden, z. B. LDAP und Netzwerk                                     |
 | Service     | Unser Hersteller-Zugang mit allen Rechten, in jeder Installation vorhanden |
 
-Die Rechte je Rolle werden in M3 festgelegt.
+Ein Benutzer kann mehrere Rollen haben. Rechte je Rolle: [Rollen und Rechte](/architektur/rollen-rechte).
 
 ::: info Stand M0
 Diagramme und Details folgen mit M3 (Core) und M9 (Normalizer).

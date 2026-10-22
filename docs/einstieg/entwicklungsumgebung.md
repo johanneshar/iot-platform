@@ -54,6 +54,23 @@ ohne Edge Device.
 2. Im Terminal des Containers `pnpm dev` ausführen.
    _Ergebnis:_ wie in Variante A; die Ports werden an den Rechner weitergeleitet.
 
+## Anmelden in der Entwicklung
+
+Beim ersten Start legt der Core je Rolle einen Beispielbenutzer an, alle mit dem Passwort `entwicklung`
+(änderbar über `CORE_DEV_PASSWORD`). Im Betrieb gibt es diese Benutzer nicht.
+
+| Benutzer      | Rolle                 |
+| ------------- | --------------------- |
+| `operator`    | Operator              |
+| `maintenance` | Maintenance           |
+| `setup`       | Setup Man             |
+| `qa`          | QA                    |
+| `admin`       | Admin                 |
+| `itadmin`     | IT Admin              |
+| `service`     | Service (alle Rechte) |
+
+Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Audit Trail entstehen neu.
+
 ## Ports
 
 | Port             | Dienst                                   |

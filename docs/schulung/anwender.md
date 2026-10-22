@@ -36,6 +36,14 @@ Plattform zurecht – an HMI, Tablet oder PC.
 2. Warum zeigt jede Linie ihre eigene Plattform?
 3. Welche Module sind in jeder Installation enthalten?
 
-::: info Stand M3a
-Anmeldung, Rollen und e-Signatur folgen mit M3b. Bis dahin kann jeder Module buchen; danach nur der Admin.
-:::
+## Anmelden und signieren
+
+1. **Anmelden:** Benutzer und Passwort eingeben.
+   _Ergebnis:_ Im Kopf stehen dein Name und deine Rolle. Nach 5 falschen Versuchen ist das Konto 15 Minuten
+   gesperrt.
+2. **Signieren:** Wenn ein Vorgang eine Signatur verlangt, öffnet sich „Elektronische Signatur“ mit der
+   Bedeutung, z. B. „Freigabe“. Benutzer und Passwort erneut eingeben und „Signieren“ wählen.
+   _Ergebnis:_ Die Signatur steht mit Bedeutung und Zeitpunkt im Audit Trail.
+3. **Abmelden:** „Abmelden“ im Kopf. Am HMI nach jeder Schicht abmelden.
+
+Was du darfst, hängt von deiner Rolle ab ([Rollen und Rechte](/architektur/rollen-rechte)).

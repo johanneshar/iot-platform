@@ -105,9 +105,11 @@ Edge Device (eins pro Linie)
 **Benutzer und Rollen**
 
 Anmeldung lokal oder – wenn vom Kunden gewünscht – über LDAP. Standardrollen: `Operator`, `Maintenance`,
-`Setup Man`, `Admin`, `IT Admin`. Zusätzlich gibt es in jeder Installation unseren Zugang `Service` mit
+`Setup Man`, `QA`, `Admin`, `IT Admin`. Zusätzlich gibt es in jeder Installation unseren Zugang `Service` mit
 allen Rechten. Module buchen darf nur der `Admin` des Kunden; der Lizenzstatus kommt vom IEM.
-e-Signatur = erneute Eingabe von Benutzer und Passwort plus Bedeutung.
+e-Signatur = erneute Eingabe von Benutzer und Passwort plus Bedeutung. Rechte je Rolle: `apps/core/backend/config/roles.json`
+(QA signiert den Batchbericht; Service hat alle Rechte, auch GxP-Signaturen; mehrere Rollen je Benutzer).
+Umsetzung: ADR-004.
 
 **Daten außerhalb der Maschinenschnittstelle**
 
@@ -469,6 +471,5 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M2 und M3a sind abgeschlossen (siehe `docs/changelog.md`). M3 ist geteilt (E-24): M3a Shell und
-Modul-Registry, M3b Benutzer, Rollen, Audit Trail und e-Signatur. Nächster Schritt: **M3b** – zuerst den
-Vorschlag der Rechte-Matrix (O-05) zur Bestätigung vorlegen.
+M0 bis M3 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: Plan für **M4** (Linien-Dashboard)
+vorlegen und auf Freigabe warten.

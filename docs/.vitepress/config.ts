@@ -43,6 +43,10 @@ export default defineConfig({
           { text: 'ADR-001 Tech-Stack', link: '/adr/ADR-001-tech-stack' },
           { text: 'ADR-002 Einbindung der Modul-UIs', link: '/adr/ADR-002-modul-einbindung' },
           { text: 'ADR-003 Schnittstelle 0.2', link: '/adr/ADR-003-schnittstelle-v0-2' },
+          {
+            text: 'ADR-004 Anmeldung, Audit, Signatur',
+            link: '/adr/ADR-004-anmeldung-audit-signatur',
+          },
         ],
       },
       {

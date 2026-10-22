@@ -2,6 +2,25 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M3b – Benutzer, Rollen, Audit Trail, e-Signatur (2026-10-22)
+
+**Neu**
+
+- Anmeldung am Core mit lokalen Benutzern; Sperre nach 5 Fehlversuchen; LDAP vorbereitet
+- Rollen und Rechte aus `config/roles.json` inkl. neuer Rolle QA; serverseitige Prüfung, Oberfläche blendet aus
+- Audit Trail: nur Anhängen, Hash-Kette mit Prüfung, Trigger gegen Ändern und Löschen; Seite „Audit Trail“
+- e-Signatur mit erneuter Eingabe von Benutzer und Passwort und Pflicht-Bedeutung
+- `module-sdk`: `useUser`, `usePermission`, `useAudit`, `useRequestSignature`
+- `@iot/ui`: `LoginForm`, `SignatureDialog`
+- Registry nur mit Dienst-Token; Benutzer-API für `core.users.manage`
+- [ADR-004](/adr/ADR-004-anmeldung-audit-signatur), [Rollen und Rechte](/architektur/rollen-rechte)
+
+**Demo**
+
+1. `pnpm dev`, als `operator` anmelden (Passwort `entwicklung`) → Baukasten: Buchen gesperrt, kein Audit Trail.
+2. Als `service` anmelden → Beispielmodul → „Beispiel signieren“ → Signatur mit Passwort.
+3. „Audit Trail“ öffnen → Eintrag mit „Signatur: Freigabe“, Kette unversehrt.
+
 ## M3a – Shell und Modul-Registry (2026-10-22)
 
 **Neu**

@@ -3,11 +3,12 @@
 Für alle, die wissen wollen, warum die Plattform so gebaut ist: Hier steht jede Architekturentscheidung mit
 Kontext, Alternativen und Konsequenzen.
 
-| Nr.                                     | Titel                                                       | Status     |
-| --------------------------------------- | ----------------------------------------------------------- | ---------- |
-| [ADR-000](./ADR-000-vorlage)            | Vorlage                                                     | –          |
-| [ADR-001](./ADR-001-tech-stack)         | Tech-Stack                                                  | angenommen |
-| [ADR-002](./ADR-002-modul-einbindung)   | Einbindung der Modul-UIs per ES-Module und Import-Map       | angenommen |
-| [ADR-003](./ADR-003-schnittstelle-v0-2) | Schnittstelle Maschinendaten – Entwurf 0.2 und JSON Schemas | angenommen |
+| Nr.                                           | Titel                                                       | Status     |
+| --------------------------------------------- | ----------------------------------------------------------- | ---------- |
+| [ADR-000](./ADR-000-vorlage)                  | Vorlage                                                     | –          |
+| [ADR-001](./ADR-001-tech-stack)               | Tech-Stack                                                  | angenommen |
+| [ADR-002](./ADR-002-modul-einbindung)         | Einbindung der Modul-UIs per ES-Module und Import-Map       | angenommen |
+| [ADR-003](./ADR-003-schnittstelle-v0-2)       | Schnittstelle Maschinendaten – Entwurf 0.2 und JSON Schemas | angenommen |
+| [ADR-004](./ADR-004-anmeldung-audit-signatur) | Anmeldung, Rechte, Audit Trail und e-Signatur im Core       | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.
