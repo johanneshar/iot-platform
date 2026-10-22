@@ -1,6 +1,11 @@
 {
   "home": {
     "title": "Beispielmodul",
-    "text": "Dieses Modul wurde mit pnpm create-module angelegt."
+    "text": "Dieses Modul wurde mit pnpm create-module angelegt.",
+    "sign": "Beispiel signieren",
+    "subject": "Beispielvorgang",
+    "meaning": "Freigabe",
+    "signed": "Signiert",
+    "signedBy": "von {{user}} · im Audit Trail erfasst"
   }
 }

@@ -17,5 +17,5 @@ export const manifest = {
   minConformance: 'basic',
   nav: { section: 'Plattform', order: 90, icon: 'modules' },
   routes: [{ path: '', title: { de: 'Beispielmodul', en: 'Example module' } }],
-  permissions: ['example.view'],
+  permissions: ['example.view', 'example.sign'],
 } satisfies Omit<ModuleManifest, 'entry' | 'styles'>;

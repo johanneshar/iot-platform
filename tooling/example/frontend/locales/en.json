@@ -1,6 +1,11 @@
 {
   "home": {
     "title": "Example module",
-    "text": "This module was created with pnpm create-module."
+    "text": "This module was created with pnpm create-module.",
+    "sign": "Sign example",
+    "subject": "Example action",
+    "meaning": "Approval",
+    "signed": "Signed",
+    "signedBy": "by {{user}} · recorded in the audit trail"
   }
 }

@@ -9,6 +9,8 @@ const port = Number(process.env['MODULE_PORT'] ?? 4100);
 const host = process.env['MODULE_HOST'] ?? '127.0.0.1';
 const publicUrl = process.env['MODULE_PUBLIC_URL'] ?? `http://localhost:${String(port)}`;
 const coreUrl = process.env['CORE_URL'] ?? 'http://localhost:4000';
+// Dienst-Token für die Registry (O-18); im Betrieb aus der Konfiguration der Edge App
+const registryToken = process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token';
 const distDir = fileURLToPath(new URL('../dist/', import.meta.url));
 
 const TYPES: Record<string, string> = {
@@ -46,7 +48,7 @@ async function register(): Promise<void> {
     try {
       const response = await fetch(`${coreUrl}/api/registry/modules`, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${registryToken}` },
         body: JSON.stringify(body),
       });
       if (response.ok) {
