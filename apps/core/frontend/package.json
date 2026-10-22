@@ -5,16 +5,19 @@
   "type": "module",
   "description": "Core Edge App – Shell-UI (Layout, Navigation, Linienwahl, Anmeldung, Baukasten)",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "vite --configLoader runner",
+    "build": "vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --configLoader runner"
   },
   "dependencies": {
     "@iot/module-sdk": "workspace:*",
+    "@iot/ui": "workspace:*",
+    "i18next": "26.5.3",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-i18next": "17.1.0"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.2",

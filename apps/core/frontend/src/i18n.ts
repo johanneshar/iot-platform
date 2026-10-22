@@ -1,4 +1,5 @@
 import { createI18n, resolveLanguage, type LanguageCode } from '@iot/module-sdk';
+import { UI_NAMESPACE, uiTranslations } from '@iot/ui';
 import de from './locales/de.json';
 import en from './locales/en.json';
 
@@ -26,9 +27,13 @@ export function initialLanguage(): LanguageCode {
   return resolveLanguage([readStoredLanguage(), ...navigator.languages]);
 }
 
+/** Übersetzungen der Shell und der Komponentenbibliothek; Module ergänzen ihre beim Laden. */
 export function createCoreI18n(language: LanguageCode = initialLanguage()) {
   return createI18n({
     language,
-    translations: [{ namespace: CORE_NAMESPACE, resources: { de, en } }],
+    translations: [
+      { namespace: CORE_NAMESPACE, resources: { de, en } },
+      { namespace: UI_NAMESPACE, resources: uiTranslations },
+    ],
   });
 }

@@ -1,4 +1,5 @@
 import { I18nProvider } from '@iot/module-sdk';
+import '@iot/ui/styles.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createCoreI18n } from './i18n';

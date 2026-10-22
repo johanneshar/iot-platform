@@ -1,11 +1,44 @@
 {
   "app": {
     "title": "IoT-Plattform",
+    "productName": "IoT Plattform",
+    "logoPlaceholder": "[Firmenlogo]",
     "navigation": "Hauptnavigation",
-    "noModules": "Noch keine Module registriert.",
-    "noModulesHint": "Module erscheinen hier, sobald sie sich mit ihrem Manifest beim Core anmelden."
+    "loading": "Wird geladen …",
+    "loadError": "Die Plattform ist nicht erreichbar. Bitte später erneut versuchen.",
+    "edgeOnline": "Edge Device online"
+  },
+  "nav": {
+    "section": {
+      "Linie": "Linie",
+      "Service": "Service",
+      "Plattform": "Plattform"
+    },
+    "catalog": "Baukasten"
+  },
+  "line": {
+    "select": "Linie wählen"
   },
   "language": {
     "label": "Sprache"
+  },
+  "category": {
+    "all": "Alle",
+    "Kern": "Kern",
+    "Produktion": "Produktion",
+    "Instandhaltung": "Instandhaltung",
+    "Integration": "Integration"
+  },
+  "catalog": {
+    "title": "Baukasten",
+    "intro": "Module werden pro Linie gebucht und als Edge Apps auf das Edge Device verteilt. Kernmodule sind in jeder Installation enthalten. Ein abgeschaltetes Modul wird in der Navigation gesperrt.",
+    "active": "von {{total}} Modulen aktiv",
+    "filter": "Modulkategorie filtern",
+    "bookError": "Die Buchung konnte nicht gespeichert werden."
+  },
+  "module": {
+    "loadError": "Das Modul „{{name}}“ konnte nicht geladen werden.",
+    "notFound": "Diese Seite gibt es nicht.",
+    "notInstalled": "„{{name}}“ ist auf dem Edge Device dieser Linie nicht installiert."
   }
 }

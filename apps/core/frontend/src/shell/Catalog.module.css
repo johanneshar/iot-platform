@@ -1,0 +1,33 @@
+.intro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.text {
+  max-width: var(--size-narrow-max-width);
+  margin: 0;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+.count {
+  display: flex;
+  gap: var(--space-10);
+  align-items: center;
+  font-size: var(--font-size-table);
+}
+
+.countValue {
+  font-size: var(--font-size-figure);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-card-min), 1fr));
+  gap: var(--space-16);
+}
