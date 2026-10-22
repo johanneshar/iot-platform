@@ -200,6 +200,21 @@ export class LineModel {
         for (const v of (data as DataByClass['values']).values)
           machine.values[v.key] = { value: v.value, ts };
         break;
+      // S-09: vollständiger Stand der anstehenden Alarme (retained) – maßgeblich nach einem Neustart
+      case 'activeAlarms': {
+        const { alarms } = data as DataByClass['activeAlarms'];
+        machine.alarms = alarms.map((a) => ({
+          alarmId: a.alarmId,
+          class: a.class,
+          ...(a.textKey ? { textKey: a.textKey } : {}),
+          ...(a.text ? { text: a.text } : {}),
+          ...(a.subsystem ? { subsystem: a.subsystem } : {}),
+          raisedAt: a.raisedAt,
+          acknowledged: a.acknowledged,
+          acknowledgedBy: a.user,
+        }));
+        break;
+      }
       case 'alarms': {
         const alarm = data as DataByClass['alarms'];
         const others = machine.alarms.filter((a) => a.alarmId !== alarm.alarmId);

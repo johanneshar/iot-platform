@@ -132,6 +132,38 @@ describe('Linienmodell', () => {
     expect(after).toEqual(before);
   });
 
+  it('übernimmt den Stand der anstehenden Alarme aus activeAlarms (S-09)', () => {
+    const m = model();
+    const at = '2026-10-21T11:48:00.000Z';
+    m.apply('iot/v1/l1/l1-fill/activeAlarms', {
+      schema: 'iot.activeAlarms/1.0',
+      machineId: 'l1-fill',
+      ts: NOW.toISOString(),
+      tsEdge: NOW.toISOString(),
+      quality: 'good',
+      data: {
+        alarms: [
+          {
+            alarmId: 'FILL-WGT-0003',
+            class: 'fault',
+            textKey: 'alarm.weighcell.tare',
+            text: { de: 'Wägezelle 3' },
+            raisedAt: at,
+            acknowledged: true,
+            user: '[Bediener]',
+          },
+        ],
+      },
+    });
+    expect(m.snapshot().machines.find((x) => x.machineId === 'l1-fill')?.alarms).toEqual([
+      expect.objectContaining({
+        alarmId: 'FILL-WGT-0003',
+        raisedAt: at,
+        acknowledgedBy: '[Bediener]',
+      }),
+    ]);
+  });
+
   it('meldet Änderungen an Abonnenten', () => {
     const m = model();
     let calls = 0;
