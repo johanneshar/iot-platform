@@ -11,5 +11,6 @@ Kontext, Alternativen und Konsequenzen.
 | [ADR-003](./ADR-003-schnittstelle-v0-2)       | Schnittstelle Maschinendaten – Entwurf 0.2 und JSON Schemas | angenommen |
 | [ADR-004](./ADR-004-anmeldung-audit-signatur) | Anmeldung, Rechte, Audit Trail und e-Signatur im Core       | angenommen |
 | [ADR-005](./ADR-005-datenzugriff)             | Datenzugriff über den Datenkern des Core                    | angenommen |
+| [ADR-006](./ADR-006-identity-source)          | Optionales Feld `identity.source` (Datenquelle)             | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.

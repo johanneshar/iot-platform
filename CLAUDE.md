@@ -454,9 +454,9 @@ Jeder Meilenstein endet mit: Doku aktualisiert, Changelog, kurze Demo-Notiz in `
 ## 13. Lokale Entwicklung
 
 ```bash
-# Voraussetzungen: Node.js 22 LTS, pnpm 12, Docker Desktop, VS Code mit Dev-Containers-Erweiterung
+# Voraussetzungen: Node.js 22 LTS, pnpm 12, VS Code mit Dev-Containers-Erweiterung (Docker nur für dev:mosquitto)
 pnpm install
-pnpm dev            # startet MQTT-Broker, Simulator, Core und alle Module
+pnpm dev            # startet MQTT-Broker (im Prozess), Simulator, Core und alle Module
 pnpm storybook      # Komponentenbibliothek (Port 5182)
 pnpm docs           # Dokumentation als Website (Port 5181)
 pnpm test           # alle Unit-Tests
@@ -467,7 +467,8 @@ Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5
 Backend 4000, Beispielmodul 4100, zweite Linie 4001/5190 (`pnpm dev:line2`), Storybook 5182, Doku 5181,
 E2E-Tests 4010/4110/5185.
 
-Im Dev-Betrieb ersetzt ein lokaler Mosquitto-Broker den Databus. Der Simulator erzeugt die Daten aus dem
+Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
+Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten aus dem
 Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und ohne Edge Device möglich ist.
 
 ---

@@ -2,6 +2,13 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## Nach M4 (2026-10-22)
+
+- Simulator: stehende Maschinen wechseln zwischen Stillstand und Lauf, Alarme kommen und gehen mit (O-24)
+- Schnittstelle: optionales Feld `identity.source`, Dashboard zeigt die Datenquelle wie im Mockup
+  ([ADR-006](/adr/ADR-006-identity-source))
+- `pnpm dev` läuft ohne Docker (Broker im Prozess); Mosquitto mit `pnpm dev:mosquitto`
+
 ## M4 – Linien-Dashboard (2026-10-22)
 
 **Neu**

@@ -5,20 +5,21 @@ Für Entwicklerinnen und Entwickler: Nach dieser Anleitung laufen die Daten von 
 
 ## Starten
 
-1. **Docker Desktop starten** und dann
+1. **Starten**
 
    ```bash
    pnpm dev
    ```
 
-   _Ergebnis:_ Mosquitto läuft auf Port 1883, der Simulator meldet
+   _Ergebnis:_ Der MQTT-Broker läuft im Prozess auf Port 1883 (ohne Docker), der Simulator meldet
    `Simulator: verbunden mit mqtt://localhost:1883, sende Linie 1 · Vials und Linie 2 · Spritzen`.
-   Läuft kein Broker, versucht er es alle 5 s erneut.
+   Er startet erst, wenn der Core die Topics abonniert hat – sonst gingen die anstehenden Alarme verloren. Mit
+   Mosquitto in Docker: `pnpm dev:mosquitto`.
 
 2. **Daten mitlesen** (optional, mit einem MQTT-Client)
 
    ```bash
-   docker exec -it iot-dev-mosquitto-1 mosquitto_sub -t 'iot/v1/#' -v
+   pnpm dlx mqtt@5.16.1 sub -h localhost -t 'iot/v1/#' -v
    ```
 
    _Ergebnis:_ Retained-Topics (`identity`, `meta`, `state`, `counters`) erscheinen sofort, die Zähler alle
@@ -49,23 +50,26 @@ Nur der Simulator, ohne Shell: `pnpm --filter @iot/simulator start`. Anderer Bro
 
 Diese Werte hat der Simulator festgelegt. Sie sind Platzhalter für die Entwicklung, keine Maschinendaten.
 
-| Thema                      | Annahme                                                                                                  |
-| -------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Standort und Zeitzone      | `Europe/Berlin`                                                                                          |
-| Rücksetzen der Zähler      | Schichtbeginn 06:00 („Schicht seit 06:00“); Füllmaschinen: Batchstart                                    |
-| Sollleistung je Maschine   | Sollleistung der Linie aus „286 von 320 /min“ bzw. „348 von 400 /min“                                    |
-| Schlechtzähler             | Füllmaschinen aus den Batchdaten; Inspektion und Etikettierer aus der Ausschussquote; Waschmaschine 0    |
-| `alarmId` und `textKey`    | im Simulator festgelegt (z. B. `FILL-CAP-0001`); `FILL-WGT-0003` stammt aus der Spezifikation            |
-| Vergangene Alarme          | kommen und gehen zur selben Uhrzeit (Dauer unbekannt); Quittierung durch „[Bediener]“ nur bei Stufe full |
-| Schlüssel der Prozesswerte | aus den Beschriftungen abgeleitet, z. B. „Wassertemperatur“ → `waterTemperature`                         |
-| GxP-Kennzeichnung          | nur Füllgewicht/-volumen und Standardabweichung (offen: O-16)                                            |
-| Hersteller, Seriennummer   | Platzhalter „[Hersteller]“, „[Seriennummer]“                                                             |
-| Rezept Linie 2             | `syringe-1ml`, Version 5, ohne Formatteile                                                               |
-| Betriebsart                | immer `Production`                                                                                       |
+| Thema                      | Annahme                                                                                                                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Standort und Zeitzone      | `Europe/Berlin`                                                                                                                                                                     |
+| Rücksetzen der Zähler      | Schichtbeginn 06:00 („Schicht seit 06:00“); Füllmaschinen: Batchstart                                                                                                               |
+| Sollleistung je Maschine   | Sollleistung der Linie aus „286 von 320 /min“ bzw. „348 von 400 /min“                                                                                                               |
+| Schlechtzähler             | Füllmaschinen aus den Batchdaten; Inspektion und Etikettierer aus der Ausschussquote; Waschmaschine 0                                                                               |
+| `alarmId` und `textKey`    | im Simulator festgelegt (z. B. `FILL-CAP-0001`); `FILL-WGT-0003` stammt aus der Spezifikation                                                                                       |
+| Vergangene Alarme          | kommen und gehen zur selben Uhrzeit (Dauer unbekannt); Quittierung durch „[Bediener]“ nur bei Stufe full                                                                            |
+| Schlüssel der Prozesswerte | aus den Beschriftungen abgeleitet, z. B. „Wassertemperatur“ → `waterTemperature`                                                                                                    |
+| GxP-Kennzeichnung          | nur Füllgewicht/-volumen und Standardabweichung (offen: O-16)                                                                                                                       |
+| Hersteller, Seriennummer   | Platzhalter „[Hersteller]“, „[Seriennummer]“                                                                                                                                        |
+| Rezept Linie 2             | `syringe-1ml`, Version 5, ohne Formatteile                                                                                                                                          |
+| Betriebsart                | immer `Production`                                                                                                                                                                  |
+| Zustandswechsel            | Maschinen, die im Mockup stehen (Inspektion, Linie 2), wechseln: 1 min Zustand aus dem Mockup, 9 min Execute (≈ 90 % Verfügbarkeit); der zugehörige Alarm kommt und geht mit (O-24) |
+| Leistung im Lauf           | für diese Maschinen die Linienleistung aus der KPI „Leistung“: 286 bzw. 348 /min                                                                                                    |
+| Datenquelle                | Texte aus dem Mockup in `identity.source` (S-07)                                                                                                                                    |
 
 ## Einschränkungen
 
 - Alarm- und Batch-Ereignisse sind nicht retained. Wer sich später verbindet, sieht sie erst nach einem
   Neustart des Simulators.
-- Die Werte ändern sich nicht. Dynamik (Rauschen, Zustandswechsel, neue Alarme) kommt bei Bedarf mit den
-  Modulen, die sie brauchen.
+- Prozesswerte ändern sich nicht. Weitere Dynamik (Rauschen, neue Alarme) kommt bei Bedarf mit den Modulen,
+  die sie brauchen.

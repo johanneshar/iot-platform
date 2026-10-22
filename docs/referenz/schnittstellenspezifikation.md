@@ -1,7 +1,7 @@
 # Schnittstellenspezifikation Maschinendaten (Entwurf)
 
 ::: warning Kopie zur Ansicht
-Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie entspricht Entwurf 0.2 vom 2026-10-22 und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
+Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie entspricht Entwurf 0.3 vom 2026-10-22 und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
 :::
 
 Oct 21, 2026 · @Johannes
@@ -13,7 +13,7 @@ Diese Spezifikation ist der Vertrag zwischen Automatisierung und Plattform: Jede
 - **Gilt für:** alle neuen eigenen Maschinen, nachgerüstete Bestandsmaschinen und Fremdmaschinen in einer Linie
 - **Regelt:** welche Daten in welcher Struktur, mit welchen Metadaten und in welcher Qualität auf dem Edge Device ankommen
 - **Regelt nicht:** wie die Daten in der Steuerung erzeugt werden (Sache der Automatisierung) und wie die Module sie darstellen (Sache der Plattform)
-- **Status:** Entwurf, Version 0.2 (Stand 2026-10-22) – zur Abstimmung mit der Automatisierung; Änderungen gegenüber 0.1 im Abschnitt „Änderungen in Entwurf 0.2“
+- **Status:** Entwurf, Version 0.3 (Stand 2026-10-22) – zur Abstimmung mit der Automatisierung; Änderungen gegenüber 0.1 im Abschnitt „Änderungen seit Entwurf 0.1“
 
 ## Verantwortlichkeiten und Schnittstellengrenze
 
@@ -111,13 +111,16 @@ Gezeigt ist jeweils nur der Inhalt von `data`; der Umschlag ist immer gleich.
   "position": 3,
   "interfaceVersion": "1.0",
   "conformance": "full",
-  "nominalRate": 320
+  "nominalRate": 320,
+  "source": "S7-1500 · IIoT-Datenbaustein (OPC UA)"
 }
 ```
 
 `manufacturer` ist `own` oder der Herstellername; `conformance` ist `basic`, `standard` oder `full`.
 
 `nominalRate` ist die Sollleistung in Stück pro Minute und Pflicht – Grundlage der OEE-Leistung. Die geplante Produktionszeit (Schichtmodell) gehört nicht zur Maschine, sondern zur Linienkonfiguration der Plattform.
+
+`source` ist optional: die Anbindung der Maschine im Klartext, z. B. „OPC UA · PackML-Tags“. Der Normalizer setzt sie aus der Mapping-Datei.
 
 **state**
 
@@ -226,9 +229,9 @@ Die Plattform stellt ein Prüfwerkzeug bereit, das die Topics einer Maschine ein
 
 Der Prüfbericht wird Teil der Inbetriebnahmedokumentation der Maschine.
 
-## Änderungen in Entwurf 0.2
+## Änderungen seit Entwurf 0.1
 
-Entwurf 0.2 übernimmt die Entscheidungen vom 21. und 22.10.2026; die JSON Schemas im Plattform-Repository setzen sie um (ADR-003).
+Entwurf 0.2 und 0.3 übernehmen die Entscheidungen vom 21. und 22.10.2026; die JSON Schemas im Plattform-Repository setzen sie um (ADR-003, ADR-006).
 
 | Nr. | Änderung | Datenklasse |
 | --- | --- | --- |
@@ -238,6 +241,7 @@ Entwurf 0.2 übernimmt die Entscheidungen vom 21. und 22.10.2026; die JSON Schem
 | S-05 | Geplante Produktionszeit gehört zur Linienkonfiguration der Plattform | – |
 | S-06 | `min`/`max` im Katalog sind optional | `meta` |
 | – | Zeitstempel RFC 3339 in UTC mit `Z`; Texte je Sprache, Deutsch Pflicht; `value` immer Zahl | alle |
+| S-07 | Optionales Feld `source`: Datenquelle der Maschine im Klartext (Entwurf 0.3) | `identity` |
 
 ## Offene Punkte
 

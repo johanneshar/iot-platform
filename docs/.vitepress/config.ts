@@ -48,6 +48,7 @@ export default defineConfig({
             link: '/adr/ADR-004-anmeldung-audit-signatur',
           },
           { text: 'ADR-005 Datenzugriff', link: '/adr/ADR-005-datenzugriff' },
+          { text: 'ADR-006 Datenquelle', link: '/adr/ADR-006-identity-source' },
         ],
       },
       {

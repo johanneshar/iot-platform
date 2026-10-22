@@ -7,7 +7,7 @@ ohne Edge Device.
 
 - Node.js 22 LTS (Version steht in `.nvmrc`)
 - pnpm 12 (Version steht in `package.json` unter `packageManager`; `corepack enable` richtet sie ein)
-- Docker Desktop (für den lokalen MQTT-Broker)
+- Docker Desktop – nur für `pnpm dev:mosquitto`; `pnpm dev` braucht kein Docker
 - VS Code, empfohlen mit der Erweiterung „Dev Containers“
 
 ## Variante A: lokal
@@ -27,9 +27,8 @@ ohne Edge Device.
    pnpm dev
    ```
 
-   _Ergebnis:_ Der MQTT-Broker läuft auf Port 1883, die Shell unter <http://localhost:5180>, das
-   Core-Backend unter <http://localhost:4000/api/health>. Läuft Docker nicht, erscheint ein Hinweis und
-   Shell und Backend starten trotzdem.
+   _Ergebnis:_ MQTT-Broker (im Prozess, Port 1883), Simulator, Core und alle Module laufen. Die Shell steht
+   unter <http://localhost:5180> – anmelden z. B. als `operator` mit `entwicklung`.
 
 3. **Doku starten** (in einem zweiten Terminal)
 
@@ -91,6 +90,7 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | `pnpm build`                                     | Produktions-Build aller Pakete                                                                              |
 | `pnpm test:e2e`                                  | E2E- und Barrierefreiheitstests (Playwright + axe); einmalig vorher `pnpm exec playwright install chromium` |
 | `pnpm format`                                    | Code formatieren                                                                                            |
+| `pnpm dev:mosquitto`                             | wie `pnpm dev`, aber mit Mosquitto in Docker                                                                |
 | `pnpm dev:broker:stop`                           | MQTT-Broker beenden                                                                                         |
 | `pnpm dev:line2`                                 | zweite Linie „Linie 2 · Spritzen“ mit eigenem Core starten (Linienwahl testen)                              |
 | `pnpm create-module <id> "<Name>" --port <port>` | neues Modul aus der Vorlage ([Anleitung](/anleitungen/neues-modul))                                         |

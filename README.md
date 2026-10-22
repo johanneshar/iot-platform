@@ -5,11 +5,11 @@ Modulare IoT-Plattform für Pharma-Abfülllinien auf Siemens Industrial Edge. Ei
 
 ## Schnellstart
 
-Voraussetzungen: Node.js 22, pnpm 12 (`corepack enable`), Docker Desktop.
+Voraussetzungen: Node.js 22, pnpm 12 (`corepack enable`). Docker ist nicht nötig.
 
 ```bash
 pnpm install
-pnpm dev     # MQTT-Broker, Shell (http://localhost:5180), Core-Backend (:4000)
+pnpm dev     # Broker, Simulator, Core, Module – Shell http://localhost:5180 (Benutzer operator, Passwort entwicklung)
 pnpm docs    # Dokumentation (http://localhost:5181)
 ```
 
