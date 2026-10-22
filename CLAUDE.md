@@ -170,6 +170,11 @@ export interface ModuleManifest {
 }
 ```
 
+Umgesetzt ist das Manifest in zwei Teilen (ADR-002): `ModuleManifest` ist reines JSON und enthält
+zusätzlich `entry` (Adresse des Einstiegsmoduls) und `styles`; das Modul-Backend meldet es beim Start an.
+`badge` und die Seitenkomponenten liefert das Einstiegsmodul (`ModuleEntry`). Reservierte IDs:
+`baukasten`, `api`, `shared`, `assets`.
+
 ### 6.2 Modul-SDK (`packages/module-sdk`)
 
 Alles, was ein Modul vom System braucht, kommt aus dem SDK – damit sieht jedes Modul gleich aus und
@@ -187,7 +192,7 @@ verhält sich gleich:
 ### 6.3 Neues Modul anlegen (Ablauf)
 
 ```bash
-pnpm create-module <id>      # erzeugt modules/<id>/ aus tooling/module-template
+pnpm create-module <id> "<Name>" --port <port>   # erzeugt modules/<id>/ aus tooling/module-template
 ```
 
 Das Template enthält bereits:
@@ -196,7 +201,7 @@ Das Template enthält bereits:
 modules/<id>/
 ├── manifest.ts              # Manifest ausfüllen
 ├── frontend/pages/          # Seiten, nur mit @iot/ui-Komponenten
-├── backend/                 # Fastify-Service (optional)
+├── backend/                 # Fastify-Service: liefert entry.js aus, meldet das Manifest beim Core an
 ├── tests/                   # Unit + E2E
 ├── docs/
 │   ├── entwickler.md        # Aufbau, Datenfluss, Entscheidungen
@@ -326,7 +331,9 @@ iot-platform/
 │   ├── simulator/                # Erzeugt Linien- und Maschinendaten nach Spezifikation
 │   └── conformance-checker/      # Prüfwerkzeug für die Automatisierung
 ├── tooling/
-│   └── module-template/          # Vorlage für pnpm create-module
+│   ├── module-template/          # Vorlage für pnpm create-module
+│   ├── example/                  # Beispielmodul aus der Vorlage (Anleitung, E2E der Shell) – kein Produktmodul
+│   └── scripts/                  # dev, create-module, module-dev, dev-line2, serve-static
 ├── deploy/
 │   ├── docker-compose.dev.yml    # Mosquitto + Simulator + Core + alle Module
 │   └── edge/                     # Paketierung, iectl-Skripte
@@ -451,7 +458,9 @@ pnpm test           # alle Unit-Tests
 pnpm test:e2e       # E2E + axe (Playwright)
 ```
 
-Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180.
+Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
+Backend 4000, Beispielmodul 4100, zweite Linie 4001/5190 (`pnpm dev:line2`), Storybook 5182, Doku 5181,
+E2E-Tests 4010/4110/5185.
 
 Im Dev-Betrieb ersetzt ein lokaler Mosquitto-Broker den Databus. Der Simulator erzeugt die Daten aus dem
 Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und ohne Edge Device möglich ist.
@@ -460,6 +469,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M2 sind abgeschlossen (siehe `docs/changelog.md`). Die Optik ist über Referenzbilder aller Stories
-eingefroren; die Schnittstelle liegt als JSON Schema vor (ADR-003), der Simulator liefert beide Linien.
-Nächster Schritt: Plan für **M3** vorlegen und auf Freigabe warten.
+M0 bis M2 und M3a sind abgeschlossen (siehe `docs/changelog.md`). M3 ist geteilt (E-24): M3a Shell und
+Modul-Registry, M3b Benutzer, Rollen, Audit Trail und e-Signatur. Nächster Schritt: **M3b** – zuerst den
+Vorschlag der Rechte-Matrix (O-05) zur Bestätigung vorlegen.

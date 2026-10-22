@@ -2,6 +2,26 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M3a – Shell und Modul-Registry (2026-10-22)
+
+**Neu**
+
+- `module-sdk`: Modul-Manifest (statischer Teil und Einstiegsmodul), `validateManifest()`, Shell-Kontext mit
+  `useLine`, `useNavigate`, `useDeepLinkParams`, `useIsModuleBooked`
+- Core-Backend: Registry, Produktkatalog des Baukastens, Lizenzspeicher (SQLite) hinter einer Schnittstelle
+  bis zur IEM-Anbindung, Standortkonfiguration der Linien
+- Shell: Navigation nur aus Manifesten, Sperrbildschirm, Baukasten mit Kategoriefilter, Linienwahl zum Core
+  der anderen Linie, Sprachumschaltung; Module werden per ES-Modul und Import-Map geladen
+  ([ADR-002](/adr/ADR-002-modul-einbindung) angenommen)
+- `pnpm create-module` mit Vorlage; Beispielmodul `tooling/example`
+- E2E-Tests der Shell mit axe; `pnpm dev:line2` für die zweite Linie
+
+**Demo**
+
+1. `pnpm dev` → <http://localhost:5180> zeigt das Beispielmodul in der Navigation.
+2. Baukasten öffnen, beim Beispielmodul „Aktiv – deaktivieren“ → Schloss in der Navigation, Sperrbildschirm.
+3. „Modul aktivieren“ → Seite erscheint wieder.
+
 ## M2 – Schnittstellen-Schema und Simulator (2026-10-22)
 
 **Neu**

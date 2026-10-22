@@ -56,21 +56,27 @@ ohne Edge Device.
 
 ## Ports
 
-| Port | Dienst                                   |
-| ---- | ---------------------------------------- |
-| 1883 | MQTT-Broker (Mosquitto, nur Entwicklung) |
-| 4000 | Core-Backend                             |
-| 5180 | Shell (Core-Frontend)                    |
-| 5181 | Doku                                     |
+| Port             | Dienst                                   |
+| ---------------- | ---------------------------------------- |
+| 1883             | MQTT-Broker (Mosquitto, nur Entwicklung) |
+| 4000             | Core-Backend                             |
+| 5180             | Shell (Core-Frontend)                    |
+| 5181             | Doku                                     |
+| 5182             | Storybook                                |
+| 4100             | Beispielmodul (`tooling/example`)        |
+| 4001, 5190       | zweite Linie mit `pnpm dev:line2`        |
+| 4010, 4110, 5185 | E2E-Tests (`pnpm test:e2e`)              |
 
 ## Weitere Befehle
 
-| Befehl                 | Zweck                                                                                                       |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `pnpm build`           | Produktions-Build aller Pakete                                                                              |
-| `pnpm test:e2e`        | E2E- und Barrierefreiheitstests (Playwright + axe); einmalig vorher `pnpm exec playwright install chromium` |
-| `pnpm format`          | Code formatieren                                                                                            |
-| `pnpm dev:broker:stop` | MQTT-Broker beenden                                                                                         |
+| Befehl                                           | Zweck                                                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `pnpm build`                                     | Produktions-Build aller Pakete                                                                              |
+| `pnpm test:e2e`                                  | E2E- und Barrierefreiheitstests (Playwright + axe); einmalig vorher `pnpm exec playwright install chromium` |
+| `pnpm format`                                    | Code formatieren                                                                                            |
+| `pnpm dev:broker:stop`                           | MQTT-Broker beenden                                                                                         |
+| `pnpm dev:line2`                                 | zweite Linie „Linie 2 · Spritzen“ mit eigenem Core starten (Linienwahl testen)                              |
+| `pnpm create-module <id> "<Name>" --port <port>` | neues Modul aus der Vorlage ([Anleitung](/anleitungen/neues-modul))                                         |
 
 ## Commits
 

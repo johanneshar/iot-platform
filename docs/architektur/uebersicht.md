@@ -33,6 +33,25 @@ Steuerung ──Connector──▶ Databus ──Normalizer──▶ iot/v1/{lin
 - **GxP-relevante Aktionen** gehen immer über die Audit-API des Core.
 - **Die Plattform liest nur.**
 
+## Shell und Modul-Registry
+
+```text
+Modul-Backend ──POST /api/registry/modules──▶ Core (Registry, SQLite)
+Shell ──GET /api/shell──▶ Linie, Standortlinien, Katalog + angemeldete Module + Buchungsstand
+Shell ──import(entry.js)──▶ Einstiegsmodul des Moduls (React, @iot/ui, module-sdk über die Import-Map)
+```
+
+1. Jedes Modul meldet beim Start sein Manifest an; die Registry prüft es.
+2. Die Shell baut daraus die Navigation. Nicht gebuchte Module erscheinen mit Schloss und zeigen den
+   Sperrbildschirm.
+3. Gebuchte Module lädt die Shell als ES-Modul und rendert die Seite zum aufgerufenen Pfad
+   ([ADR-002](/adr/ADR-002-modul-einbindung)).
+4. Der **Baukasten** zeigt den Produktkatalog (`apps/core/backend/config/catalog.json`) mit Buchungsstand.
+   Den Lizenzstatus liefert im Betrieb das IEM; bis die Anbindung steht (O-06), speichert der Core ihn lokal.
+
+**Mehrere Linien:** Jede Linie hat ihr eigenes Edge Device mit eigenem Core (E-23). Die Linienwahl springt
+zur Adresse des Core der anderen Linie (`config/site.dev.json`).
+
 ## Benutzer und Rollen
 
 Anmeldung lokal am Core oder – wenn der Kunde es wünscht – über LDAP.

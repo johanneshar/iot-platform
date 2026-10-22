@@ -20,7 +20,7 @@ dasselbe Typensystem teilen. Das Mockup muss exakt umgesetzt werden.
 | Komponenten-Doku | Storybook (ab M1)                                                                                           |
 | Backend je Modul | Fastify                                                                                                     |
 | Datenzugriff     | MQTT (Databus), optional IIH per REST/GraphQL                                                               |
-| Persistenz       | SQLite je Modul, Audit Trail zentral im Core                                                                |
+| Persistenz       | SQLite je Modul (`better-sqlite3`), Audit Trail zentral im Core                                             |
 | Schemas          | JSON Schema → generierte TS-Typen                                                                           |
 | i18n             | i18next + react-i18next, ein Namespace je Paket, Rückfall auf Deutsch                                       |
 | Monorepo         | pnpm Workspaces + Turborepo                                                                                 |
