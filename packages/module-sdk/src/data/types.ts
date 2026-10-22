@@ -53,9 +53,12 @@ export interface MachineSnapshot {
   /** Verlauf seit Beginn der Beobachtung in der laufenden Schicht */
   history: {
     states: StatePeriod[];
-    /** Erster Zählerstand der Schicht (bzw. seit Start des Core) */
+    /**
+     * Erster Zählerstand der Schicht (bzw. seit Start des Core). Nach einem Zählerreset um den Stand vor dem
+     * Reset verschoben (auch negativ), damit `counters − counterBaseline` die Menge der Schicht bleibt.
+     */
     counterBaseline: CounterSample | null;
-    /** Zählerstände der letzten Minuten für die aktuelle Leistung */
+    /** Zählerstände der letzten Minuten für die aktuelle Leistung (nach einem Reset ebenso verschoben) */
     recentCounters: CounterSample[];
   };
 }

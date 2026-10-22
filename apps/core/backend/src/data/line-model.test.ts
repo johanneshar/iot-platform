@@ -88,6 +88,35 @@ describe('Linienmodell', () => {
     expect(insp?.history.counterBaseline?.good).toBe(55130);
   });
 
+  it('rechnet nach einem Zählerreset mit der bisherigen Menge weiter', () => {
+    const m = model();
+    feed(m, messages);
+    const topic = 'iot/v1/l1/l1-insp/counters';
+    const counters = (good: number, bad: number, resetAt: string, ts: string) => ({
+      schema: 'iot.counters/1.0',
+      machineId: 'l1-insp',
+      ts,
+      tsEdge: ts,
+      quality: 'good',
+      data: { good, bad, total: good + bad, resetAt },
+    });
+    const before = m.snapshot().machines.find((x) => x.machineId === 'l1-insp');
+    const start = before?.counters;
+    if (!start?.bad) throw new Error('Zähler der Inspektionsmaschine fehlen');
+    // 100 Stück nach Beobachtungsbeginn, dann Reset der Steuerung und 20 weitere Stück
+    m.apply(
+      topic,
+      counters(start.good + 90, start.bad + 10, start.resetAt, '2026-10-21T12:21:00.000Z'),
+    );
+    m.apply(topic, counters(18, 2, '2026-10-21T12:21:30.000Z', '2026-10-21T12:22:00.000Z'));
+    const insp = m.snapshot().machines.find((x) => x.machineId === 'l1-insp');
+    const base = insp?.history.counterBaseline;
+    expect(insp?.counters && base && insp.counters.total - base.total).toBe(120);
+    expect(insp?.counters && base && insp.counters.good - base.good).toBe(108);
+    const recent = insp?.history.recentCounters ?? [];
+    expect((recent.at(-1)?.total ?? 0) - (recent.at(-2)?.total ?? 0)).toBe(20);
+  });
+
   it('meldet Änderungen an Abonnenten', () => {
     const m = model();
     let calls = 0;

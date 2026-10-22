@@ -153,6 +153,23 @@ export class LineModel {
       }
       case 'counters': {
         const counters = data as DataByClass['counters'];
+        const previous = machine.counters;
+        // Zählerreset (neues resetAt oder fallender Stand): bisher Gezähltes bleibt erhalten, indem
+        // Basis und letzte Stände um den Stand vor dem Reset verschoben werden (Spezifikation: counters)
+        if (
+          previous &&
+          (previous.resetAt !== counters.resetAt || counters.total < previous.total)
+        ) {
+          const shift = (s: CounterSample): CounterSample => ({
+            ...s,
+            good: s.good - previous.good,
+            total: s.total - previous.total,
+            ...(s.bad === undefined ? {} : { bad: s.bad - (previous.bad ?? 0) }),
+          });
+          const { history } = machine;
+          if (history.counterBaseline) history.counterBaseline = shift(history.counterBaseline);
+          history.recentCounters = history.recentCounters.map(shift);
+        }
         machine.counters = { ...counters, ts };
         const sample = this.sample(counters, ts);
         machine.history.counterBaseline ??= sample;
