@@ -1,7 +1,7 @@
 # Simulator nutzen
 
-Für Entwicklerinnen und Entwickler: Nach dieser Anleitung laufen die Daten von Linie 1 (Vials) und Linie 2
-(Spritzen) aus dem Mockup über MQTT – ohne Maschine und ohne Edge Device.
+Für Entwicklerinnen und Entwickler: Nach dieser Anleitung laufen die Daten der Linie 3 · Flexfill über MQTT –
+ohne Maschine und ohne Edge Device.
 
 ## Starten
 
@@ -12,7 +12,7 @@ Für Entwicklerinnen und Entwickler: Nach dieser Anleitung laufen die Daten von 
    ```
 
    _Ergebnis:_ Der MQTT-Broker läuft im Prozess auf Port 1883 (ohne Docker), der Simulator meldet
-   `Simulator: verbunden mit mqtt://localhost:1883, sende Linie 1 · Vials und Linie 2 · Spritzen`.
+   `Simulator: verbunden mit mqtt://localhost:1883, sende Linie 3 · Flexfill`.
    Er startet erst, wenn der Core die Topics abonniert hat – sonst gingen die anstehenden Alarme verloren. Mit
    Mosquitto in Docker: `pnpm dev:mosquitto`.
 
@@ -30,70 +30,56 @@ Nur der Simulator, ohne Shell: `pnpm --filter @iot/simulator start`. Anderer Bro
 
 ## Was gesendet wird
 
-| Maschine                     | ID          | Stufe    | Topics                                                              |
-| ---------------------------- | ----------- | -------- | ------------------------------------------------------------------- |
-| Waschmaschine                | `l1-wash`   | standard | identity, meta, state, counters, alarms, values                     |
-| Sterilisationstunnel         | `l1-tunnel` | basic    | identity, state, counters (gut/gesamt), alarms (nur `COMMON-FAULT`) |
-| Füll- und Verschließmaschine | `l1-fill`   | full     | alle, inkl. batch und quittierte Alarme                             |
-| Inspektionsmaschine          | `l1-insp`   | standard | identity, meta, state, counters, alarms, values                     |
-| Tub-Entdeckler               | `l2-detub`  | basic    | identity, state, counters (gut/gesamt), alarms (nur `COMMON-FAULT`) |
-| Füll- und Verschließmaschine | `l2-fill`   | full     | alle, inkl. batch und quittierte Alarme                             |
-| Etikettierer                 | `l2-label`  | standard | identity, meta, state, counters, alarms, values                     |
+Seit 2026-10-22 simuliert der Simulator nur noch die Linie 3 · Flexfill (E-47, `fixtures/flexfill.ts`). Die
+Mockup-Daten der Linien 1 und 2 (`fixtures/mockup.ts`) nutzt nur noch Storybook.
 
-- **Zustände, Werte, Alarme, Batches** wie im Mockup. Die Uhrzeiten des Mockups gelten als Ortszeit am
-  heutigen Tag.
-- **Zähler** starten mit den Ständen des Mockups und steigen mit der Leistung der Maschine, solange sie in
-  `Execute` ist.
+| Maschine                     | ID            | Stufe | Topics                                                                       |
+| ---------------------------- | ------------- | ----- | ---------------------------------------------------------------------------- |
+| Isolator (Fremdmaschine)     | `l3-iso`      | basic | identity, state, counters (gut/gesamt), alarms/activeAlarms (`COMMON-FAULT`) |
+| Beutelauspacker              | `l3-debag`    | full  | alle, inkl. batch und quittierte Alarme                                      |
+| Öffner (Delid/Delining)      | `l3-delid`    | full  | alle, inkl. batch und quittierte Alarme                                      |
+| Füll- und Verschließmaschine | `l3-fill`     | full  | alle, inkl. batch und quittierte Alarme                                      |
+| Transfermodul                | `l3-transfer` | full  | alle, inkl. batch und quittierte Alarme                                      |
+| Bördelmodul                  | `l3-cap`      | full  | alle, inkl. batch und quittierte Alarme                                      |
+
+Aufbau nach Beschreibung vom 2026-10-22: Isolator → Beutelauspacker → Öffner → Füll- und Verschließmaschine →
+Transfermodul (Gut-/Schlechtauslauf, Roboter) → Bördelmodul. Alle Maschinen außer dem Isolator sind eigene
+Maschinen der Stufe Voll. 3D-Modell: `fixtures/models/flexfill_blockmodell.glb` mit Zuordnung
+`flexfill.model.json` (ADR-010).
+
+- **Zähler** steigen mit der Leistung der Maschine, solange sie in `Execute` ist.
 - Alle Nachrichten werden in den Tests gegen die Schemas geprüft.
 
-## Annahmen – nicht im Mockup enthalten
+## Annahmen (O-28, zu bestätigen)
 
 Diese Werte hat der Simulator festgelegt. Sie sind Platzhalter für die Entwicklung, keine Maschinendaten.
 
-| Thema                      | Annahme                                                                                                                                                                             |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Standort und Zeitzone      | `Europe/Berlin`                                                                                                                                                                     |
-| Rücksetzen der Zähler      | Schichtbeginn 06:00 („Schicht seit 06:00“); Füllmaschinen: Batchstart                                                                                                               |
-| Sollleistung je Maschine   | Sollleistung der Linie aus „286 von 320 /min“ bzw. „348 von 400 /min“                                                                                                               |
-| Schlechtzähler             | Füllmaschinen aus den Batchdaten; Inspektion und Etikettierer aus der Ausschussquote; Waschmaschine 0                                                                               |
-| `alarmId` und `textKey`    | im Simulator festgelegt (z. B. `FILL-CAP-0001`); `FILL-WGT-0003` stammt aus der Spezifikation                                                                                       |
-| Vergangene Alarme          | kommen und gehen zur selben Uhrzeit (Dauer unbekannt); Quittierung durch „[Bediener]“ nur bei Stufe full                                                                            |
-| Schlüssel der Prozesswerte | aus den Beschriftungen abgeleitet, z. B. „Wassertemperatur“ → `waterTemperature`                                                                                                    |
-| GxP-Kennzeichnung          | nur Füllgewicht/-volumen und Standardabweichung (offen: O-16)                                                                                                                       |
-| Hersteller, Seriennummer   | Platzhalter „[Hersteller]“, „[Seriennummer]“                                                                                                                                        |
-| Rezept Linie 2             | `syringe-1ml`, Version 5, ohne Formatteile                                                                                                                                          |
-| Betriebsart                | immer `Production`                                                                                                                                                                  |
-| Zustandswechsel            | Maschinen, die im Mockup stehen (Inspektion, Linie 2), wechseln: 1 min Zustand aus dem Mockup, 9 min Execute (≈ 90 % Verfügbarkeit); der zugehörige Alarm kommt und geht mit (O-24) |
-| Leistung im Lauf           | für diese Maschinen die Linienleistung aus der KPI „Leistung“: 286 bzw. 348 /min                                                                                                    |
-| Datenquelle                | Texte aus dem Mockup in `identity.source` (S-07)                                                                                                                                    |
+| Thema                    | Annahme                                                                                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Standort und Zeitzone    | `Europe/Berlin`, drei Schichten (06:00, 14:00, 22:00), kein OEE-Ziel hinterlegt                                                              |
+| Leistung                 | Soll 100 /min, Ist 92 /min                                                                                                                   |
+| Prozesswerte             | Tubs im Puffer, Abzugskraft Folie, Füllgewicht 2,01 g (Grenzen 1,95–2,05), Differenzdruck Isolator, Robotertakt, Bördelkraft (1.300–1.600 N) |
+| Isolator                 | Fremdsteuerung, Basissignale über S7-Connector; Zähler gut 18.700; Sammelstörung um 12:40 (vergangen)                                        |
+| Bördelmodul              | wechselt zwischen „Suspended – Einlauf leer“ (Alarm `CAP-INF-0001` „Einlauf: keine Vials“) und Lauf                                          |
+| Alarme                   | `FILL-WGT-0003` (steht an), `FILL-STP-0001` (vergangen), `TRF-ROB-0001` Roboter (steht an, ohne Fehlerbaum), `CAP-INF-0001`, `COMMON-FAULT`  |
+| Batch                    | `B-2026-3001`, Start 06:05, Rezept `vial-nest` v1, Produktname „[Produktname]“                                                               |
+| Hersteller, Seriennummer | Platzhalter „[Hersteller]“, „[Seriennummer]“                                                                                                 |
+| Betriebsart              | immer `Production`                                                                                                                           |
+| 3D-Modell                | Positionen der Alarmstellen im Blockmodell; mit dem CAD-Export nach Namensregel (ADR-010) entfallen die Koordinaten                          |
 
 ## Batch-Zyklus (M6)
 
 Annahme für die Entwicklung: Ein Batch läuft 15 min; nach 2 min Pause startet der nächste mit fortlaufender
-Nummer (B-2026-1042 → B-2026-1043), die Zähler der Maschinen mit Batch beginnen bei null (`resetAt` =
+Nummer (B-2026-3001 → B-2026-3002), die Zähler der Maschinen mit Batch beginnen bei null (`resetAt` =
 Batchstart). Alle Maschinen der Stufe Voll einer Linie gehören zum selben Batch. Verkürzbar mit
 `SIM_BATCH_RUN_MS` und `SIM_BATCH_PAUSE_MS` (E2E: 20 s / 5 s).
-
-## Linie 3 · Flexfill (nicht im Mockup)
-
-Aufbau nach Beschreibung vom 2026-10-22 (`fixtures/flexfill.ts`): Beutelauspacker → Öffner (Delid/Delining) →
-Füll- und Verschließmaschine → Transfermodul (Gut-/Schlechtauslauf, Roboter) → Bördelmodul; alle eigene
-Maschinen der Stufe Voll. Starten mit `pnpm dev:line3` (eigener Core 4002, Shell
-<http://localhost:5195>, Module 4201–4203), während `pnpm dev` läuft. 3D-Modell:
-`fixtures/models/flexfill_blockmodell.glb` mit Zuordnung `flexfill.model.json`.
-
-**Annahmen (O-28, zu bestätigen):** Sollleistung 100 /min, Ist 92 /min; Prozesswerte (Tubs im Puffer,
-Abzugskraft Folie, Füllgewicht 2,01 g mit Grenzen 1,95–2,05, Differenzdruck Isolator, Robotertakt,
-Bördelkraft mit Grenzen 1.300–1.600 N); Bördelmodul wechselt zwischen „Suspended – Einlauf leer“ und Lauf;
-Alarme `FILL-WGT-0003` (steht an), `FILL-STP-0001` (vergangen), `TRF-ROB-0001` Roboter (steht an, ohne
-Fehlerbaum); Batch `B-2026-3001`, Rezept `vial-nest` v1; Positionen der Alarmstellen im Blockmodell.
 
 ## Einschränkungen
 
 - Anstehende Alarme (`activeAlarms`) und der laufende Batch (`batch`) sind retained (Entwurf 0.4, ADR-012):
   Später gestartete Cores und Module kennen den Stand sofort. Vergangene Alarmereignisse sieht nur, wer beim
   Start verbunden war.
-- Produktname aller Batches ist der Platzhalter „[Produktname]“ aus dem Mockup. Sollmenge (Annahme): für den
-  Batch aus dem Mockup Menge ÷ Fortschritt, für die folgenden Batches die Menge eines Batch-Laufs.
+- Produktname aller Batches ist der Platzhalter „[Produktname]“. Sollmenge (Annahme): für den ersten Batch
+  Menge ÷ Fortschritt, für die folgenden Batches die Menge eines Batch-Laufs.
 - Prozesswerte ändern sich nicht. Weitere Dynamik (Rauschen, neue Alarme) kommt bei Bedarf mit den Modulen,
   die sie brauchen.

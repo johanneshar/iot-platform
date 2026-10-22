@@ -80,10 +80,8 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | 5181                  | Doku                                         |
 | 5182                  | Storybook                                    |
 | 4100                  | Beispielmodul (`tooling/example`)            |
-| 4001, 5190            | zweite Linie mit `pnpm dev:line2`            |
-| 4002, 5195, 4201–4204 | dritte Linie (Flexfill) mit `pnpm dev:line3` |
-| 4101, 4102, 4103      | Module Dashboard, Alarme, Fehlersuche        |
-| 4010, 4110, 5185      | E2E-Tests (`pnpm test:e2e`)                  |
+| 4101–4104             | Module Dashboard, Alarme, Fehlersuche, Batch |
+| 4010, 4110–4114, 5185 | E2E-Tests (`pnpm test:e2e`)                  |
 
 ## Weitere Befehle
 
@@ -94,8 +92,6 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | `pnpm format`                                    | Code formatieren                                                                                            |
 | `pnpm dev:mosquitto`                             | wie `pnpm dev`, aber mit Mosquitto in Docker                                                                |
 | `pnpm dev:broker:stop`                           | MQTT-Broker beenden                                                                                         |
-| `pnpm dev:line2`                                 | zweite Linie „Linie 2 · Spritzen“ mit eigenem Core starten (Linienwahl testen)                              |
-| `pnpm dev:line3`                                 | dritte Linie „Linie 3 · Flexfill“ mit eigenem Core und Modulen (3D-Ansicht)                                 |
 | `pnpm create-module <id> "<Name>" --port <port>` | neues Modul aus der Vorlage ([Anleitung](/anleitungen/neues-modul))                                         |
 
 ## Commits

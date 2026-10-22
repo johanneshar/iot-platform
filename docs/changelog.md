@@ -2,6 +2,18 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## Nach M6: nur noch Linie 3 · Flexfill (2026-10-22)
+
+- Simulator, Core und Tests laufen nur noch mit Linie 3 · Flexfill (E-47); Linien 1 und 2 bleiben als
+  Mockup-Daten in Storybook
+- Neu: Isolator als Fremdmaschine der Stufe Basis vor dem Beutelauspacker, im 3D-Modell zugeordnet; Alarm
+  `CAP-INF-0001` „Einlauf: keine Vials“ am Bördelmodul
+- Module übernehmen die Linie vom Core (`fetchLineConfig`); `pnpm dev:line2` und `pnpm dev:line3` entfallen
+- E2E-Test der Linienwahl entfällt (die Funktion bleibt)
+
+**Demo:** `pnpm dev` neu starten, <http://localhost:5180> öffnen – die Linienübersicht zeigt die sechs
+Maschinen der Flexfill, der Isolator ist als „Fremd · Basis“ markiert.
+
 ## Nach M6: Schnittstelle Entwurf 0.4 (2026-10-22)
 
 - `batch` retained mit `startedAt`, neue Datenklasse `activeAlarms` (retained), `productName` und

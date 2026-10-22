@@ -412,7 +412,7 @@ Datum: JJJJ-MM-TT
 | --- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | M0  | Monorepo, Linting, Formatierung, CI, Dev-Container, Doku-Gerüst, ADR-001                                  | `pnpm dev` startet leere Shell, `pnpm docs` startet Doku         |
 | M1  | Design Tokens + `@iot/ui` mit allen Komponenten aus 7.4 in Storybook                                      | Komponenten pixelgleich zum Mockup                               |
-| M2  | `interface-schema` + Simulator (Linie 1 Vials, Linie 2 Spritzen wie im Mockup)                            | Simulator erzeugt schemakonforme Daten                           |
+| M2  | `interface-schema` + Simulator (seit 2026-10-22 nur Linie 3 · Flexfill, E-47)                             | Simulator erzeugt schemakonforme Daten                           |
 | M3  | Core: Shell, Linienwahl, Modul-Registry, Sperrbildschirm, Baukasten, Audit-API, Rollen                    | Module erscheinen nur per Manifest; Abschalten sperrt Navigation |
 | M4  | Modul Linien-Dashboard                                                                                    | entspricht Mockup-Ansicht „Linienübersicht“                      |
 | M5  | Module Alarme + Geführte Fehlersuche (inkl. Fehlerbaum-Format)                                            | Alarm → Fehlersuche per Deep Link                                |
@@ -466,18 +466,18 @@ pnpm test:e2e       # E2E + axe (Playwright)
 ```
 
 Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
-Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, Batch 4104, zweite Linie
-4001/5190 (`pnpm dev:line2`), dritte Linie Flexfill 4002/5195 mit Modulen 4201–4204 (`pnpm dev:line3`),
-Storybook 5182, Doku 5181, E2E-Tests 4010/4110–4114/5185.
+Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, Batch 4104, Storybook 5182,
+Doku 5181, E2E-Tests 4010/4110–4114/5185.
 
 Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
-Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten aus dem
-Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und ohne Edge Device möglich ist.
+Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten der
+Linie 3 · Flexfill (Isolator als Fremdmaschine der Stufe Basis, E-47), damit Entwicklung ohne Maschine und ohne
+Edge Device möglich ist. Die Mockup-Daten der Linien 1 und 2 nutzt nur noch Storybook.
 
 ---
 
 ## 14. Stand
 
 M0 bis M6 (Batch-Reporting mit e-Signatur) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
-Schritt: Plan für **M7** (Formatwechsel, Ersatzteilkatalog) vorlegen und auf Freigabe warten. Offen aus
-M5a/M6: Flexfill-Annahmen (O-28), Rechte im Batch (O-29), veraPDF-Prüfung (O-32).
+Schritt: Plan für **M7** (Formatwechsel, Ersatzteilkatalog) vorlegen und auf Freigabe warten. Seit 2026-10-22 läuft und testet
+alles mit Linie 3 · Flexfill (E-47). Offen aus M5a/M6: Flexfill-Annahmen (O-28), Rechte im Batch (O-29), veraPDF-Prüfung (O-32).
