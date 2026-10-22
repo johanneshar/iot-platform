@@ -161,3 +161,78 @@ describe('Simulator', () => {
     expect(published.length - afterStart).toBe(machines.length);
   });
 });
+
+describe('Zustandswechsel (O-24)', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function run() {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+    const published: Outgoing[] = [];
+    const sim = new Simulator((o) => published.push(o));
+    sim.start();
+    const since = published.length;
+    const after = () => published.slice(since);
+    const data = (o: Outgoing) => o.message.data as Record<string, unknown>;
+    return { sim, after, data };
+  }
+
+  it('die Inspektion läuft nach 1 min an; ihr Alarm geht', () => {
+    const { sim, after, data } = run();
+    vi.advanceTimersByTime(60_000);
+    const insp = after().filter((o) => o.topic.startsWith('iot/v1/l1/l1-insp/'));
+    expect(insp.filter((o) => o.topic.endsWith('/state')).map((o) => data(o)['state'])).toEqual([
+      'Execute',
+    ]);
+    expect(
+      insp
+        .filter((o) => o.topic.endsWith('/alarms'))
+        .map((o) => [data(o)['alarmId'], data(o)['event']]),
+    ).toEqual([['INSP-OUT-0001', 'cleared']]);
+    sim.stop();
+  });
+
+  it('nach 9 min Lauf steht sie wieder und der Alarm kommt erneut', () => {
+    const { sim, after, data } = run();
+    vi.advanceTimersByTime(60_000 + 9 * 60_000);
+    const states = after()
+      .filter((o) => o.topic === 'iot/v1/l1/l1-insp/state')
+      .map((o) => [data(o)['state'], data(o)['reason']]);
+    expect(states).toEqual([
+      ['Execute', null],
+      ['Suspended', 'Auslauf gestaut'],
+    ]);
+    sim.stop();
+  });
+
+  it('im Lauf zählt die Inspektion mit der Linienleistung (286 /min)', () => {
+    const { sim, after } = run();
+    vi.advanceTimersByTime(60_000 + 60_000);
+    const counters = after().filter((o) => o.topic === 'iot/v1/l1/l1-insp/counters');
+    const totals = counters.map((o) => (o.message.data as { total: number }).total);
+    const first = totals[0] ?? 0;
+    const last = totals.at(-1) ?? 0;
+    expect(last - first).toBeGreaterThan(250);
+    expect(last - first).toBeLessThan(320);
+    sim.stop();
+  });
+
+  it('laufende Maschinen wechseln nicht', () => {
+    const { sim, after } = run();
+    vi.advanceTimersByTime(20 * 60_000);
+    expect(after().some((o) => o.topic === 'iot/v1/l1/l1-fill/state')).toBe(false);
+    sim.stop();
+  });
+
+  it('alle Nachrichten der Wechsel sind schemakonform', () => {
+    const { sim, after } = run();
+    vi.advanceTimersByTime(11 * 60_000);
+    for (const o of after()) {
+      const parsed = parseTopic(o.topic);
+      expect(validateMessage(parsed?.dataClass as DataClass, o.message).errors).toEqual([]);
+    }
+    sim.stop();
+  });
+});

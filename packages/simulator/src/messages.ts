@@ -55,6 +55,7 @@ export function identityMessage(machine: SimMachine, now: Date): Outgoing {
       interfaceVersion: '1.0',
       conformance: machine.conformance,
       nominalRate: machine.nominalRate,
+      source: machine.source,
     },
     now,
   );
@@ -62,19 +63,29 @@ export function identityMessage(machine: SimMachine, now: Date): Outgoing {
 
 export function stateMessage(machine: SimMachine, now: Date): Outgoing {
   const since = machine.stateSince ? local(machine.stateSince, now) : now;
-  return envelope(
-    machine,
-    'state',
-    { state: machine.state, mode: 'Production', reason: machine.reason },
-    since,
-  );
+  return stateChange(machine, machine.state, machine.reason, since);
+}
+
+/** Zustandswechsel zur Laufzeit (Zyklus, O-24). */
+export function stateChange(
+  machine: SimMachine,
+  state: SimMachine['state'],
+  reason: string | null,
+  at: Date,
+): Outgoing {
+  return envelope(machine, 'state', { state, mode: 'Production', reason }, at);
 }
 
 /** Zählerstand nach `elapsedMs` seit Start; nur im Zustand Execute steigen die Zähler. */
 export function countersMessage(machine: SimMachine, elapsedMs: number, now: Date): Outgoing {
   const producing = machine.state === 'Execute' ? (machine.rate * elapsedMs) / 60_000 : 0;
-  const good = machine.counters.good + Math.floor(producing * (1 - machine.rejectShare));
-  const bad = machine.counters.bad + Math.floor(producing * machine.rejectShare);
+  return countersFor(machine, producing, now);
+}
+
+/** Zählerstand nach `produced` Stück seit Start (Anteil Schlechtteile wie im Mockup). */
+export function countersFor(machine: SimMachine, produced: number, now: Date): Outgoing {
+  const good = machine.counters.good + Math.floor(produced * (1 - machine.rejectShare));
+  const bad = machine.counters.bad + Math.floor(produced * machine.rejectShare);
   const resetAt = local(machine.counters.resetAt, now).toISOString();
   // Stufe basic liefert nur gut und gesamt (Spezifikation, Konformitätsstufen)
   const data =
@@ -108,6 +119,16 @@ export function valuesMessage(machine: SimMachine, now: Date): Outgoing | null {
   const [first, ...rest] = machine.values.map((v) => ({ key: v.key, value: v.value }));
   if (!first) return null;
   return envelope(machine, 'values', { values: [first, ...rest] }, now);
+}
+
+/** Einzelnes Alarmereignis zur Laufzeit (Zyklus, O-24). */
+export function alarmEvent(
+  machine: SimMachine,
+  alarm: SimAlarm,
+  event: 'raised' | 'cleared',
+  at: Date,
+): Outgoing {
+  return envelope(machine, 'alarms', alarmData(alarm, event), at);
 }
 
 function alarmData(

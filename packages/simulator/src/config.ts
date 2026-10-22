@@ -12,6 +12,12 @@ export type Conformance = 'basic' | 'standard' | 'full';
 export const SITE_TIME_ZONE = 'Europe/Berlin';
 /** Annahme: Beginn der Schicht laut Mockup „Schicht seit 06:00“ – Rücksetzzeitpunkt der Zähler. */
 export const SHIFT_START = '06:00';
+/**
+ * Annahme (O-24): Maschinen, die im Mockup stehen, wechseln zwischen ihrem Zustand aus dem Mockup und
+ * Execute – 1 min Stillstand, 9 min Lauf (≈ 90 % Verfügbarkeit, angelehnt an 91,2 % im Mockup).
+ */
+export const STOP_PHASE_MS = 60_000;
+export const RUN_PHASE_MS = 9 * 60_000;
 
 const LEVEL: Record<string, Conformance> = {
   Basis: 'basic',
@@ -166,6 +172,13 @@ export interface SimMachine {
   reason: string | null;
   /** aktuelle Leistung in Stück pro Minute */
   rate: number;
+  /** Anbindung laut Mockup, z. B. „OPC UA · PackML-Tags“ (identity.source, S-07) */
+  source: string;
+  /**
+   * Wechsel zwischen dem Zustand aus dem Mockup und Execute (nur Maschinen, die im Mockup stehen).
+   * `runRate`: Leistung im Lauf – die Linienleistung aus der KPI „Leistung“ (z. B. 286 von 320 /min).
+   */
+  cycle?: { runRate: number };
   counters: { good: number; bad: number; resetAt: string };
   /** Anteil Schlechtteile an der Gesamtmenge */
   rejectShare: number;
@@ -189,12 +202,12 @@ function fixtureValue(machine: FixtureMachine, label: string): string | undefine
   return machine.values.find((v) => v.label === label)?.value;
 }
 
-/** Sollleistung der Linie aus der KPI „Leistung“, z. B. „286 von 320 /min“ → 320. */
-function lineNominalRate(line: FixtureLine): number {
+/** Ist- und Sollleistung der Linie aus der KPI „Leistung“, z. B. „286 von 320 /min“. */
+function lineRates(line: FixtureLine): { actual: number; nominal: number } {
   const sub = line.kpis.find((k) => k.label === 'Leistung')?.sub ?? '';
-  const match = /von ([\d.]+)/.exec(sub);
-  if (!match?.[1]) throw new Error(`Sollleistung für ${line.id} nicht im Mockup gefunden`);
-  return parseGermanNumber(match[1]);
+  const match = /([\d.]+) von ([\d.]+)/.exec(sub);
+  if (!match?.[1] || !match[2]) throw new Error(`Leistung für ${line.id} nicht im Mockup gefunden`);
+  return { actual: parseGermanNumber(match[1]), nominal: parseGermanNumber(match[2]) };
 }
 
 function buildMachine(line: FixtureLine, machine: FixtureMachine, index: number): SimMachine {
@@ -243,11 +256,13 @@ function buildMachine(line: FixtureLine, machine: FixtureMachine, index: number)
     own,
     conformance,
     // Annahme: Sollleistung je Maschine = Sollleistung der Linie (im Mockup nur für die Linie angegeben)
-    nominalRate: lineNominalRate(line),
+    nominalRate: lineRates(line).nominal,
     state: machine.state,
     ...(stateSince ? { stateSince } : {}),
     reason: fixtureValue(machine, 'Grund') ?? null,
     rate: parseGermanNumber(machine.rate),
+    source: machine.source,
+    ...(machine.state === 'Execute' ? {} : { cycle: { runRate: lineRates(line).actual } }),
     counters: { good, bad, resetAt: own ? line.batch.start : SHIFT_START },
     rejectShare,
     values: extras.values.map((v) => {
