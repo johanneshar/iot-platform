@@ -1,0 +1,57 @@
+{
+  "waiting": "Waiting for line data …",
+  "noValue": "—",
+  "kpi": {
+    "oee": "Line OEE",
+    "target": "Target {{value}} %",
+    "noTarget": "no target set",
+    "availability": "Availability",
+    "shiftSince": "Shift since {{time}}",
+    "noShift": "no shift running",
+    "performance": "Performance",
+    "rateOfNominal": "{{rate}} of {{nominal}} /min",
+    "quality": "Quality",
+    "reject": "Rejects {{value}} %",
+    "output": "Output",
+    "outputUnit": "pcs/h",
+    "outputSub": "Good parts",
+    "percent": "%"
+  },
+  "flow": {
+    "title": "Line flow",
+    "subtitle": "Select a machine for details · the bottleneck determines line output"
+  },
+  "level": {
+    "basic": "Basic",
+    "standard": "Standard",
+    "full": "Full (GxP)"
+  },
+  "quality": {
+    "uncertain": "Data uncertain",
+    "bad": "No valid data"
+  },
+  "details": {
+    "eyebrow": "Machine details",
+    "packml": "PackML:",
+    "manufacturer": "Manufacturer",
+    "ownMachine": "Own machine",
+    "level": "Integration level",
+    "reason": "Reason",
+    "state": "Operating state",
+    "goodCount": "Good count",
+    "commonFault": "Common fault",
+    "yes": "Yes",
+    "no": "No",
+    "spares": "Spare parts for this machine",
+    "format": "Start format change",
+    "prediction": "Maintenance forecast",
+    "foreignNote": "Third-party machine: spare parts and service via the respective manufacturer. Data scope according to integration level."
+  },
+  "alarms": {
+    "title": "Active alarms",
+    "active": "{{count}} active",
+    "none": "No active alarms.",
+    "all": "Show all alarms →",
+    "commonFault": "Common fault"
+  }
+}

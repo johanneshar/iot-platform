@@ -1,0 +1,57 @@
+{
+  "waiting": "Warte auf Daten der Linie …",
+  "noValue": "—",
+  "kpi": {
+    "oee": "Linien-OEE",
+    "target": "Ziel {{value}} %",
+    "noTarget": "kein Ziel hinterlegt",
+    "availability": "Verfügbarkeit",
+    "shiftSince": "Schicht seit {{time}}",
+    "noShift": "keine laufende Schicht",
+    "performance": "Leistung",
+    "rateOfNominal": "{{rate}} von {{nominal}} /min",
+    "quality": "Qualität",
+    "reject": "Ausschuss {{value}} %",
+    "output": "Ausbringung",
+    "outputUnit": "Stk/h",
+    "outputSub": "Gutteile",
+    "percent": "%"
+  },
+  "flow": {
+    "title": "Linienfluss",
+    "subtitle": "Maschine anklicken für Details · Engpass bestimmt die Linienleistung"
+  },
+  "level": {
+    "basic": "Basis",
+    "standard": "Standard",
+    "full": "Voll (GxP)"
+  },
+  "quality": {
+    "uncertain": "Daten unsicher",
+    "bad": "Keine gültigen Daten"
+  },
+  "details": {
+    "eyebrow": "Maschinendetails",
+    "packml": "PackML:",
+    "manufacturer": "Hersteller",
+    "ownMachine": "Eigene Maschine",
+    "level": "Integrationsstufe",
+    "reason": "Grund",
+    "state": "Betriebszustand",
+    "goodCount": "Zähler gut",
+    "commonFault": "Sammelstörung",
+    "yes": "Ja",
+    "no": "Nein",
+    "spares": "Ersatzteile dieser Maschine",
+    "format": "Formatwechsel starten",
+    "prediction": "Wartungsprognose",
+    "foreignNote": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller. Datenumfang gemäß Integrationsstufe."
+  },
+  "alarms": {
+    "title": "Anstehende Alarme",
+    "active": "{{count}} aktiv",
+    "none": "Keine aktiven Alarme.",
+    "all": "Alle Alarme anzeigen →",
+    "commonFault": "Sammelstörung"
+  }
+}
