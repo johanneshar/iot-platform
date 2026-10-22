@@ -10,6 +10,16 @@ updates:
     groups:
       dev-tooling:
         dependency-type: development
+    # React bleibt auf Version 18 (ADR-001); Minor-, Patch- und Sicherheitsupdates kommen weiter
+    ignore:
+      - dependency-name: react
+        update-types: ['version-update:semver-major']
+      - dependency-name: react-dom
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/react-dom'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
