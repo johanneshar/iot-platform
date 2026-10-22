@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/activeAlarms.schema.json",
+  "title": "ActiveAlarmsData",
+  "description": "Topic activeAlarms (retained, S-09): vollständige Liste der anstehenden Alarme, bei jeder Änderung neu. Wer sich später verbindet, kennt damit sofort den Stand. Stufe basic: nur die Sammelstörung COMMON-FAULT.",
+  "type": "object",
+  "required": ["alarms"],
+  "properties": {
+    "alarms": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/activeAlarm" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "activeAlarm": {
+      "type": "object",
+      "required": ["alarmId", "class", "raisedAt", "acknowledged", "user"],
+      "properties": {
+        "alarmId": {
+          "type": "string",
+          "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$",
+          "maxLength": 64
+        },
+        "class": { "type": "string", "enum": ["fault", "warning", "info"] },
+        "textKey": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)+$" },
+        "text": { "$ref": "common.schema.json#/$defs/localizedText" },
+        "subsystem": { "type": "string", "minLength": 1 },
+        "raisedAt": {
+          "description": "Zeitpunkt „kommt“ an der Quelle (UTC)",
+          "$ref": "common.schema.json#/$defs/utcTimestamp"
+        },
+        "acknowledged": { "type": "boolean" },
+        "user": {
+          "description": "Benutzer, der an der Maschine quittiert hat; sonst null",
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": false,
+      "if": { "properties": { "alarmId": { "const": "COMMON-FAULT" } } },
+      "then": { "properties": { "class": { "const": "fault" } } },
+      "else": { "required": ["textKey", "text"] }
+    }
+  }
+}

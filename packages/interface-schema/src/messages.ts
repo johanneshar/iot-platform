@@ -1,4 +1,5 @@
 import type {
+  ActiveAlarmsData,
   AlarmData,
   BatchData,
   CountersData,
@@ -17,6 +18,7 @@ export interface DataByClass {
   state: StateData;
   counters: CountersData;
   alarms: AlarmData;
+  activeAlarms: ActiveAlarmsData;
   values: ValuesData;
   batch: BatchData;
 }

@@ -1,5 +1,6 @@
 import { Ajv2020, type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.js';
 import addFormatsModule from 'ajv-formats';
+import activeAlarms from '../schemas/activeAlarms.schema.json';
 import alarms from '../schemas/alarms.schema.json';
 import batch from '../schemas/batch.schema.json';
 import common from '../schemas/common.schema.json';
@@ -23,7 +24,7 @@ addFormats(ajv);
 ajv.addKeyword('tsType');
 ajv.addSchema(common);
 
-const SCHEMAS = { identity, meta, state, counters, alarms, values, batch } as const;
+const SCHEMAS = { identity, meta, state, counters, alarms, activeAlarms, values, batch } as const;
 
 const validators = Object.fromEntries(
   DATA_CLASSES.map((dataClass) => [dataClass, ajv.compile(SCHEMAS[dataClass])]),

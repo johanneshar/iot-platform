@@ -165,6 +165,28 @@ export interface CountersData {
   resetAt: string;
 }
 /**
+ * Topic activeAlarms (retained, S-09): vollständige Liste der anstehenden Alarme, bei jeder Änderung neu. Wer sich später verbindet, kennt damit sofort den Stand. Stufe basic: nur die Sammelstörung COMMON-FAULT.
+ */
+export interface ActiveAlarmsData {
+  alarms: ActiveAlarm[];
+}
+export interface ActiveAlarm {
+  alarmId: string;
+  class: 'fault' | 'warning' | 'info';
+  textKey?: string;
+  text?: LocalizedText;
+  subsystem?: string;
+  /**
+   * Zeitstempel in UTC nach RFC 3339 mit Z
+   */
+  raisedAt: string;
+  acknowledged: boolean;
+  /**
+   * Benutzer, der an der Maschine quittiert hat; sonst null
+   */
+  user: string | null;
+}
+/**
  * Topic values: Prozesswerte, zyklisch oder bei Änderung
  */
 export interface ValuesData {
@@ -183,11 +205,23 @@ export interface ValuesData {
   ];
 }
 /**
- * Topic batch: Batch- und Rezeptereignisse (Stufe full)
+ * Topic batch (retained, S-08): Batch- und Rezeptereignisse (Stufe full). Die letzte Meldung bleibt auf dem Broker – wer sich später verbindet, erkennt den laufenden Batch.
  */
 export interface BatchData {
   event: 'started' | 'paused' | 'resumed' | 'ended';
   batchId: string;
+  /**
+   * Produkt laut Maschine bzw. Rezept (S-10)
+   */
+  productName: string;
+  /**
+   * Sollmenge des Batches in Stück, falls bekannt (S-10)
+   */
+  targetQuantity?: number;
+  /**
+   * Zeitstempel in UTC nach RFC 3339 mit Z
+   */
+  startedAt: string;
   recipe: {
     id: string;
     version: number;

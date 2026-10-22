@@ -2,25 +2,54 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.iot-platform.local/v1/batch.schema.json",
   "title": "BatchData",
-  "description": "Topic batch: Batch- und Rezeptereignisse (Stufe full)",
+  "description": "Topic batch (retained, S-08): Batch- und Rezeptereignisse (Stufe full). Die letzte Meldung bleibt auf dem Broker – wer sich später verbindet, erkennt den laufenden Batch.",
   "type": "object",
-  "required": ["event", "batchId", "recipe", "formatParts"],
+  "required": ["event", "batchId", "recipe", "formatParts", "startedAt", "productName"],
   "properties": {
-    "event": { "type": "string", "enum": ["started", "paused", "resumed", "ended"] },
-    "batchId": { "type": "string", "minLength": 1 },
+    "event": {
+      "type": "string",
+      "enum": ["started", "paused", "resumed", "ended"]
+    },
+    "batchId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "productName": {
+      "description": "Produkt laut Maschine bzw. Rezept (S-10)",
+      "type": "string",
+      "minLength": 1
+    },
+    "targetQuantity": {
+      "description": "Sollmenge des Batches in Stück, falls bekannt (S-10)",
+      "type": "integer",
+      "minimum": 1
+    },
+    "startedAt": {
+      "description": "Start des Batches (UTC) – auch in späteren Ereignissen desselben Batches (S-08)",
+      "$ref": "common.schema.json#/$defs/utcTimestamp"
+    },
     "recipe": {
       "type": "object",
       "required": ["id", "version"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "version": { "type": "integer", "minimum": 1 }
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        }
       },
       "additionalProperties": false
     },
     "formatParts": {
       "description": "Teilenummern der eingesetzten Formatteile",
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   },
   "additionalProperties": false

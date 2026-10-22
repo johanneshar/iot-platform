@@ -11,7 +11,7 @@ const envelope = (dataClass: DataClass, data: object) => ({
   data,
 });
 
-// Beispiele aus der Schnittstellenspezifikation (Entwurf 0.1), ergänzt um S-03
+// Beispiele aus der Schnittstellenspezifikation (Entwurf 0.4): ergänzt um S-03, S-08 bis S-10
 const examples: Record<DataClass, object> = {
   identity: {
     type: 'Füll- und Verschließmaschine',
@@ -34,6 +34,20 @@ const examples: Record<DataClass, object> = {
     subsystem: 'Wägung',
     user: null,
   },
+  activeAlarms: {
+    alarms: [
+      {
+        alarmId: 'FILL-WGT-0003',
+        class: 'fault',
+        textKey: 'alarm.weighcell.tare',
+        text: { de: 'Wägezelle 3: Tara-Abweichung', en: 'Weigh cell 3: tare deviation' },
+        subsystem: 'Wägung',
+        raisedAt: '2026-10-21T11:48:00Z',
+        acknowledged: false,
+        user: null,
+      },
+    ],
+  },
   meta: {
     values: [
       {
@@ -51,6 +65,9 @@ const examples: Record<DataClass, object> = {
   batch: {
     event: 'started',
     batchId: 'B-2026-1042',
+    productName: '[Produktname]',
+    targetQuantity: 27700,
+    startedAt: '2026-10-21T03:58:00Z',
     recipe: { id: 'vial-10ml', version: 3 },
     formatParts: ['FT-2041', 'FT-3110'],
   },
@@ -195,5 +212,50 @@ describe('Datenklassen', () => {
     expect(
       validateData('values', { values: [{ key: 'reason', value: 'Auslauf gestaut' }] }).valid,
     ).toBe(false);
+  });
+});
+
+describe('S-08 bis S-10', () => {
+  it('batch verlangt Start und Produktname, Sollmenge ist optional', () => {
+    const base = {
+      event: 'ended',
+      batchId: 'B-1',
+      recipe: { id: 'r', version: 1 },
+      formatParts: [],
+    };
+    expect(validateData('batch', base).valid).toBe(false);
+    expect(
+      validateData('batch', { ...base, startedAt: '2026-10-21T03:58:00Z', productName: 'P' }).valid,
+    ).toBe(true);
+  });
+
+  it('activeAlarms: Einzelalarme mit Text, Sammelstörung ohne', () => {
+    expect(
+      validateData('activeAlarms', {
+        alarms: [
+          {
+            alarmId: 'COMMON-FAULT',
+            class: 'fault',
+            raisedAt: '2026-10-21T03:58:00Z',
+            acknowledged: false,
+            user: null,
+          },
+        ],
+      }).valid,
+    ).toBe(true);
+    expect(
+      validateData('activeAlarms', {
+        alarms: [
+          {
+            alarmId: 'X-1',
+            class: 'warning',
+            raisedAt: '2026-10-21T03:58:00Z',
+            acknowledged: false,
+            user: null,
+          },
+        ],
+      }).valid,
+    ).toBe(false);
+    expect(validateData('activeAlarms', { alarms: [] }).valid).toBe(true);
   });
 });

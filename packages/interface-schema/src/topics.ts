@@ -5,6 +5,7 @@ export const DATA_CLASSES = [
   'state',
   'counters',
   'alarms',
+  'activeAlarms',
   'values',
   'batch',
 ] as const;
@@ -18,8 +19,11 @@ export const RETAINED: Readonly<Record<DataClass, boolean>> = {
   state: true,
   counters: true,
   alarms: false,
+  // S-09: Stand der anstehenden Alarme für Nachzügler
+  activeAlarms: true,
   values: false,
-  batch: false,
+  // S-08: laufender Batch für Nachzügler
+  batch: true,
 };
 
 export const TOPIC_ROOT = 'iot/v1';
