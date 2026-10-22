@@ -98,18 +98,19 @@ Klick auf eine Maschine im 3D-Bild öffnet eine Detailseite dieser Maschine.
 
 **Entschieden (2026-10-22)**
 
-| Nr.     | Thema                      | Entscheidung                                                                                                                                     |
-| ------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| A-01.1  | Herkunft der Modelle       | Export aus dem CAD                                                                                                                               |
-| A-01.2  | Fremdmaschinen             | Modell vom jeweiligen Hersteller                                                                                                                 |
-| A-01.3  | Alarm → Stelle             | Konfiguration in der Plattform über die stabile `alarmId`, keine Änderung der Schnittstelle                                                      |
-| A-01.4  | Verhältnis zum Linienfluss | 3D-Bild oben, Linienfluss bleibt darunter; ohne Modell nur der Linienfluss                                                                       |
-| A-01.6  | Einordnung                 | eigener Meilenstein M5a, nach M5, weil die Markierung die Fehlersuche voraussetzt                                                                |
-| A-01.7  | Markierung und Fehlersuche | Alarmmarkierungen nur, wenn „Geführte Fehlersuche“ gebucht ist; Berühren der Markierung springt per Deep Link in die Fehlersuche zu diesem Alarm |
-| A-01.5  | Maschinen-Detailseite      | wird vor der Umsetzung zuerst in Claude Design entworfen                                                                                         |
-| A-01.8  | Modulschnitt               | Teil des Linien-Dashboards (`dashboard`), kein eigenes Modul                                                                                     |
-| A-01.9  | Alarm ohne Fehlerbaum      | wird nicht markiert                                                                                                                              |
-| A-01.10 | Format und Zuständigkeit   | glTF/GLB; Umwandlung aus CAD und Zuordnung der Bauteile zu Maschinen und Alarmstellen durch Konstruktion und Automatisierung                     |
+| Nr.     | Thema                      | Entscheidung                                                                                                                                                                                                                                     |
+| ------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A-01.1  | Herkunft der Modelle       | Export aus dem CAD                                                                                                                                                                                                                               |
+| A-01.2  | Fremdmaschinen             | Modell vom jeweiligen Hersteller                                                                                                                                                                                                                 |
+| A-01.3  | Alarm → Stelle             | Konfiguration in der Plattform über die stabile `alarmId`, keine Änderung der Schnittstelle                                                                                                                                                      |
+| A-01.4  | Verhältnis zum Linienfluss | 3D-Bild oben, Linienfluss bleibt darunter; ohne Modell nur der Linienfluss                                                                                                                                                                       |
+| A-01.6  | Einordnung                 | eigener Meilenstein M5a, nach M5, weil die Markierung die Fehlersuche voraussetzt                                                                                                                                                                |
+| A-01.7  | Markierung und Fehlersuche | Alarmmarkierungen nur, wenn „Geführte Fehlersuche“ gebucht ist; Berühren der Markierung springt per Deep Link in die Fehlersuche zu diesem Alarm                                                                                                 |
+| A-01.5  | Maschinen-Detailseite      | entworfen und abgenommen (2026-10-22) im Mockup: „M5a · Maschinendetail – Auswertungen der Maschine“ – Kennzahlen, 3D-Ansicht, Zustandsverlauf mit Stillständen, Leistung und Ausschuss je Stunde, Prozesswerte mit Grenzen, Alarme der Maschine |
+| A-01.11 | Linienübersicht mit 3D     | abgenommen (2026-10-22) im Mockup: „M5a · Linienübersicht mit 3D-Ansicht“ – Kennzahlen, „Linie in 3D“, Linienfluss; Maschine antippen öffnet die Detailseite                                                                                     |
+| A-01.8  | Modulschnitt               | Teil des Linien-Dashboards (`dashboard`), kein eigenes Modul                                                                                                                                                                                     |
+| A-01.9  | Alarm ohne Fehlerbaum      | wird nicht markiert                                                                                                                                                                                                                              |
+| A-01.10 | Format und Zuständigkeit   | glTF/GLB; Umwandlung aus CAD und Zuordnung der Bauteile zu Maschinen und Alarmstellen durch Konstruktion und Automatisierung                                                                                                                     |
 
 ## Offen aus dem Konzept und der Spezifikation
 
