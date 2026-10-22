@@ -45,5 +45,4 @@ existiert.
 
 ## Abweichungen vom Mockup
 
-- Kachel „Hersteller“ statt „Datenquelle“: die Schnittstelle kennt keine Datenquelle (O-23).
 - Werte werden berechnet, nicht aus dem Mockup übernommen (E-30).

@@ -77,6 +77,7 @@ test('Linienübersicht zeigt die Linie aus dem Simulator wie im Mockup', async (
     page.getByRole('heading', { name: 'Füll- und Verschließmaschine', level: 2 }),
   ).toBeVisible();
   await expect(page.getByText('10,02 g')).toBeVisible();
+  await expect(page.getByText('S7-1500 · IIoT-Datenbaustein (OPC UA)')).toBeVisible();
   await new AxeBuilder({ page }).analyze().then((r) => {
     expect(r.violations.map((v) => v.id)).toEqual([]);
   });

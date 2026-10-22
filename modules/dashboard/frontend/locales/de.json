@@ -33,8 +33,6 @@
   "details": {
     "eyebrow": "Maschinendetails",
     "packml": "PackML:",
-    "manufacturer": "Hersteller",
-    "ownMachine": "Eigene Maschine",
     "level": "Integrationsstufe",
     "reason": "Grund",
     "state": "Betriebszustand",
@@ -45,7 +43,8 @@
     "spares": "Ersatzteile dieser Maschine",
     "format": "Formatwechsel starten",
     "prediction": "Wartungsprognose",
-    "foreignNote": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller. Datenumfang gemäß Integrationsstufe."
+    "foreignNote": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller. Datenumfang gemäß Integrationsstufe.",
+    "source": "Datenquelle"
   },
   "alarms": {
     "title": "Anstehende Alarme",

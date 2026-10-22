@@ -33,8 +33,6 @@
   "details": {
     "eyebrow": "Machine details",
     "packml": "PackML:",
-    "manufacturer": "Manufacturer",
-    "ownMachine": "Own machine",
     "level": "Integration level",
     "reason": "Reason",
     "state": "Operating state",
@@ -45,7 +43,8 @@
     "spares": "Spare parts for this machine",
     "format": "Start format change",
     "prediction": "Maintenance forecast",
-    "foreignNote": "Third-party machine: spare parts and service via the respective manufacturer. Data scope according to integration level."
+    "foreignNote": "Third-party machine: spare parts and service via the respective manufacturer. Data scope according to integration level.",
+    "source": "Data source"
   },
   "alarms": {
     "title": "Active alarms",

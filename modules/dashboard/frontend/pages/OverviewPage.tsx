@@ -219,8 +219,8 @@ function MachineDetails({
       />
       <div className={styles.tiles}>
         <InfoTile
-          label={t('details.manufacturer')}
-          value={own ? t('details.ownMachine') : (machine.identity?.manufacturer ?? t('noValue'))}
+          label={t('details.source')}
+          value={machine.identity?.source ?? t('noValue')}
           size="sm"
         />
         <InfoTile
