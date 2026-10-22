@@ -13,10 +13,12 @@ export interface AuditInput {
   reason?: string | null;
   /** Bedeutung der e-Signatur, z. B. „Freigabe“ – nur bei Signaturen */
   meaning?: string | null;
+  /** Bezug, z. B. „batch:B-2026-1042“ – Module finden darüber ihre Einträge */
+  reference?: string | null;
 }
 
 export interface AuditEntry extends Required<
-  Omit<AuditInput, 'oldValue' | 'newValue' | 'reason' | 'meaning'>
+  Omit<AuditInput, 'oldValue' | 'newValue' | 'reason' | 'meaning' | 'reference'>
 > {
   seq: number;
   /** UTC, RFC 3339 */
@@ -25,6 +27,7 @@ export interface AuditEntry extends Required<
   newValue: string | null;
   reason: string | null;
   meaning: string | null;
+  reference: string | null;
   prevHash: string;
   hash: string;
 }
@@ -42,6 +45,7 @@ interface Row {
   new_value: string | null;
   reason: string | null;
   meaning: string | null;
+  reference: string | null;
   prev_hash: string;
   hash: string;
 }
@@ -59,6 +63,8 @@ function hashOf(entry: Omit<AuditEntry, 'hash'>): string {
     entry.reason,
     entry.meaning,
     entry.prevHash,
+    // seit M6; ohne Bezug bleibt der Hash wie zuvor (bestehende Ketten bleiben gültig)
+    ...(entry.reference === null ? [] : [entry.reference]),
   ]);
   return createHash('sha256').update(canonical).digest('hex');
 }
@@ -74,6 +80,7 @@ const toEntry = (r: Row): AuditEntry => ({
   newValue: r.new_value,
   reason: r.reason,
   meaning: r.meaning,
+  reference: r.reference,
   prevHash: r.prev_hash,
   hash: r.hash,
 });
@@ -104,13 +111,14 @@ export class AuditLog {
         newValue: input.newValue ?? null,
         reason: input.reason ?? null,
         meaning: input.meaning ?? null,
+        reference: input.reference ?? null,
         prevHash: last?.hash ?? GENESIS_HASH,
       };
       const entry = { ...base, hash: hashOf(base) };
       this.db
         .prepare(
-          `INSERT INTO audit_log (seq, ts, username, user_name, action, module, old_value, new_value, reason, meaning, prev_hash, hash)
-           VALUES (@seq, @ts, @username, @userName, @action, @module, @oldValue, @newValue, @reason, @meaning, @prevHash, @hash)`,
+          `INSERT INTO audit_log (seq, ts, username, user_name, action, module, old_value, new_value, reason, meaning, reference, prev_hash, hash)
+           VALUES (@seq, @ts, @username, @userName, @action, @module, @oldValue, @newValue, @reason, @meaning, @reference, @prevHash, @hash)`,
         )
         .run(entry);
       return entry;
@@ -124,6 +132,31 @@ export class AuditLog {
       .prepare('SELECT * FROM audit_log ORDER BY seq DESC LIMIT ?')
       .all(limit) as Row[];
     return rows.map(toEntry);
+  }
+
+  /** Einträge eines Moduls, optional mit Bezug – älteste zuerst. */
+  find(module: string, reference?: string): AuditEntry[] {
+    const rows = (
+      reference === undefined
+        ? this.db.prepare('SELECT * FROM audit_log WHERE module = ? ORDER BY seq ASC').all(module)
+        : this.db
+            .prepare('SELECT * FROM audit_log WHERE module = ? AND reference = ? ORDER BY seq ASC')
+            .all(module, reference)
+    ) as Row[];
+    return rows.map(toEntry);
+  }
+
+  /** Alle Einträge, älteste zuerst (Export). */
+  all(): AuditEntry[] {
+    return (this.db.prepare('SELECT * FROM audit_log ORDER BY seq ASC').all() as Row[]).map(
+      toEntry,
+    );
+  }
+
+  get(seq: number): AuditEntry | null {
+    const row = this.db.prepare('SELECT * FROM audit_log WHERE seq = ?').get(seq) as
+      Row | undefined;
+    return row ? toEntry(row) : null;
   }
 
   /** Prüft die Hash-Kette vom ersten bis zum letzten Eintrag. */

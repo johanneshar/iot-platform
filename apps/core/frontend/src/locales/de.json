@@ -82,7 +82,14 @@
       "core_user_password-reset": "Passwort zurückgesetzt",
       "core_module_booked": "Modul gebucht",
       "core_module_unbooked": "Modul abbestellt",
-      "core_signature_failed": "Signatur fehlgeschlagen"
-    }
+      "core_signature_failed": "Signatur fehlgeschlagen",
+      "core_audit_exported": "Audit Trail exportiert",
+      "batch_line-released": "Linienfreigabe erteilt",
+      "batch_line-cleared": "Linienräumung bestätigt",
+      "batch_report-reviewed": "Batchbericht geprüft",
+      "batch_report-released": "Batchbericht freigegeben",
+      "batch_report-exported": "Batchbericht als PDF/A exportiert"
+    },
+    "export": "Als Datei exportieren (JSON)"
   }
 }

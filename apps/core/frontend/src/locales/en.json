@@ -82,7 +82,14 @@
       "core_user_password-reset": "Password reset",
       "core_module_booked": "Module booked",
       "core_module_unbooked": "Module cancelled",
-      "core_signature_failed": "Signature failed"
-    }
+      "core_signature_failed": "Signature failed",
+      "core_audit_exported": "Audit trail exported",
+      "batch_line-released": "Line released",
+      "batch_line-cleared": "Line clearance confirmed",
+      "batch_report-reviewed": "Batch report reviewed",
+      "batch_report-released": "Batch report released",
+      "batch_report-exported": "Batch report exported as PDF/A"
+    },
+    "export": "Export as file (JSON)"
   }
 }

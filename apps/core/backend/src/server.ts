@@ -196,6 +196,27 @@ export async function buildServer({
     return reply.code(204).send();
   });
 
+  // Audit-Einträge eines Moduls für sein Backend (z. B. Signaturen eines Batchberichts prüfen) – Dienst-Token
+  server.get<{ Querystring: { module?: string; reference?: string } }>(
+    '/api/registry/audit',
+    async (request, reply) => {
+      if (request.headers.authorization !== `Bearer ${config.registryToken}`) {
+        return reply.code(401).send({ errors: ['Dienst-Token fehlt oder ist falsch'] });
+      }
+      if (!text(request.query.module))
+        return reply.code(400).send({ errors: ['module erforderlich'] });
+      return audit.find(request.query.module, request.query.reference);
+    },
+  );
+
+  server.get<{ Params: { seq: string } }>('/api/registry/audit/:seq', async (request, reply) => {
+    if (request.headers.authorization !== `Bearer ${config.registryToken}`) {
+      return reply.code(401).send({ errors: ['Dienst-Token fehlt oder ist falsch'] });
+    }
+    const entry = audit.get(Number(request.params.seq));
+    return entry ?? reply.code(404).send({ errors: ['Eintrag unbekannt'] });
+  });
+
   // Linienkonfiguration für Modul-Backends (Zeitzone, Schichtmodell, OEE-Ziel) – mit Dienst-Token
   server.get('/api/registry/line', async (request, reply) => {
     if (request.headers.authorization !== `Bearer ${config.registryToken}`) {
@@ -314,6 +335,28 @@ export async function buildServer({
     return audit.list(Math.min(Number(request.query.limit ?? 200) || 200, 1000));
   });
 
+  // Export als Datei (JSON): alle Einträge mit Hash-Kette und Prüfergebnis; der Export selbst wird erfasst
+  server.get('/api/audit/export', async (request, reply) => {
+    const user = guard(request, reply, 'core.audit.view');
+    if (!user) return reply;
+    audit.record({ ...actor(user), module: 'core', action: 'core.audit.exported' });
+    const exportedAt = new Date().toISOString();
+    const body = {
+      format: 'iot-audit-export/1',
+      exportedAt,
+      line: config.lineId,
+      chain: audit.verify(),
+      entries: audit.all(),
+    };
+    return reply
+      .type('application/json')
+      .header(
+        'content-disposition',
+        `attachment; filename="audit-trail-${config.lineId}-${exportedAt.slice(0, 10)}.json"`,
+      )
+      .send(JSON.stringify(body, null, 2));
+  });
+
   server.get('/api/audit/verify', async (request, reply) => {
     if (!guard(request, reply, 'core.audit.view')) return reply;
     return audit.verify();
@@ -341,6 +384,7 @@ export async function buildServer({
       oldValue: optionalText(request.body['oldValue']),
       newValue: optionalText(request.body['newValue']),
       reason: optionalText(request.body['reason']),
+      reference: optionalText(request.body['reference']),
     });
     return reply.code(201).send(entry);
   });
@@ -394,6 +438,7 @@ export async function buildServer({
       oldValue: optionalText(request.body['oldValue']),
       newValue: optionalText(request.body['newValue']),
       reason: optionalText(request.body['reason']),
+      reference: optionalText(request.body['reference']),
     });
     return reply.code(201).send({
       seq: entry.seq,

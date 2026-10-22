@@ -24,6 +24,14 @@ export interface AuditRecord {
   oldValue?: string;
   newValue?: string;
   reason?: string;
+  /** Bezug, z. B. `batch:B-2026-1042` – das Modul-Backend findet darüber seine Einträge */
+  reference?: string;
+}
+
+/** Bestätigung eines Audit-Eintrags: laufende Nummer und Zeitpunkt (UTC). */
+export interface AuditReceipt {
+  seq: number;
+  ts: string;
 }
 
 export interface SignatureRequest {
@@ -38,6 +46,8 @@ export interface SignatureRequest {
   oldValue?: string;
   newValue?: string;
   reason?: string;
+  /** Bezug wie bei `AuditRecord` */
+  reference?: string;
 }
 
 export interface SignatureResult {
@@ -66,7 +76,7 @@ export interface ShellApi {
   params: Readonly<Record<string, string>>;
   isModuleBooked: (moduleId: string) => boolean;
   /** Vorgang des Moduls `moduleId` im zentralen Audit Trail erfassen */
-  recordAudit: (moduleId: string, record: AuditRecord) => Promise<void>;
+  recordAudit: (moduleId: string, record: AuditRecord) => Promise<AuditReceipt>;
   /** e-Signatur anfordern; `null`, wenn der Benutzer abbricht */
   requestSignature: (
     moduleId: string,
@@ -123,7 +133,7 @@ export function useIsModuleBooked(): ShellApi['isModuleBooked'] {
 }
 
 /** `audit.record(...)` – GxP-relevante Vorgänge gehen immer über den Core (CLAUDE.md, Abschnitt 4). */
-export function useAudit(): { record: (record: AuditRecord) => Promise<void> } {
+export function useAudit(): { record: (record: AuditRecord) => Promise<AuditReceipt> } {
   const shell = useShell();
   const moduleId = useContext(ModuleIdContext);
   return { record: (record) => shell.recordAudit(moduleId, record) };

@@ -137,6 +137,11 @@ test('e-Signatur aus einem Modul landet mit Bedeutung im Audit Trail', async ({ 
   await expect(row.getByRole('cell', { name: 'Signatur: Freigabe' })).toBeVisible();
   await expect(page.getByText(/Kette unversehrt/)).toBeVisible();
   await expectNoA11yViolations(page);
+
+  // Export als Datei (M6)
+  const download = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Als Datei exportieren (JSON)' }).click();
+  expect((await download).suggestedFilename()).toMatch(/^audit-trail-l1-\d{4}-\d{2}-\d{2}\.json$/);
 });
 
 test('Sprache umschalten übersetzt Shell und Modul', async ({ page }) => {

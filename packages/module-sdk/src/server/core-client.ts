@@ -89,3 +89,48 @@ export async function fetchLineConfig(connection: CoreConnection): Promise<LineC
     await wait(5_000);
   }
 }
+
+/** Eintrag im Audit Trail des Core, wie ihn Modul-Backends lesen (`fetchAudit`, `fetchAuditEntry`). */
+export interface AuditEntryInfo {
+  seq: number;
+  ts: string;
+  username: string;
+  userName: string;
+  action: string;
+  module: string;
+  oldValue: string | null;
+  newValue: string | null;
+  reason: string | null;
+  meaning: string | null;
+  reference: string | null;
+  hash: string;
+}
+
+async function getJson<T>(connection: CoreConnection, path: string): Promise<T | null> {
+  const response = await fetch(`${connection.coreUrl}${path}`, {
+    headers: { authorization: `Bearer ${connection.token}` },
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Core: GET ${path} → ${String(response.status)}`);
+  return (await response.json()) as T;
+}
+
+/** Einträge dieses Moduls im Audit Trail, optional nur mit Bezug – älteste zuerst. */
+export async function fetchAudit(
+  connection: CoreConnection,
+  module: string,
+  reference?: string,
+): Promise<AuditEntryInfo[]> {
+  const query = new URLSearchParams({ module, ...(reference ? { reference } : {}) });
+  return (
+    (await getJson<AuditEntryInfo[]>(connection, `/api/registry/audit?${query.toString()}`)) ?? []
+  );
+}
+
+/** Ein Eintrag nach laufender Nummer – z. B. um eine Signatur zu prüfen; `null`, wenn unbekannt. */
+export async function fetchAuditEntry(
+  connection: CoreConnection,
+  seq: number,
+): Promise<AuditEntryInfo | null> {
+  return getJson<AuditEntryInfo>(connection, `/api/registry/audit/${String(seq)}`);
+}

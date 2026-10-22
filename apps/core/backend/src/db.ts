@@ -66,5 +66,10 @@ export function openDb(dataDir: string): Db {
   if (!columns.some((c) => c.name === 'targets')) {
     db.exec("ALTER TABLE registered_modules ADD COLUMN targets TEXT NOT NULL DEFAULT '{}'");
   }
+  // Ergänzung M6: Bezug eines Audit-Eintrags, z. B. „batch:B-2026-1042“ (Hash nur, wenn gesetzt)
+  const auditColumns = db.prepare('PRAGMA table_info(audit_log)').all() as { name: string }[];
+  if (!auditColumns.some((c) => c.name === 'reference')) {
+    db.exec('ALTER TABLE audit_log ADD COLUMN reference TEXT');
+  }
   return db;
 }

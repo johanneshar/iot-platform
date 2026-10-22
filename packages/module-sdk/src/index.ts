@@ -68,6 +68,7 @@ export {
   useRequestSignature,
   useUser,
   type AuditRecord,
+  type AuditReceipt,
   type LineDataSource,
   type LineInfo,
   type ModuleApi,

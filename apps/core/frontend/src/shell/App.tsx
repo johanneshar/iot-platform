@@ -200,7 +200,8 @@ export function App() {
             },
             isModuleBooked: (id) => modules.some((m) => m.id === id && m.booked),
             recordAudit: async (module, record) => {
-              await api.recordAudit(module, record);
+              const entry = await api.recordAudit(module, record);
+              return { seq: entry.seq, ts: entry.ts };
             },
             requestSignature: (module, request) =>
               new Promise<SignatureResult | null>((resolve) => {

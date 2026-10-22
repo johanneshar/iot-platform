@@ -1,9 +1,10 @@
 import { useTranslation } from '@iot/module-sdk';
 import { Card, CardHeader, Chip, DataTable, type DataTableColumn } from '@iot/ui';
 import { useEffect, useState } from 'react';
-import { fetchAudit, verifyAudit, type AuditEntry } from '../api';
+import { AUDIT_EXPORT_URL, fetchAudit, verifyAudit, type AuditEntry } from '../api';
 import { formatTimestamp } from '../format';
 import { CORE_NAMESPACE } from '../i18n';
+import styles from './AuditPage.module.css';
 
 /** Audit Trail des Core: unveränderbar, Kette geprüft, Zeiten in Ortszeit des Standorts. */
 export function AuditPage({ timeZone }: { timeZone: string }) {
@@ -72,6 +73,9 @@ export function AuditPage({ timeZone }: { timeZone: string }) {
           )
         }
       />
+      <a className={styles.export} href={AUDIT_EXPORT_URL} download>
+        {t('audit.export')}
+      </a>
       {entries ? (
         <DataTable
           label={t('audit.label')}

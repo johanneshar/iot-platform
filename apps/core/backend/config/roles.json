@@ -7,7 +7,7 @@
         "de": "Operator",
         "en": "Operator"
       },
-      "permissions": ["troubleshooting.use", "spares.view"]
+      "permissions": ["troubleshooting.use", "spares.view", "batch.clear"]
     },
     {
       "id": "maintenance",
@@ -32,6 +32,8 @@
       },
       "permissions": [
         "troubleshooting.use",
+        "batch.review",
+        "batch.clear",
         "troubleshooting.document",
         "format.execute",
         "format.sign",

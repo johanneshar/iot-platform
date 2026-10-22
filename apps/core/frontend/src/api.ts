@@ -88,7 +88,7 @@ export const sign = (
   signature: SignatureRequest,
 ) => {
   // `subject` ist nur Anzeige im Dialog; der Rest geht in den Audit Trail
-  const { meaning, permission, action, oldValue, newValue, reason } = signature;
+  const { meaning, permission, action, oldValue, newValue, reason, reference } = signature;
   return request<SignatureResult>('POST', '/api/signatures', {
     module,
     ...credentials,
@@ -98,8 +98,11 @@ export const sign = (
     oldValue,
     newValue,
     reason,
+    reference,
   });
 };
 export const fetchAudit = () => request<AuditEntry[]>('GET', '/api/audit?limit=500');
+/** Export als Datei – über einen Link, damit der Browser herunterlädt */
+export const AUDIT_EXPORT_URL = '/api/audit/export';
 export const verifyAudit = () =>
   request<{ valid: boolean; count: number; brokenAt: number | null }>('GET', '/api/audit/verify');

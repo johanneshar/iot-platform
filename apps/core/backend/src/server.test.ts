@@ -471,3 +471,69 @@ describe('Linienkonfiguration für Modul-Backends', () => {
     });
   });
 });
+
+describe('Audit-Einträge mit Bezug für Modul-Backends (M6)', () => {
+  it('Module finden ihre Einträge über den Bezug; die Hash-Kette bleibt gültig', async () => {
+    const cookie = await login('qa');
+    const signed = await send(
+      'POST',
+      '/api/signatures',
+      {
+        username: 'qa',
+        password: PASSWORD,
+        meaning: 'Freigabe',
+        permission: 'batch.sign',
+        module: 'batch',
+        action: 'batch.report-released',
+        newValue: 'sha256:abc',
+        reference: 'batch:B-1',
+      },
+      cookie,
+    );
+    expect(signed.statusCode).toBe(201);
+    await send(
+      'POST',
+      '/api/audit',
+      { module: 'batch', action: 'batch.report-exported', reference: 'batch:B-2' },
+      cookie,
+    );
+    const auth = { authorization: `Bearer ${TOKEN}` };
+    expect((await server.inject({ url: '/api/registry/audit?module=batch' })).statusCode).toBe(401);
+    const found = await server.inject({
+      url: '/api/registry/audit?module=batch&reference=batch%3AB-1',
+      headers: auth,
+    });
+    const entries = found.json<AuditEntry[]>();
+    expect(entries.map((e) => [e.action, e.meaning, e.newValue, e.reference])).toEqual([
+      ['batch.report-released', 'Freigabe', 'sha256:abc', 'batch:B-1'],
+    ]);
+    const seq = signed.json<{ seq: number }>().seq;
+    const one = await server.inject({ url: `/api/registry/audit/${String(seq)}`, headers: auth });
+    expect(one.json<AuditEntry>()).toMatchObject({ username: 'qa', reference: 'batch:B-1' });
+    expect(
+      (await server.inject({ url: '/api/registry/audit/99999', headers: auth })).statusCode,
+    ).toBe(404);
+    const verify = await get('/api/audit/verify', cookie);
+    expect(verify.json<{ valid: boolean }>().valid).toBe(true);
+  });
+});
+
+describe('Export des Audit Trail', () => {
+  it('nur mit core.audit.view; enthält alle Einträge, Prüfergebnis und den Export selbst', async () => {
+    expect((await get('/api/audit/export', await login('operator'))).statusCode).toBe(403);
+    const response = await get('/api/audit/export', await login('qa'));
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-disposition']).toMatch(
+      /attachment; filename="audit-trail-l1-/,
+    );
+    const body = response.json<{
+      format: string;
+      chain: { valid: boolean };
+      entries: AuditEntry[];
+    }>();
+    expect(body.format).toBe('iot-audit-export/1');
+    expect(body.chain.valid).toBe(true);
+    expect(body.entries.at(-1)?.action).toBe('core.audit.exported');
+    expect(body.entries[0]?.seq).toBe(1);
+  });
+});
