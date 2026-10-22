@@ -2,6 +2,25 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M5a-2 – 3D-Ansicht (2026-10-22)
+
+**Neu**
+
+- `@iot/ui`: `ModelViewer` mit three.js (nachgeladen), Markierungen und Maschinennamen als Schaltflächen
+- Dashboard: „Linie in 3D“ über dem Linienfluss und 3D-Ansicht auf der Detailseite; Markierung → Fehlersuche,
+  Maschine → Detailseite; ohne Modell nur der Linienfluss ([ADR-010](/adr/ADR-010-3d-ansicht))
+- Zuordnungsdatei `*.model.json` mit Schema; Namensregel für CAD-Exporte ([Anleitung](/anleitungen/3d-modell))
+- Simulator: Linie 3 · Flexfill (Annahmen O-28) mit Blockmodell; anstehende Alarme werden alle 30 s
+  wiederholt (O-25); `pnpm dev:line3`
+- Core: eine wiederholte Meldung „kommt“ ändert einen anstehenden Alarm nicht
+
+**Demo**
+
+1. `pnpm dev`, dann in einem zweiten Terminal `pnpm dev:line3`; <http://localhost:5195> als `maintenance`.
+2. „Linie in 3D“: Markierung „Wägezelle 3“ antippen → Fehlerbaum.
+3. Maschinennamen „Transfermodul“ antippen → Detailseite mit Fokus; der Roboteralarm ist ohne Fehlerbaum nicht
+   markiert.
+
 ## M5a-1 – Maschinen-Detailseite (2026-10-22)
 
 **Neu**

@@ -67,9 +67,24 @@ Diese Werte hat der Simulator festgelegt. Sie sind Platzhalter für die Entwickl
 | Leistung im Lauf           | für diese Maschinen die Linienleistung aus der KPI „Leistung“: 286 bzw. 348 /min                                                                                                    |
 | Datenquelle                | Texte aus dem Mockup in `identity.source` (S-07)                                                                                                                                    |
 
+## Linie 3 · Flexfill (nicht im Mockup)
+
+Aufbau nach Beschreibung vom 2026-10-22 (`fixtures/flexfill.ts`): Beutelauspacker → Öffner (Delid/Delining) →
+Füll- und Verschließmaschine → Transfermodul (Gut-/Schlechtauslauf, Roboter) → Bördelmodul; alle eigene
+Maschinen der Stufe Voll. Starten mit `pnpm dev:line3` (eigener Core 4002, Shell
+<http://localhost:5195>, Module 4201–4203), während `pnpm dev` läuft. 3D-Modell:
+`fixtures/models/flexfill_blockmodell.glb` mit Zuordnung `flexfill.model.json`.
+
+**Annahmen (O-28, zu bestätigen):** Sollleistung 100 /min, Ist 92 /min; Prozesswerte (Tubs im Puffer,
+Abzugskraft Folie, Füllgewicht 2,01 g mit Grenzen 1,95–2,05, Differenzdruck Isolator, Robotertakt,
+Bördelkraft mit Grenzen 1.300–1.600 N); Bördelmodul wechselt zwischen „Suspended – Einlauf leer“ und Lauf;
+Alarme `FILL-WGT-0003` (steht an), `FILL-STP-0001` (vergangen), `TRF-ROB-0001` Roboter (steht an, ohne
+Fehlerbaum); Batch `B-2026-3001`, Rezept `vial-nest` v1; Positionen der Alarmstellen im Blockmodell.
+
 ## Einschränkungen
 
-- Alarm- und Batch-Ereignisse sind nicht retained. Wer sich später verbindet, sieht sie erst nach einem
-  Neustart des Simulators.
+- Alarm- und Batch-Ereignisse sind nicht retained. Anstehende Alarme wiederholt der Simulator alle 30 s mit dem
+  ursprünglichen Zeitstempel (O-25), damit auch später gestartete Cores und Module sie sehen; vergangene Alarme
+  und Batch-Ereignisse sieht nur, wer beim Start verbunden war.
 - Prozesswerte ändern sich nicht. Weitere Dynamik (Rauschen, neue Alarme) kommt bei Bedarf mit den Modulen,
   die sie brauchen.

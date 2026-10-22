@@ -15,5 +15,6 @@ Kontext, Alternativen und Konsequenzen.
 | [ADR-007](./ADR-007-fehlerbaum-format)        | Format der Fehlerbäume                                                 | angenommen |
 | [ADR-008](./ADR-008-modul-backends-proxy)     | Modul-Backends über den Proxy des Core, Einsprungpunkte für Deep Links | angenommen |
 | [ADR-009](./ADR-009-verlauf-dashboard)        | Verlauf und Auswertungen im Dashboard-Modul                            | angenommen |
+| [ADR-010](./ADR-010-3d-ansicht)               | 3D-Ansicht der Linie und Zuordnung der Alarmstellen                    | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.

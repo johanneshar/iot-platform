@@ -52,6 +52,7 @@ export default defineConfig({
           { text: 'ADR-007 Fehlerbäume', link: '/adr/ADR-007-fehlerbaum-format' },
           { text: 'ADR-008 Proxy und Einsprungpunkte', link: '/adr/ADR-008-modul-backends-proxy' },
           { text: 'ADR-009 Verlauf im Dashboard', link: '/adr/ADR-009-verlauf-dashboard' },
+          { text: 'ADR-010 3D-Ansicht', link: '/adr/ADR-010-3d-ansicht' },
         ],
       },
       {
@@ -70,6 +71,7 @@ export default defineConfig({
           { text: 'Neue Komponente', link: '/anleitungen/neue-komponente' },
           { text: 'Simulator nutzen', link: '/anleitungen/simulator' },
           { text: 'Maschine anbinden', link: '/anleitungen/maschine-anbinden' },
+          { text: '3D-Modell einbinden', link: '/anleitungen/3d-modell' },
           { text: 'Deployment auf Edge', link: '/anleitungen/deployment-edge' },
         ],
       },

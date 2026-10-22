@@ -72,16 +72,18 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 
 ## Ports
 
-| Port             | Dienst                                   |
-| ---------------- | ---------------------------------------- |
-| 1883             | MQTT-Broker (Mosquitto, nur Entwicklung) |
-| 4000             | Core-Backend                             |
-| 5180             | Shell (Core-Frontend)                    |
-| 5181             | Doku                                     |
-| 5182             | Storybook                                |
-| 4100             | Beispielmodul (`tooling/example`)        |
-| 4001, 5190       | zweite Linie mit `pnpm dev:line2`        |
-| 4010, 4110, 5185 | E2E-Tests (`pnpm test:e2e`)              |
+| Port                  | Dienst                                       |
+| --------------------- | -------------------------------------------- |
+| 1883                  | MQTT-Broker (Mosquitto, nur Entwicklung)     |
+| 4000                  | Core-Backend                                 |
+| 5180                  | Shell (Core-Frontend)                        |
+| 5181                  | Doku                                         |
+| 5182                  | Storybook                                    |
+| 4100                  | Beispielmodul (`tooling/example`)            |
+| 4001, 5190            | zweite Linie mit `pnpm dev:line2`            |
+| 4002, 5195, 4201–4203 | dritte Linie (Flexfill) mit `pnpm dev:line3` |
+| 4101, 4102, 4103      | Module Dashboard, Alarme, Fehlersuche        |
+| 4010, 4110, 5185      | E2E-Tests (`pnpm test:e2e`)                  |
 
 ## Weitere Befehle
 
@@ -93,6 +95,7 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | `pnpm dev:mosquitto`                             | wie `pnpm dev`, aber mit Mosquitto in Docker                                                                |
 | `pnpm dev:broker:stop`                           | MQTT-Broker beenden                                                                                         |
 | `pnpm dev:line2`                                 | zweite Linie „Linie 2 · Spritzen“ mit eigenem Core starten (Linienwahl testen)                              |
+| `pnpm dev:line3`                                 | dritte Linie „Linie 3 · Flexfill“ mit eigenem Core und Modulen (3D-Ansicht)                                 |
 | `pnpm create-module <id> "<Name>" --port <port>` | neues Modul aus der Vorlage ([Anleitung](/anleitungen/neues-modul))                                         |
 
 ## Commits

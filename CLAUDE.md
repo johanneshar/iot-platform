@@ -302,7 +302,7 @@ Aus dem Mockup abgeleitet, jede Komponente mit Storybook-Story:
 (für Bilder/Videos), `SearchInput`.
 
 Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`,
-`Panel` (M5), `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend` (M5a);
+`Panel` (M5), `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend`, `ModelViewer` (M5a);
 `Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). `LineSwitch` ist eine Auswahlliste
 (Dropdown), weil Kunden mehr als zwei Linien haben. Feste Texte der Bibliothek stehen
 im i18n-Namespace `ui`, den die Shell mit registriert. Storybook läuft auf Port 5182.
@@ -466,7 +466,8 @@ pnpm test:e2e       # E2E + axe (Playwright)
 
 Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
 Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, zweite Linie 4001/5190
-(`pnpm dev:line2`), Storybook 5182, Doku 5181, E2E-Tests 4010/4110–4113/5185.
+(`pnpm dev:line2`), dritte Linie Flexfill 4002/5195 mit Modulen 4201–4203 (`pnpm dev:line3`), Storybook 5182,
+Doku 5181, E2E-Tests 4010/4110–4113/5185.
 
 Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
 Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten aus dem
@@ -476,7 +477,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M5 und M5a-1 (Maschinen-Detailseite) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
-Schritt: **M5a-2** (3D-Ansicht mit three.js, GLB-Modell vom Nutzer, Zuordnungsdatei Bauteil → Maschine/Alarm)
-nach dem freigegebenen Plan; Entwürfe: Claude Design „M5a · Linienübersicht mit 3D-Ansicht“ und
-„M5a · Maschinendetail“.
+M0 bis M5a (Maschinen-Detailseite und 3D-Ansicht) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
+Schritt: Plan für **M6** (Batch-Reporting inkl. e-Signatur) vorlegen und auf Freigabe warten. Offen aus M5a:
+Simulator-Annahmen der Flexfill (O-28), echter CAD-Export nach Namensregel (ADR-010).
