@@ -39,7 +39,12 @@ export default defineConfig({
       // Frische Datenbank je Lauf; Buchungsstand aus config/licenses.dev.json
       command: `node -e "require('fs').rmSync(process.argv[1],{recursive:true,force:true})" "${E2E_DATA_DIR}" && pnpm --filter @iot/core-backend start`,
       url: `${CORE_BACKEND}/api/health`,
-      env: { CORE_PORT: '4010', CORE_DATA_DIR: E2E_DATA_DIR, NODE_ENV: 'test' },
+      env: {
+        CORE_PORT: '4010',
+        CORE_DATA_DIR: E2E_DATA_DIR,
+        CORE_DEV_PASSWORD: 'e2e-passwort',
+        NODE_ENV: 'test',
+      },
       reuseExistingServer: false,
     },
     {
