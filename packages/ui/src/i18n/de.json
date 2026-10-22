@@ -63,5 +63,16 @@
     "sign": "Signieren",
     "cancel": "Abbrechen",
     "busy": "Wird signiert …"
+  },
+  "model": {
+    "label": "3D-Ansicht",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "reset": "Ansicht zurücksetzen",
+    "fullscreen": "Vollbild",
+    "loading": "3D-Modell wird geladen …",
+    "error": "Das 3D-Modell konnte nicht angezeigt werden.",
+    "legendFault": "Störung",
+    "legendWarning": "Warnung"
   }
 }

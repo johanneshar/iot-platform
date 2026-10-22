@@ -100,6 +100,7 @@
   --border-width-foreign: 1.5px;
   --border-width-accent: 4px;
   --shadow-raised: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-marker: 0 2px 8px rgba(58, 58, 57, 0.25);
   --opacity-label: 0.9;
   --opacity-sub: 0.85;
   --opacity-disabled: 0.45;
@@ -142,6 +143,9 @@
   --size-timeline-height: 36px;
   --size-chart-height: 200px;
   --size-trend-height: 56px;
+  --size-model-height-md: 340px;
+  --size-model-height-lg: 420px;
+  --size-marker-badge: 34px;
   --grid-kpi-min: 180px;
   --grid-value-min: 160px;
   --grid-tile-min: 200px;

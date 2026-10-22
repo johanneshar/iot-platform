@@ -2,6 +2,8 @@ import { cx } from '../../utils/cx';
 import utils from '../../styles/utils.module.css';
 import styles from './BarChart.module.css';
 
+const MAX_AXIS_LABELS = 9;
+
 export interface BarChartBar {
   /** Beschriftung unter dem Balken, z. B. „06:00“ */
   label: string;
@@ -29,6 +31,8 @@ export interface BarChartProps {
 export function BarChart({ label, bars, max, reference, tone = 'primary' }: BarChartProps) {
   const scale = max ?? Math.max(reference?.value ?? 0, ...bars.map((b) => b.value ?? 0), 1) * 1.08;
   const pct = (v: number) => `${String(Math.min(100, (v / scale) * 100))}%`;
+  // Bei vielen Abschnitten nur jede n-te Achsenbeschriftung, damit nichts abgeschnitten wird
+  const every = Math.ceil(bars.length / MAX_AXIS_LABELS);
   return (
     <div className={styles.chart}>
       <div className={styles.plot} aria-hidden="true">
@@ -44,8 +48,14 @@ export function BarChart({ label, bars, max, reference, tone = 'primary' }: BarC
           </div>
         )}
         {bars.map((b, index) => (
-          <div key={`${String(index)}-${b.label}`} className={styles.column}>
-            <span className={styles.value}>{b.display}</span>
+          <div
+            key={`${String(index)}-${b.label}`}
+            className={styles.column}
+            title={`${b.label}: ${b.display}`}
+          >
+            <span className={styles.value}>
+              {bars.length > MAX_AXIS_LABELS * 1.5 ? '' : b.display}
+            </span>
             <div
               className={cx(styles.bar, styles[tone], b.highlight && styles.highlight)}
               style={{ height: pct(b.value ?? 0) }}
@@ -56,7 +66,7 @@ export function BarChart({ label, bars, max, reference, tone = 'primary' }: BarC
       <div className={styles.axis} aria-hidden="true">
         {bars.map((b, index) => (
           <span key={`${String(index)}-${b.label}`} className={styles.axisLabel}>
-            {b.label}
+            {index % every === 0 ? b.label : ''}
           </span>
         ))}
       </div>

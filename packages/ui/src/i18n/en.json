@@ -63,5 +63,16 @@
     "sign": "Sign",
     "cancel": "Cancel",
     "busy": "Signing …"
+  },
+  "model": {
+    "label": "3D view",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "reset": "Reset view",
+    "fullscreen": "Full screen",
+    "loading": "Loading 3D model …",
+    "error": "The 3D model could not be displayed.",
+    "legendFault": "Fault",
+    "legendWarning": "Warning"
   }
 }

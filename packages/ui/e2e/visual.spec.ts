@@ -26,12 +26,20 @@ test.describe('Optik wie Mockup (abgenommen 2026-10-22)', () => {
       await page.goto(`/iframe.html?id=${story.id}&viewMode=story&globals=locale:de`);
       await page.locator('#storybook-root > *').first().waitFor();
       await page.evaluate(() => document.fonts.ready);
+      // 3D-Ansicht: erst vergleichen, wenn das Modell geladen ist; die WebGL-Fläche selbst nicht
+      const viewer = page.locator('[data-model-state]');
+      if (await viewer.count()) {
+        await expect(viewer.first()).not.toHaveAttribute('data-model-state', 'loading', {
+          timeout: 15_000,
+        });
+      }
 
       const isView = story.title.startsWith('Ansichten/');
       const target = isView ? page : page.locator('#storybook-root');
       await expect(target).toHaveScreenshot(`${story.id}.png`, {
         animations: 'disabled',
         fullPage: isView,
+        mask: [page.locator('[data-model-state] canvas')],
       });
     });
   }

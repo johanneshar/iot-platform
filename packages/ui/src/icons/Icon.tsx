@@ -126,6 +126,38 @@ const ICONS = {
     strokeWidth: 2,
     paths: <path d="m6 9 6 6 6-6" />,
   },
+  // 3D-Ansicht (Entwurf M5a)
+  zoomIn: {
+    strokeWidth: 2,
+    paths: (
+      <>
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5M11 8v6M8 11h6" />
+      </>
+    ),
+  },
+  zoomOut: {
+    strokeWidth: 2,
+    paths: (
+      <>
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5M8 11h6" />
+      </>
+    ),
+  },
+  reset: {
+    strokeWidth: 2,
+    paths: (
+      <>
+        <path d="M3 12a9 9 0 1 0 3-6.7" />
+        <path d="M3 4v5h5" />
+      </>
+    ),
+  },
+  fullscreen: {
+    strokeWidth: 2,
+    paths: <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />,
+  },
 } satisfies Record<string, IconDefinition>;
 
 export type IconName = keyof typeof ICONS;

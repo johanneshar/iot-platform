@@ -1,0 +1,181 @@
+/* 3D-Ansicht nach Mockup „M5a · Linienübersicht mit 3D-Ansicht“ und „M5a · Maschinendetail“ */
+.frame {
+  position: relative;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--color-control-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.md {
+  height: var(--size-model-height-md);
+}
+
+.lg {
+  height: var(--size-model-height-lg);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-24);
+  font-size: var(--font-size-table);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.tools {
+  position: absolute;
+  top: var(--space-12);
+  right: var(--space-12);
+  display: flex;
+  gap: var(--space-8);
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control-height);
+  height: var(--size-control-height);
+  color: var(--color-text-body);
+  cursor: pointer;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-md);
+}
+
+.tool:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.groupLabel {
+  position: absolute;
+  min-height: var(--size-control-height);
+  padding: 0 var(--space-12);
+  font-family: inherit;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-md);
+  transform: translate(-50%, -100%);
+}
+
+.groupLabel:hover {
+  background: var(--color-primary-tint-2);
+}
+
+.raised {
+  transform: translate(-50%, calc(-200% - var(--space-6)));
+}
+
+/* Schmale Flächen: keine Namen im Bild – Maschine im Modell oder im Linienfluss antippen */
+@container (max-width: 640px) {
+  .groupLabel {
+    display: none;
+  }
+}
+
+.marker {
+  position: absolute;
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  min-height: var(--size-control-height);
+  padding: var(--space-4) var(--space-14) var(--space-4) var(--space-4);
+  font-family: inherit;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-marker);
+  transform: translate(calc(-1 * var(--size-marker-badge) / 2), -50%);
+}
+
+.marker.fault {
+  color: var(--color-on-primary);
+  background: var(--color-fault);
+  border: var(--border-width-strong) solid var(--color-surface);
+}
+
+.marker.warning {
+  color: var(--color-warning-fg);
+  background: var(--color-warning-bg);
+  border: var(--border-width-strong) solid var(--color-warning);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-marker-badge);
+  height: var(--size-marker-badge);
+  font-size: var(--font-size-table);
+  border-radius: var(--radius-round);
+}
+
+.fault .badge {
+  color: var(--color-fault);
+  background: var(--color-surface);
+}
+
+.warning .badge {
+  color: var(--color-on-primary);
+  background: var(--color-warning-fg);
+}
+
+.legend {
+  position: absolute;
+  bottom: var(--space-12);
+  left: var(--space-12);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-size-label);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.legendItem {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.dot {
+  width: var(--size-swatch);
+  height: var(--size-swatch);
+  border-radius: var(--radius-round);
+}
+
+.dot.fault {
+  background: var(--color-fault);
+}
+
+.dot.warning {
+  background: var(--color-warning-bg);
+  border: var(--border-width-strong) solid var(--color-warning);
+}

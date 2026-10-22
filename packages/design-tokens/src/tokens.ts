@@ -137,6 +137,8 @@ export const border = {
 
 export const shadow = {
   raised: '0 1px 3px rgba(0, 0, 0, 0.12)',
+  // Markierung in der 3D-Ansicht (Entwurf M5a)
+  marker: '0 2px 8px rgba(58, 58, 57, 0.25)',
 } as const;
 
 export const opacity = {
@@ -188,6 +190,9 @@ export const size = {
   'timeline-height': '36px',
   'chart-height': '200px',
   'trend-height': '56px',
+  'model-height-md': '340px',
+  'model-height-lg': '420px',
+  'marker-badge': '34px',
 } as const;
 
 /** Mindestbreiten für automatische Raster (`repeat(auto-fit, minmax(…, 1fr))`). */

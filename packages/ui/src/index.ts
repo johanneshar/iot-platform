@@ -51,6 +51,13 @@ export {
 export { LockedModule, type LockedModuleProps } from './components/LockedModule/LockedModule';
 export { LoginForm, type LoginFormProps } from './components/LoginForm/LoginForm';
 export { MachineCard, type MachineCardProps } from './components/MachineCard/MachineCard';
+export {
+  ModelViewer,
+  type ModelGroup,
+  type ModelMarker,
+  type ModelViewerProps,
+  type Vec3,
+} from './components/ModelViewer/ModelViewer';
 export { ModuleCard, type ModuleCardProps } from './components/ModuleCard/ModuleCard';
 export { NavItem, type NavItemProps } from './components/NavItem/NavItem';
 export { Panel, type PanelProps } from './components/Panel/Panel';

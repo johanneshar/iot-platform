@@ -15,7 +15,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@iot/design-tokens": "workspace:*"
+    "@iot/design-tokens": "workspace:*",
+    "three": "0.186.1"
   },
   "peerDependencies": {
     "i18next": "^26.5.3",
@@ -39,6 +40,7 @@
     "react-dom": "18.3.1",
     "react-i18next": "17.1.0",
     "storybook": "10.6.2",
-    "vite": "8.3.4"
+    "vite": "8.3.4",
+    "@types/three": "0.186.0"
   }
 }
