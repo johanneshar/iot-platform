@@ -26,12 +26,21 @@ export {
 export { validateManifest, type ManifestResult } from './manifest/validate-manifest';
 export { RESERVED_MODULE_IDS, SHARED_MODULES } from './manifest/shared-modules';
 export {
+  ModuleIdContext,
   ShellContext,
+  useAudit,
   useDeepLinkParams,
   useIsModuleBooked,
   useLine,
   useNavigate,
+  usePermission,
+  useRequestSignature,
+  useUser,
+  type AuditRecord,
   type LineInfo,
   type ShellApi,
+  type ShellUser,
+  type SignatureRequest,
+  type SignatureResult,
 } from './shell/shell-context';
 export { I18nextProvider as I18nProvider, useTranslation } from 'react-i18next';

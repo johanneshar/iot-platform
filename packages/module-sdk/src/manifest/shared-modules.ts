@@ -13,4 +13,11 @@ export const SHARED_MODULES = {
 } as const;
 
 /** Erste Pfadteile, die die Shell selbst belegt – kein Modul darf so heißen. */
-export const RESERVED_MODULE_IDS = ['baukasten', 'api', 'shared', 'assets'] as const;
+export const RESERVED_MODULE_IDS = [
+  'baukasten',
+  'audit',
+  'core',
+  'api',
+  'shared',
+  'assets',
+] as const;
