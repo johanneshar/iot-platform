@@ -24,7 +24,8 @@ const fresh = (dir: string) =>
 export default defineConfig({
   forbidOnly: CI,
   retries: CI ? 1 : 0,
-  reporter: CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  // CI: Fehler zusätzlich als GitHub-Annotationen (ohne Anmeldung im Lauf lesbar)
+  reporter: CI ? [['list'], ['github'], ['html', { open: 'never' }]] : 'list',
   // Referenzbilder ohne Plattform-Suffix: sie werden ausschließlich unter Linux (CI) erzeugt
   snapshotPathTemplate: '{testFileDir}/__screenshots__/{arg}{ext}',
   expect: { toHaveScreenshot: { maxDiffPixels: 0 } },
