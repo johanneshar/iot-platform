@@ -9,18 +9,22 @@ liegt und welche Alarme anstehen; die Detailseite zeigt die Auswertungen einer e
    einen durchgezogenen, Fremdmaschinen einen gestrichelten Rahmen. „Engpass“ markiert die Maschine, die die
    Linienleistung bestimmt.
    _Ergebnis:_ Du erkennst Zustand, Leistung und OEE jeder Maschine.
-3. **Maschine öffnen:** Eine Karte im Linienfluss antippen.
+3. **Linie in 3D:** Ist ein 3D-Modell hinterlegt, steht es über dem Linienfluss. Ziehen dreht das Bild, die
+   Schaltflächen oben rechts zoomen, setzen die Ansicht zurück oder zeigen sie im Vollbild. Rote und orange
+   Markierungen zeigen anstehende Störungen und Warnungen mit Fehlerbaum.
+   _Ergebnis:_ Eine Markierung antippen öffnet die geführte Fehlersuche, einen Maschinennamen die Detailseite.
+4. **Maschine öffnen:** Eine Karte im Linienfluss antippen.
    _Ergebnis:_ Die Detailseite der Maschine öffnet sich mit Kennzahlen, Zustandsverlauf, Stillständen,
    Leistung und Ausschuss je Zeitabschnitt, Prozesswerten mit Grenzen und den Alarmen dieser Maschine.
-4. **Zeitraum wählen:** Oben rechts z. B. „Schicht“, „24 Stunden“ oder „7 Tage“ antippen.
+5. **Zeitraum wählen:** Oben rechts z. B. „Schicht“, „24 Stunden“ oder „7 Tage“ antippen.
    _Ergebnis:_ Alle Auswertungen gelten für diesen Zeitraum. Welche Zeiträume es gibt, stellt der Betreiber ein.
-5. **Stillstände lesen:** Die Tabelle unter dem Zustandsbalken nennt Beginn, Dauer, Zustand, den Grund der
+6. **Stillstände lesen:** Die Tabelle unter dem Zustandsbalken nennt Beginn, Dauer, Zustand, den Grund der
    Maschine und den auslösenden Alarm.
    _Ergebnis:_ Du siehst, was die Verfügbarkeit gekostet hat.
-6. **Weiter zu anderen Modulen:** Bei eigenen Maschinen führen die Schaltflächen zu Ersatzteilen,
+7. **Weiter zu anderen Modulen:** Bei eigenen Maschinen führen die Schaltflächen zu Ersatzteilen,
    Formatwechsel und Wartungsprognose; „← Linienübersicht“ führt zurück.
    _Ergebnis:_ Ist das Modul nicht gebucht, erklärt der Sperrbildschirm, was es kann.
-7. **Fehlersuche starten:** Bei einem anstehenden Alarm mit Fehlerbaum „Fehlersuche starten“ (Linienübersicht)
+8. **Fehlersuche starten:** Bei einem anstehenden Alarm mit Fehlerbaum „Fehlersuche starten“ (Linienübersicht)
    bzw. „Fehlersuche: …“ (Detailseite) antippen.
    _Ergebnis:_ Die geführte Fehlersuche öffnet den passenden Fehlerbaum.
 

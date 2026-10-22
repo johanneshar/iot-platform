@@ -167,6 +167,8 @@ export class ModuleApiError extends Error {
 }
 
 export interface ModuleApi {
+  /** Adresse eines Pfads des eigenen Backends, z. B. für Bilder oder 3D-Modelle */
+  url: (path: string) => string;
   get: <T>(path: string) => Promise<T>;
   post: <T>(path: string, body: unknown) => Promise<T>;
 }
@@ -193,7 +195,11 @@ function moduleApi(moduleId: string): ModuleApi {
     if (!response.ok) throw new ModuleApiError(response.status);
     return (response.status === 204 ? undefined : await response.json()) as T;
   };
-  return { get: (path) => call('GET', path), post: (path, body) => call('POST', path, body) };
+  return {
+    url: (path) => `${base}${path.replace(/^\//, '')}`,
+    get: (path) => call('GET', path),
+    post: (path, body) => call('POST', path, body),
+  };
 }
 
 /**

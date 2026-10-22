@@ -14,6 +14,9 @@ const TEST_BROKER = 'mqtt://localhost:1885';
 const STORYBOOK_URL = 'http://localhost:5183';
 const E2E_DATA_DIR = fileURLToPath(new URL('./test-results/core-data', import.meta.url));
 const E2E_MODULE_DATA = fileURLToPath(new URL('./test-results/module-data', import.meta.url));
+// 3D-Zuordnung nur für die Tests (Linie 1 auf dem Flexfill-Blockmodell) neben dem Modell
+const E2E_MODELS = fileURLToPath(new URL('./test-results/models', import.meta.url));
+const MODELS_SETUP = `node -e "const f=require('fs');f.mkdirSync(process.argv[1],{recursive:true});f.copyFileSync('packages/simulator/fixtures/models/flexfill_blockmodell.glb',process.argv[1]+'/flexfill_blockmodell.glb');f.copyFileSync('modules/dashboard/tests/e2e/models/l1.model.json',process.argv[1]+'/l1.model.json')" "${E2E_MODELS}"`;
 // Frische Datenbank je Lauf
 const fresh = (dir: string) =>
   `node -e "require('fs').rmSync(process.argv[1],{recursive:true,force:true})" "${dir}"`;
@@ -33,13 +36,22 @@ export default defineConfig({
     {
       name: 'shell',
       testMatch: ['apps/*/*/e2e/**/*.spec.ts', 'modules/*/tests/e2e/**/*.spec.ts'],
-      use: { ...devices['Desktop Chrome'], baseURL: SHELL_URL },
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: SHELL_URL,
+        // WebGL ohne Grafikkarte (3D-Ansicht, M5a)
+        launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
+      },
     },
     {
       // Läuft gegen das gebaute Storybook: vorher `pnpm storybook:build`
       name: 'ui',
       testMatch: ['packages/ui/e2e/**/*.spec.ts'],
-      use: { ...devices['Desktop Chrome'], baseURL: STORYBOOK_URL },
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: STORYBOOK_URL,
+        launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
+      },
     },
   ],
   webServer: [
@@ -69,13 +81,14 @@ export default defineConfig({
       reuseExistingServer: false,
     },
     {
-      command: `${fresh(`${E2E_MODULE_DATA}/dashboard`)} && pnpm --filter @iot/module-dashboard build && pnpm --filter @iot/module-dashboard start`,
+      command: `${fresh(`${E2E_MODULE_DATA}/dashboard`)} && ${MODELS_SETUP} && pnpm --filter @iot/module-dashboard build && pnpm --filter @iot/module-dashboard start`,
       url: `${DASHBOARD_MODULE}/entry.js`,
       env: {
         MODULE_PORT: '4111',
         CORE_URL: CORE_BACKEND,
         MQTT_URL: TEST_BROKER,
         MODULE_DATA_DIR: `${E2E_MODULE_DATA}/dashboard`,
+        DASHBOARD_MODEL_DIR: E2E_MODELS,
       },
       reuseExistingServer: false,
     },

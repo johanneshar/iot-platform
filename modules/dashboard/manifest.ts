@@ -6,7 +6,7 @@ import type { ModuleManifest } from '@iot/module-sdk/manifest';
  */
 export const manifest = {
   id: 'dashboard',
-  version: '0.3.0',
+  version: '0.4.0',
   name: { de: 'Linien-Dashboard', en: 'Line dashboard' },
   description: {
     de: 'PackML-Zustände, Linien-OEE und Engpassanalyse',

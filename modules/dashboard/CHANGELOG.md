@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 (2026-10-22)
+
+- 3D-Ansicht (A-01): „Linie in 3D“ in der Linienübersicht, 3D-Ansicht auf der Detailseite mit Fokus auf der
+  Maschine; Markierungen für anstehende Alarme mit Fehlerbaum öffnen die Fehlersuche (ADR-010)
+- Zuordnungsdatei `*.model.json` mit Schema; Flexfill-Blockmodell für Linie 3
+
 ## 0.3.0 (2026-10-22)
 
 - Maschinen-Detailseite nach Mockup (A-01.5): Kennzahlen, Zustandsverlauf mit Stillständen, Leistung und

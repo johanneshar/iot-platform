@@ -1,6 +1,6 @@
 {
   "name": "@iot/module-dashboard",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "description": "Linien-Dashboard – Modul der IoT-Plattform",
@@ -15,7 +15,8 @@
     "@iot/module-sdk": "workspace:*",
     "fastify": "5.12.7",
     "@iot/interface-schema": "workspace:*",
-    "better-sqlite3": "13.0.3"
+    "better-sqlite3": "13.0.3",
+    "ajv": "8.20.0"
   },
   "devDependencies": {
     "@iot/ui": "workspace:*",

@@ -33,6 +33,8 @@ import {
 import { useState } from 'react';
 import type { MachineAnalysis, PeriodOption, Stop } from '../../shared/analysis';
 import { durationParts, formatDateTime, formatNumber, formatPercent, formatTime } from '../format';
+import type { LineModelInfo } from '../../shared/model';
+import { LineModelView } from '../model3d/LineModelView';
 import { MODULE_ID } from '../module-id';
 import { useNow } from '../useNow';
 import styles from './MachinePage.module.css';
@@ -89,6 +91,7 @@ export function MachinePage() {
       : null,
     ANALYSIS_REFRESH_MS,
   );
+  const model = useModuleData<LineModelInfo>('model', 10 * 60_000);
   const back = () => {
     navigate(MODULE_ID);
   };
@@ -116,7 +119,7 @@ export function MachinePage() {
       />
       {analysis.failed && !analysis.data && <Card role="alert">{t('machine.loadError')}</Card>}
       {!analysis.data && !analysis.failed && <Card>{t('machine.loading')}</Card>}
-      {analysis.data && <Analysis machine={machine} analysis={analysis.data} />}
+      {analysis.data && <Analysis machine={machine} analysis={analysis.data} model={model.data} />}
     </div>
   );
 }
@@ -172,7 +175,15 @@ function Toolbar({
   );
 }
 
-function Analysis({ machine, analysis }: { machine: MachineSnapshot; analysis: MachineAnalysis }) {
+function Analysis({
+  machine,
+  analysis,
+  model,
+}: {
+  machine: MachineSnapshot;
+  analysis: MachineAnalysis;
+  model: LineModelInfo | null;
+}) {
   const { t, i18n } = useTranslation(MODULE_ID);
   const lang = i18n.language;
   const line = useLine();
@@ -238,6 +249,13 @@ function Analysis({ machine, analysis }: { machine: MachineSnapshot; analysis: M
           sub={t('machine.kpi.badSub', { value: formatNumber(k.bad, lang) })}
         />
       </div>
+
+      {model?.machines.some((m) => m.machineId === machine.machineId && m.nodes.length > 0) && (
+        <Card gap="16">
+          <CardHeader title={t('model3d.machineTitle')} subtitle={t('model3d.machineSubtitle')} />
+          <LineModelView model={model} machineId={machine.machineId} />
+        </Card>
+      )}
 
       <States analysis={analysis} timeZone={line.timeZone} />
 

@@ -5,6 +5,7 @@ import {
   useLine,
   useLineData,
   useMachines,
+  useModuleData,
   useNavigate,
   useTranslation,
   type LineAlarm,
@@ -22,6 +23,8 @@ import {
 } from '@iot/ui';
 import { formatNumber, formatPercent, formatTime } from '../format';
 import { lineKpis, machineKpis } from '../kpi/kpi';
+import type { LineModelInfo } from '../../shared/model';
+import { LineModelView } from '../model3d/LineModelView';
 import { MODULE_ID } from '../module-id';
 import { useNow } from '../useNow';
 import styles from './OverviewPage.module.css';
@@ -31,6 +34,8 @@ type T = ReturnType<typeof useTranslation>['t'];
 // Ziele der Deep Links (Modul-IDs, CLAUDE.md Abschnitt 4)
 const ALARMS_MODULE = 'alarms';
 const MACHINE_PATH = 'machine';
+const MODEL_PATH = 'model';
+const MODEL_REFRESH_MS = 10 * 60_000;
 const TROUBLESHOOTING_MODULE = 'troubleshooting';
 // Einsprungpunkt der Fehlersuche: Alarme mit Fehlerbaum
 const ALARM_TARGET = 'alarm';
@@ -52,6 +57,8 @@ export function OverviewPage() {
   const machines = useMachines();
   const alarms = useAlarms();
   const navigate = useNavigate();
+  // 3D-Modell der Linie, falls hinterlegt (A-01.4: sonst nur der Linienfluss)
+  const model = useModuleData<LineModelInfo>(MODEL_PATH, MODEL_REFRESH_MS);
   const now = useNow();
 
   if (!data || machines.length === 0) {
@@ -131,6 +138,13 @@ export function OverviewPage() {
           sub={t('kpi.outputSub')}
         />
       </div>
+
+      {model.data && (
+        <Card gap="16">
+          <CardHeader title={t('model3d.lineTitle')} subtitle={t('model3d.lineSubtitle')} />
+          <LineModelView model={model.data} machineId={null} onMachineSelect={openMachine} />
+        </Card>
+      )}
 
       <LineFlow
         title={t('flow.title')}

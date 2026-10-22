@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { manifest } from '../manifest';
 import { buildApp } from './app';
 import { HistoryStore } from './history-store';
+import { loadLineModel } from './line-model-3d';
 import { parsePeriods, retentionMs } from './periods';
 
 const port = Number(process.env['MODULE_PORT'] ?? 4101);
@@ -30,9 +31,18 @@ const dataDir =
   process.env['MODULE_DATA_DIR'] ?? fileURLToPath(new URL(`../.data/${lineId}/`, import.meta.url));
 const distDir = fileURLToPath(new URL('../dist/', import.meta.url));
 
+// 3D-Modelle und Zuordnungen (ADR-010): im Betrieb aus der Konfiguration der Edge App
+const modelDir =
+  process.env['DASHBOARD_MODEL_DIR'] ??
+  fileURLToPath(new URL('../../../packages/simulator/fixtures/models/', import.meta.url));
+
 const history = new HistoryStore(dataDir);
 let lineConfig: LineConfig | null = null;
-const app = buildApp({ history, periods, line: () => lineConfig, token: core.token });
+const model = loadLineModel(modelDir, lineId, (m) => {
+  console.warn(m);
+});
+const app = buildApp({ history, periods, line: () => lineConfig, token: core.token, model });
+if (model) app.log.info(`3D-Modell für ${lineId}: ${model.path}`);
 
 const TYPES: Record<string, string> = {
   '.js': 'text/javascript; charset=utf-8',

@@ -1,0 +1,19 @@
+{
+  "$comment": "NUR FÜR E2E-TESTS: legt das Flexfill-Blockmodell auf die vier Maschinen von Linie 1, damit 3D-Ansicht, Markierung und Deep Link mit dem Test-Core (Linie 1) geprüft werden können. Kein Abbild der echten Linie 1.",
+  "lineId": "l1",
+  "model": "flexfill_blockmodell.glb",
+  "machines": [
+    { "machineId": "l1-wash", "xRange": [-1, 2.6] },
+    { "machineId": "l1-tunnel", "xRange": [2.6, 4.92] },
+    { "machineId": "l1-fill", "xRange": [4.92, 7.02] },
+    { "machineId": "l1-insp", "xRange": [7.02, 13.3] }
+  ],
+  "alarms": [
+    {
+      "alarmId": "FILL-WGT-0003",
+      "machineId": "l1-fill",
+      "label": { "de": "Wägezelle 3", "en": "Load cell 3" },
+      "position": [5.6, 1.25, 0.2]
+    }
+  ]
+}

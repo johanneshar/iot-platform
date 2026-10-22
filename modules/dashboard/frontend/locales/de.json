@@ -143,5 +143,16 @@
     "hm": "{{h}} h {{m}} min",
     "m": "{{m}} min",
     "lt1": "< 1 min"
+  },
+  "model3d": {
+    "lineLabel": "3D-Ansicht der Linie",
+    "machineLabel": "3D-Ansicht {{name}}",
+    "marker": "{{severity}} {{text}} – Fehlersuche starten",
+    "fault": "Störung",
+    "warning": "Warnung",
+    "lineTitle": "Linie in 3D",
+    "lineSubtitle": "Maschine antippen für Details · Markierung antippen startet die Fehlersuche",
+    "machineTitle": "3D-Ansicht",
+    "machineSubtitle": "Markierung antippen startet die Fehlersuche"
   }
 }

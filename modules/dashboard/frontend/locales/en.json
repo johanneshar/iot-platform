@@ -143,5 +143,16 @@
     "hm": "{{h}} h {{m}} min",
     "m": "{{m}} min",
     "lt1": "< 1 min"
+  },
+  "model3d": {
+    "lineLabel": "3D view of the line",
+    "machineLabel": "3D view {{name}}",
+    "marker": "{{severity}} {{text}} – start troubleshooting",
+    "fault": "Fault",
+    "warning": "Warning",
+    "lineTitle": "Line in 3D",
+    "lineSubtitle": "Tap a machine for details · tap a marker to start troubleshooting",
+    "machineTitle": "3D view",
+    "machineSubtitle": "Tap a marker to start troubleshooting"
   }
 }

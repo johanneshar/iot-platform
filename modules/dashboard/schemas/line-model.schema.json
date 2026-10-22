@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/line-model.schema.json",
+  "title": "LineModel3D",
+  "description": "Zuordnung eines 3D-Modells (glTF/GLB) zu den Maschinen einer Linie und den Alarmstellen (ADR-010, A-01.3).",
+  "type": "object",
+  "required": ["lineId", "model", "machines"],
+  "additionalProperties": false,
+  "properties": {
+    "$comment": { "type": "string" },
+    "lineId": { "type": "string", "minLength": 1 },
+    "model": {
+      "description": "Dateiname des Modells im selben Ordner",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+\\.(glb|gltf)$"
+    },
+    "machines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["machineId"],
+        "additionalProperties": false,
+        "properties": {
+          "machineId": { "type": "string", "minLength": 1 },
+          "nodes": {
+            "description": "Knotennamen im Modell, * als Platzhalter (z. B. „l3-fill/*“ nach Namensregel)",
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "xRange": {
+            "description": "Abschnitt entlang der Linie (x, Meter): Teile, die ganz darin liegen",
+            "type": "array",
+            "prefixItems": [{ "type": "number" }, { "type": "number" }],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "anyOf": [{ "required": ["nodes"] }, { "required": ["xRange"] }]
+      }
+    },
+    "alarms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alarmId", "machineId", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "alarmId": { "type": "string", "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$" },
+          "machineId": { "type": "string", "minLength": 1 },
+          "label": {
+            "type": "object",
+            "required": ["de"],
+            "additionalProperties": { "type": "string" }
+          },
+          "position": {
+            "description": "Punkt im Modell (x, y, z in Metern)",
+            "type": "array",
+            "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }],
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "node": {
+            "description": "oder: Knoten, an dessen Mitte die Markierung sitzt",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "anyOf": [{ "required": ["position"] }, { "required": ["node"] }]
+      }
+    }
+  }
+}

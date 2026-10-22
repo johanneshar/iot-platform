@@ -9,6 +9,7 @@ und erkennst den Engpass der Linie.
 - Du findest den Engpass und seinen Zustand.
 - Du erkennst unsichere Daten.
 - Du findest auf der Detailseite einer Maschine Stillstände und ihre Ursachen.
+- Du startest die Fehlersuche aus einer Markierung im 3D-Bild.
 
 ## Übungen
 
@@ -18,6 +19,7 @@ und erkennst den Engpass der Linie.
 4. Welche Alarme stehen an? Welcher ist eine Störung, welcher eine Warnung?
 5. Öffne die Detailseite der Füll- und Verschließmaschine. Wie lange stand sie in dieser Schicht, und warum?
 6. Wechsle auf „24 Stunden“. Welcher Prozesswert lag am nächsten an einer Grenze?
+7. Öffne Linie 3 · Flexfill. Welche Maschine ist im 3D-Bild markiert? Tippe die Markierung an.
 
 ## Prüffragen
 
@@ -26,3 +28,4 @@ und erkennst den Engpass der Linie.
 3. Woran erkennst du, dass die Daten einer Maschine unsicher sind?
 4. Warum zählt für die Linien-OEE die letzte Maschine der Linie?
 5. Warum zeigt eine Fremdmaschine der Stufe Basis keine Prozesswerte?
+6. Warum ist der Alarm „Roboter: Greiferposition nicht erreicht“ im 3D-Bild nicht markiert?

@@ -25,22 +25,34 @@ Für Entwicklerinnen und Entwickler: Aufbau, Datenfluss und Berechnung der Linie
 
 ## API (über `/api/modules/dashboard/…`)
 
-| Aufruf                                   | Antwort                                                  |
-| ---------------------------------------- | -------------------------------------------------------- |
-| `GET periods`                            | eingestellte Zeiträume mit Bezeichnung de/en             |
-| `GET machines/:id/analysis?period=shift` | `MachineAnalysis` (siehe `shared/analysis.ts`); 404, 503 |
+| Aufruf                                   | Antwort                                                   |
+| ---------------------------------------- | --------------------------------------------------------- |
+| `GET periods`                            | eingestellte Zeiträume mit Bezeichnung de/en              |
+| `GET machines/:id/analysis?period=shift` | `MachineAnalysis` (siehe `shared/analysis.ts`); 404, 503  |
+| `GET model`                              | 3D-Zuordnung der Linie (`LineModelInfo`); 404 ohne Modell |
+| `GET model/file`                         | Modelldatei (glTF-Binär)                                  |
 
 ## Konfiguration
 
-| Variable                          | Standard                      | Bedeutung                                                       |
-| --------------------------------- | ----------------------------- | --------------------------------------------------------------- |
-| `DASHBOARD_PERIODS`               | `shift,24h,7d`                | Zeiträume der Detailseite (E-37), z. B. `30min,1h,shift,24h,7d` |
-| `MODULE_PORT`                     | 4101                          |                                                                 |
-| `LINE_ID`, `MQTT_URL`             | `l1`, `mqtt://localhost:1883` | Linie und Databus                                               |
-| `MODULE_DATA_DIR`                 | `.data/<LINE_ID>/`            | SQLite-Datei des Verlaufs                                       |
-| `CORE_URL`, `CORE_REGISTRY_TOKEN` | wie Vorlage                   |                                                                 |
+| Variable                          | Standard                              | Bedeutung                                                       |
+| --------------------------------- | ------------------------------------- | --------------------------------------------------------------- |
+| `DASHBOARD_PERIODS`               | `shift,24h,7d`                        | Zeiträume der Detailseite (E-37), z. B. `30min,1h,shift,24h,7d` |
+| `MODULE_PORT`                     | 4101                                  |                                                                 |
+| `LINE_ID`, `MQTT_URL`             | `l1`, `mqtt://localhost:1883`         | Linie und Databus                                               |
+| `MODULE_DATA_DIR`                 | `.data/<LINE_ID>/`                    | SQLite-Datei des Verlaufs                                       |
+| `CORE_URL`, `CORE_REGISTRY_TOKEN` | wie Vorlage                           |                                                                 |
+| `DASHBOARD_MODEL_DIR`             | `packages/simulator/fixtures/models/` | 3D-Modelle und Zuordnungen (`*.model.json`, ADR-010)            |
 
 Aufbewahrung: längster Zeitraum plus ein Tag; stündlich bereinigt.
+
+## 3D-Ansicht (A-01, ADR-010)
+
+- Linienübersicht: Karte „Linie in 3D“ über dem Linienfluss, wenn für `LINE_ID` eine Zuordnung vorliegt;
+  Maschinennamen im Bild öffnen die Detailseite.
+- Detailseite: Karte „3D-Ansicht“ zwischen Kennzahlen und Zustandsverlauf, Fokus auf der Maschine.
+- Markierungen: anstehender Alarm + Eintrag in der Zuordnung + Einsprungpunkt der Fehlersuche
+  (`useDeepLinkTargets`); Berühren → `navigate('troubleshooting', { alarmId, machine })`.
+- Einbinden eines Modells: [Anleitung](../../../docs/anleitungen/3d-modell.md).
 
 ## Kennzahlen (E-27)
 
