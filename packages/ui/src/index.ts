@@ -51,6 +51,7 @@ export { LoginForm, type LoginFormProps } from './components/LoginForm/LoginForm
 export { MachineCard, type MachineCardProps } from './components/MachineCard/MachineCard';
 export { ModuleCard, type ModuleCardProps } from './components/ModuleCard/ModuleCard';
 export { NavItem, type NavItemProps } from './components/NavItem/NavItem';
+export { Panel, type PanelProps } from './components/Panel/Panel';
 export { Placeholder, type PlaceholderProps } from './components/Placeholder/Placeholder';
 export { ProgressBar, type ProgressBarProps } from './components/ProgressBar/ProgressBar';
 export { SearchInput, type SearchInputProps } from './components/SearchInput/SearchInput';
