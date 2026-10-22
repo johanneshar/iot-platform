@@ -14,6 +14,12 @@ Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-No
   wiederholt (O-25); `pnpm dev:line3`
 - Core: eine wiederholte Meldung „kommt“ ändert einen anstehenden Alarm nicht
 
+**Behoben**
+
+- OEE und Leistung weit über 100 %, wenn zwei Quellen dieselbe Maschine mit unterschiedlichen Zählerständen
+  melden (z. B. zwei Simulatoren): Rücksprünge ohne neuen Reset und unmögliche Sprünge werden nicht mehr
+  gezählt (`counterStep`), die Detailseite weist auf unplausible Zählerstände hin
+
 **Demo**
 
 1. `pnpm dev`, dann in einem zweiten Terminal `pnpm dev:line3`; <http://localhost:5195> als `maintenance`.

@@ -18,12 +18,15 @@ sprechen nicht miteinander und lesen Maschinendaten nur über die Schnittstelle.
    geplante Produktionszeit aus dem Schichtmodell (`plannedIntervals`), Zustandsabschnitte, Stillstände mit
    auslösendem Alarm, Leistung und Ausschuss je Abschnitt, Prozesswerte mit Grenzen aus dem Wertekatalog
    und Alarmstatistik. Zählerresets werden erkannt.
-3. **Beobachtungszeitraum:** Kennzahlen gelten nur ab dem ersten gespeicherten Zählerstand im Zeitraum;
+3. **Plausible Zähler:** `counterStep` (SDK) zählt einen Reset nur, wenn `resetAt` nach dem letzten Stand liegt;
+   Rücksprünge ohne neuen Reset und Sprünge über 1,5 × Sollleistung werden nicht gezählt und auf der
+   Detailseite als unplausibel gemeldet. Dieselbe Regel gilt im Datenkern des Core.
+4. **Beobachtungszeitraum:** Kennzahlen gelten nur ab dem ersten gespeicherten Zählerstand im Zeitraum;
    die Seite zeigt „Daten seit …“, wenn der Verlauf später beginnt.
-4. **Zeiträume (E-37):** `DASHBOARD_PERIODS`, z. B. `1h,shift,24h,7d` (`shift` = laufende Schicht, sonst
+5. **Zeiträume (E-37):** `DASHBOARD_PERIODS`, z. B. `1h,shift,24h,7d` (`shift` = laufende Schicht, sonst
    Zahl mit `min`, `h`, `d`). Aufbewahrung = längster Zeitraum + 1 Tag. Abschnitte: bis 2 h je 5 min, bis
    2 Tage je Stunde, darüber je Tag.
-5. **Linienkonfiguration:** Zeitzone und Schichtmodell holt das Modul beim Core (`GET /api/registry/line`,
+6. **Linienkonfiguration:** Zeitzone und Schichtmodell holt das Modul beim Core (`GET /api/registry/line`,
    Dienst-Token; `fetchLineConfig`).
 
 ## Alternativen
