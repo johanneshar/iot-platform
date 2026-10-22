@@ -2,7 +2,7 @@ import { NAV_SECTIONS, type ModuleEntry } from '@iot/module-sdk';
 import type { SidebarSection } from '@iot/ui';
 import type { ShellModule } from '../api';
 import { localized } from '../localized';
-import { CATALOG_ROUTE } from '../router';
+import { AUDIT_ROUTE, CATALOG_ROUTE } from '../router';
 
 type NavEntry = SidebarSection['items'][number];
 
@@ -13,6 +13,8 @@ interface NavOptions {
   language: string;
   sectionLabel: (section: string) => string;
   catalogLabel: string;
+  /** Eintrag „Audit Trail“, nur mit Recht core.audit.view */
+  audit?: { label: string } | null;
   go: (moduleId: string) => void;
 }
 
@@ -27,6 +29,7 @@ export function buildSections({
   language,
   sectionLabel,
   catalogLabel,
+  audit = null,
   go,
 }: NavOptions): SidebarSection[] {
   const withNav = modules.filter((m) => m.installed && m.manifest?.nav);
@@ -64,6 +67,18 @@ export function buildSections({
     },
   };
   platform?.items.push(catalog);
+  if (audit) {
+    platform?.items.push({
+      id: AUDIT_ROUTE,
+      icon: 'batch',
+      label: audit.label,
+      active: activeId === AUDIT_ROUTE,
+      locked: false,
+      onClick: () => {
+        go(AUDIT_ROUTE);
+      },
+    });
+  }
 
   return sections.filter((s) => s.items.length > 0);
 }

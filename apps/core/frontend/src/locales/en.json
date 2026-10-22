@@ -14,7 +14,8 @@
       "Service": "Service",
       "Plattform": "Platform"
     },
-    "catalog": "Module catalog"
+    "catalog": "Module catalog",
+    "audit": "Audit trail"
   },
   "line": {
     "select": "Select line"
@@ -40,5 +41,47 @@
     "loadError": "The module “{{name}}” could not be loaded.",
     "notFound": "This page does not exist.",
     "notInstalled": "“{{name}}” is not installed on the Edge Device of this line."
+  },
+  "login": {
+    "invalid": "User name or password is wrong.",
+    "locked": "The account is locked for 15 minutes after several failed attempts.",
+    "inactive": "The account is deactivated.",
+    "error": "Sign-in is not possible. Please try again later."
+  },
+  "user": {
+    "logout": "Sign out"
+  },
+  "signature": {
+    "invalid": "User name or password is wrong – sign with your own credentials.",
+    "locked": "The account is locked for 15 minutes after several failed attempts.",
+    "forbidden": "You do not have the right for this signature.",
+    "error": "The signature could not be saved."
+  },
+  "audit": {
+    "title": "Audit trail",
+    "subtitle": "Immutable · 21 CFR Part 11 / Annex 11",
+    "valid": "Chain intact · {{count}} entries",
+    "broken": "Chain broken from entry {{seq}}",
+    "label": "Audit trail",
+    "time": "Time",
+    "user": "User",
+    "action": "Action",
+    "change": "Old → new",
+    "note": "Reason / signature",
+    "signed": "Signature: {{meaning}}",
+    "actions": {
+      "core_login": "Sign-in",
+      "core_logout": "Sign-out",
+      "core_login_failed": "Sign-in failed",
+      "core_user_locked": "Account locked",
+      "core_user_created": "User created",
+      "core_user_roles-changed": "Roles changed",
+      "core_user_activated": "User activated",
+      "core_user_deactivated": "User deactivated",
+      "core_user_password-reset": "Password reset",
+      "core_module_booked": "Module booked",
+      "core_module_unbooked": "Module cancelled",
+      "core_signature_failed": "Signature failed"
+    }
   }
 }

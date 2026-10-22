@@ -10,12 +10,14 @@ type Filter = 'all' | ModuleCategory;
 
 interface CatalogProps {
   modules: readonly ShellModule[];
+  /** Buchen nur mit Recht core.modules.book (E-14) */
+  canBook: boolean;
   onToggle: (module: ShellModule) => void;
   onOpen: (moduleId: string) => void;
 }
 
-/** Baukasten: alle Module des Katalogs mit Buchungsstand (E-14: buchen nur durch den Admin, ab M3b). */
-export function Catalog({ modules, onToggle, onOpen }: CatalogProps) {
+/** Baukasten: alle Module des Katalogs mit Buchungsstand; buchen nur mit Recht (E-14). */
+export function Catalog({ modules, canBook, onToggle, onOpen }: CatalogProps) {
   const { t, i18n } = useTranslation(CORE_NAMESPACE);
   const [filter, setFilter] = useState<Filter>('all');
   const booked = modules.filter((m) => m.booked).length;
@@ -49,6 +51,7 @@ export function Catalog({ modules, onToggle, onOpen }: CatalogProps) {
             core={m.core}
             gxp={m.gxp}
             booked={m.booked}
+            canToggle={canBook}
             headingLevel={2}
             onToggle={() => {
               onToggle(m);

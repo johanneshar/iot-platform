@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 /** Seite des Baukastens; die ID ist in RESERVED_MODULE_IDS reserviert. */
 export const CATALOG_ROUTE = 'baukasten';
+/** Seite des Audit Trail (Kernbaustein „Benutzer & Audit Trail“, ID reserviert). */
+export const AUDIT_ROUTE = 'audit';
 
 export interface Route {
   /** Modul-ID oder CATALOG_ROUTE; leer = Startseite */

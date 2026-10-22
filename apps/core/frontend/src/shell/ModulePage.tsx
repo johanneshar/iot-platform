@@ -1,4 +1,4 @@
-import { useTranslation, type ModuleEntry } from '@iot/module-sdk';
+import { ModuleIdContext, useTranslation, type ModuleEntry } from '@iot/module-sdk';
 import { Card, LockedModule } from '@iot/ui';
 import { useEffect, useState } from 'react';
 import type { ShellModule } from '../api';
@@ -9,7 +9,8 @@ import { loadModule } from '../module-loader';
 interface ModulePageProps {
   module: ShellModule;
   path: string;
-  onActivate: () => void;
+  /** Nur mit Recht core.modules.book (E-14) */
+  onActivate?: () => void;
   onOpenCatalog: () => void;
   onLoaded: (id: string, entry: ModuleEntry) => void;
 }
@@ -46,7 +47,7 @@ export function ModulePage({ module, path, onActivate, onOpenCatalog, onLoaded }
       <LockedModule
         moduleName={name}
         description={localized(module.description, i18n.language)}
-        onActivate={onActivate}
+        {...(onActivate ? { onActivate } : {})}
         onOpenCatalog={onOpenCatalog}
       />
     );
@@ -59,5 +60,9 @@ export function ModulePage({ module, path, onActivate, onOpenCatalog, onLoaded }
 
   const Page = entry.pages[path];
   if (!Page) return <Card>{t('module.notFound')}</Card>;
-  return <Page path={path} />;
+  return (
+    <ModuleIdContext.Provider value={module.id}>
+      <Page path={path} />
+    </ModuleIdContext.Provider>
+  );
 }

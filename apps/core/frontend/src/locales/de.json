@@ -14,7 +14,8 @@
       "Service": "Service",
       "Plattform": "Plattform"
     },
-    "catalog": "Baukasten"
+    "catalog": "Baukasten",
+    "audit": "Audit Trail"
   },
   "line": {
     "select": "Linie wählen"
@@ -40,5 +41,47 @@
     "loadError": "Das Modul „{{name}}“ konnte nicht geladen werden.",
     "notFound": "Diese Seite gibt es nicht.",
     "notInstalled": "„{{name}}“ ist auf dem Edge Device dieser Linie nicht installiert."
+  },
+  "login": {
+    "invalid": "Benutzer oder Passwort ist falsch.",
+    "locked": "Das Konto ist nach mehreren Fehlversuchen für 15 Minuten gesperrt.",
+    "inactive": "Das Konto ist deaktiviert.",
+    "error": "Anmeldung nicht möglich. Bitte später erneut versuchen."
+  },
+  "user": {
+    "logout": "Abmelden"
+  },
+  "signature": {
+    "invalid": "Benutzer oder Passwort ist falsch – signieren Sie mit Ihren eigenen Zugangsdaten.",
+    "locked": "Das Konto ist nach mehreren Fehlversuchen für 15 Minuten gesperrt.",
+    "forbidden": "Ihnen fehlt das Recht für diese Signatur.",
+    "error": "Die Signatur konnte nicht gespeichert werden."
+  },
+  "audit": {
+    "title": "Audit Trail",
+    "subtitle": "Unveränderbar · 21 CFR Part 11 / Annex 11",
+    "valid": "Kette unversehrt · {{count}} Einträge",
+    "broken": "Kette verletzt ab Eintrag {{seq}}",
+    "label": "Audit Trail",
+    "time": "Zeit",
+    "user": "Benutzer",
+    "action": "Aktion",
+    "change": "Alt → Neu",
+    "note": "Grund / Signatur",
+    "signed": "Signatur: {{meaning}}",
+    "actions": {
+      "core_login": "Anmeldung",
+      "core_logout": "Abmeldung",
+      "core_login_failed": "Anmeldung fehlgeschlagen",
+      "core_user_locked": "Konto gesperrt",
+      "core_user_created": "Benutzer angelegt",
+      "core_user_roles-changed": "Rollen geändert",
+      "core_user_activated": "Benutzer aktiviert",
+      "core_user_deactivated": "Benutzer deaktiviert",
+      "core_user_password-reset": "Passwort zurückgesetzt",
+      "core_module_booked": "Modul gebucht",
+      "core_module_unbooked": "Modul abbestellt",
+      "core_signature_failed": "Signatur fehlgeschlagen"
+    }
   }
 }
