@@ -1,0 +1,40 @@
+{
+  "list": {
+    "title": "Alarmliste",
+    "subtitle": "Anstehende Alarme und Verlauf der letzten 24 Stunden",
+    "filter": "Alarmklasse",
+    "label": "Alarmliste",
+    "none": "Keine Alarme in diesem Zeitraum.",
+    "historyError": "Der Verlauf konnte nicht geladen werden – es werden nur anstehende Alarme angezeigt."
+  },
+  "filter": {
+    "all": "Alle",
+    "fault": "Störung",
+    "warning": "Warnung",
+    "info": "Info"
+  },
+  "column": {
+    "time": "Zeit",
+    "machine": "Maschine",
+    "text": "Meldung",
+    "class": "Klasse",
+    "action": "Aktion"
+  },
+  "status": {
+    "active": "Steht an",
+    "acknowledged": "An der Maschine quittiert",
+    "acknowledgedBy": "An der Maschine quittiert ({{user}})",
+    "cleared": "Gegangen {{time}}"
+  },
+  "troubleshoot": "Fehlersuche",
+  "troubleshootLabel": "Fehlersuche: {{text}}",
+  "commonFault": "Sammelstörung",
+  "top": {
+    "title": "Top-Störungen",
+    "subtitle": "Stillstandszeit der letzten 7 Tage",
+    "none": "Keine Störungen in den letzten 7 Tagen.",
+    "error": "Die Top-Störungen konnten nicht geladen werden.",
+    "minutes": "{{value}} min",
+    "bar": "{{text}}: {{value}} Minuten"
+  }
+}

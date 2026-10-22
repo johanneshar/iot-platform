@@ -1,0 +1,74 @@
+/* Aufbau nach Mockup „Alarme“ */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: flex-start;
+}
+
+.wide {
+  flex: 3 1 var(--grid-column-main-xl);
+  min-width: 0;
+}
+
+.narrow {
+  flex: 1 1 var(--grid-column-side);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--font-size-table);
+  color: var(--color-text-muted);
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.status {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.faults {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fault {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.faultHead {
+  display: flex;
+  gap: var(--space-12);
+  justify-content: space-between;
+  font-size: var(--font-size-table);
+}
+
+.faultText {
+  color: var(--color-text-body);
+}
+
+.faultValue {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  white-space: nowrap;
+}

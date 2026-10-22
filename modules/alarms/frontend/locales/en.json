@@ -1,0 +1,40 @@
+{
+  "list": {
+    "title": "Alarm list",
+    "subtitle": "Active alarms and history of the last 24 hours",
+    "filter": "Alarm class",
+    "label": "Alarm list",
+    "none": "No alarms in this period.",
+    "historyError": "The history could not be loaded – only active alarms are shown."
+  },
+  "filter": {
+    "all": "All",
+    "fault": "Fault",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "column": {
+    "time": "Time",
+    "machine": "Machine",
+    "text": "Message",
+    "class": "Class",
+    "action": "Action"
+  },
+  "status": {
+    "active": "Active",
+    "acknowledged": "Acknowledged at the machine",
+    "acknowledgedBy": "Acknowledged at the machine ({{user}})",
+    "cleared": "Cleared {{time}}"
+  },
+  "troubleshoot": "Troubleshoot",
+  "troubleshootLabel": "Troubleshoot: {{text}}",
+  "commonFault": "Common fault",
+  "top": {
+    "title": "Top faults",
+    "subtitle": "Downtime of the last 7 days",
+    "none": "No faults in the last 7 days.",
+    "error": "The top faults could not be loaded.",
+    "minutes": "{{value}} min",
+    "bar": "{{text}}: {{value}} minutes"
+  }
+}
