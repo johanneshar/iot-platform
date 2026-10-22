@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import type { LineSnapshot } from '../data/types';
 import type { LocalizedText } from '../manifest/manifest';
 
@@ -74,6 +74,8 @@ export interface ShellApi {
   ) => Promise<SignatureResult | null>;
   /** Maschinendaten der Linie */
   data: LineDataSource;
+  /** Hat das (gebuchte, installierte) Modul einen Einsprungpunkt, z. B. `('troubleshooting', 'alarm', id)`? */
+  hasDeepLinkTarget: (moduleId: string, kind: string, id: string) => boolean;
 }
 
 export const ShellContext = createContext<ShellApi | null>(null);
@@ -132,4 +134,51 @@ export function useRequestSignature(): (
   const shell = useShell();
   const moduleId = useContext(ModuleIdContext);
   return (request) => shell.requestSignature(moduleId, request);
+}
+
+/** Ist ein Deep Link möglich – z. B. „Fehlersuche starten“ nur für Alarme mit Fehlerbaum? */
+export function useDeepLinkAvailable(moduleId: string, kind: string, id: string): boolean {
+  return useShell().hasDeepLinkTarget(moduleId, kind, id);
+}
+
+/** Prüfer für viele Einträge auf einmal, z. B. eine Alarmliste. */
+export function useDeepLinkTargets(): ShellApi['hasDeepLinkTarget'] {
+  return useShell().hasDeepLinkTarget;
+}
+
+/** Fehler eines Aufrufs an das eigene Modul-Backend. */
+export class ModuleApiError extends Error {
+  constructor(readonly status: number) {
+    super(`HTTP ${String(status)}`);
+  }
+}
+
+export interface ModuleApi {
+  get: <T>(path: string) => Promise<T>;
+  post: <T>(path: string, body: unknown) => Promise<T>;
+}
+
+/**
+ * Aufrufe an das eigene Modul-Backend – über den Proxy des Core, mit der Sitzung des Benutzers (E-36).
+ * Das Objekt bleibt je Modul gleich und kann in Abhängigkeitslisten von Effekten stehen.
+ */
+export function useModuleApi(): ModuleApi {
+  const moduleId = useContext(ModuleIdContext);
+  return useMemo(() => moduleApi(moduleId), [moduleId]);
+}
+
+function moduleApi(moduleId: string): ModuleApi {
+  const base = `/api/modules/${encodeURIComponent(moduleId)}/`;
+  const call = async <T>(method: string, path: string, body?: unknown): Promise<T> => {
+    const response = await fetch(`${base}${path.replace(/^\//, '')}`, {
+      method,
+      credentials: 'same-origin',
+      ...(body === undefined
+        ? {}
+        : { headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }),
+    });
+    if (!response.ok) throw new ModuleApiError(response.status);
+    return (response.status === 204 ? undefined : await response.json()) as T;
+  };
+  return { get: (path) => call('GET', path), post: (path, body) => call('POST', path, body) };
 }

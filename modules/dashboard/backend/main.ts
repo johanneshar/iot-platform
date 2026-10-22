@@ -1,4 +1,5 @@
-import { validateManifest, type ModuleManifest } from '@iot/module-sdk/manifest';
+import type { ModuleManifest } from '@iot/module-sdk/manifest';
+import { registerWithCore } from '@iot/module-sdk/server';
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
@@ -8,9 +9,11 @@ import { manifest } from '../manifest';
 const port = Number(process.env['MODULE_PORT'] ?? 4101);
 const host = process.env['MODULE_HOST'] ?? '127.0.0.1';
 const publicUrl = process.env['MODULE_PUBLIC_URL'] ?? `http://localhost:${String(port)}`;
-const coreUrl = process.env['CORE_URL'] ?? 'http://localhost:4000';
-// Dienst-Token für die Registry (O-18); im Betrieb aus der Konfiguration der Edge App
-const registryToken = process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token';
+const core = {
+  coreUrl: process.env['CORE_URL'] ?? 'http://localhost:4000',
+  // Dienst-Token für die Registry (O-18); im Betrieb aus der Konfiguration der Edge App
+  token: process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token',
+};
 const distDir = fileURLToPath(new URL('../dist/', import.meta.url));
 
 const TYPES: Record<string, string> = {
@@ -18,9 +21,9 @@ const TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
 };
 
-const server = Fastify({ logger: true });
+export const server = Fastify({ logger: true });
 
-// Die Shell lädt das Einstiegsmodul von hier (ADR-002); Auslieferung über den Core-Proxy folgt mit M10
+// Die Shell lädt das Einstiegsmodul von hier (ADR-002); Aufrufe an die API kommen über den Proxy des Core
 server.addHook('onSend', async (_request, reply) => {
   reply.header('access-control-allow-origin', '*');
 });
@@ -31,37 +34,20 @@ server.get<{ Params: { file: string } }>('/:file', async (request, reply) => {
   return reply.type(TYPES[extname(file)] ?? 'application/octet-stream').send(readFileSync(file));
 });
 
-function fullManifest(): ModuleManifest {
-  return {
-    ...manifest,
-    entry: `${publicUrl}/entry.js`,
-    ...(existsSync(join(distDir, 'entry.css')) ? { styles: [`${publicUrl}/entry.css`] } : {}),
-  };
-}
-
-/** Meldet das Manifest beim Core an; versucht es alle 5 s, bis der Core erreichbar ist. */
-async function register(): Promise<void> {
-  const body = fullManifest();
-  const check = validateManifest(body);
-  if (!check.ok) throw new Error(`Manifest ungültig: ${check.errors.join('; ')}`);
-  for (;;) {
-    try {
-      const response = await fetch(`${coreUrl}/api/registry/modules`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', authorization: `Bearer ${registryToken}` },
-        body: JSON.stringify(body),
-      });
-      if (response.ok) {
-        server.log.info(`beim Core ${coreUrl} angemeldet`);
-        return;
-      }
-      server.log.warn(`Anmeldung abgelehnt: ${String(response.status)} ${await response.text()}`);
-    } catch {
-      server.log.warn(`Core ${coreUrl} nicht erreichbar – neuer Versuch in 5 s`);
-    }
-    await new Promise((resolve) => setTimeout(resolve, 5_000));
-  }
-}
+const fullManifest: ModuleManifest = {
+  ...manifest,
+  entry: `${publicUrl}/entry.js`,
+  backend: publicUrl,
+  ...(existsSync(join(distDir, 'entry.css')) ? { styles: [`${publicUrl}/entry.css`] } : {}),
+};
 
 await server.listen({ port, host });
-await register();
+await registerWithCore(
+  {
+    ...core,
+    log: (m) => {
+      server.log.info(m);
+    },
+  },
+  fullManifest,
+);

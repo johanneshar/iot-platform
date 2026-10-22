@@ -14,6 +14,8 @@ export interface ShellModule {
   /** auf diesem Edge Device installiert und bei der Registry angemeldet */
   installed: boolean;
   manifest?: ModuleManifest;
+  /** Einsprungpunkte des Moduls, z. B. Alarme mit Fehlerbaum */
+  targets: Record<string, string[]>;
 }
 
 export interface ShellState {
@@ -33,6 +35,7 @@ export function buildShellState(
   catalog: readonly CatalogModule[],
   registered: readonly ModuleManifest[],
   licenses: LicenseProvider,
+  targets: Readonly<Record<string, Record<string, string[]>>> = {},
 ): ShellState {
   const line = site.find((l) => l.id === lineId);
   if (!line) throw new Error(`Linie ${lineId} fehlt in der Standortkonfiguration`);
@@ -51,6 +54,7 @@ export function buildShellState(
       booked: core || licenses.isBooked(c.id),
       installed: manifest !== undefined,
       ...(manifest ? { manifest } : {}),
+      targets: targets[c.id] ?? {},
     };
   });
   const known = new Set(catalog.map((c) => c.id));
@@ -66,6 +70,7 @@ export function buildShellState(
       booked: (m.core ?? false) || licenses.isBooked(m.id),
       installed: true,
       manifest: m,
+      targets: targets[m.id] ?? {},
     }));
 
   return {

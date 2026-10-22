@@ -321,6 +321,49 @@ importers:
         specifier: 1.6.4
         version: 1.6.4(@algolia/client-search@5.60.0)(@types/node@22.20.5)(@types/react@18.3.31)(lightningcss@1.33.0)(postcss@8.5.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(typescript@6.0.3)
 
+  modules/alarms:
+    dependencies:
+      '@iot/interface-schema':
+        specifier: workspace:*
+        version: link:../../packages/interface-schema
+      '@iot/module-sdk':
+        specifier: workspace:*
+        version: link:../../packages/module-sdk
+      better-sqlite3:
+        specifier: 13.0.3
+        version: 13.0.3
+      fastify:
+        specifier: 5.12.7
+        version: 5.12.7
+    devDependencies:
+      '@iot/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@types/better-sqlite3':
+        specifier: 9.6.0
+        version: 9.6.0
+      '@types/react':
+        specifier: 18.3.31
+        version: 18.3.31
+      '@vitejs/plugin-react':
+        specifier: 6.1.2
+        version: 6.1.2(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+      i18next:
+        specifier: 26.5.3
+        version: 26.5.3(typescript@6.0.3)
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-i18next:
+        specifier: 17.1.0
+        version: 17.1.0(i18next@26.5.3(typescript@6.0.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@6.0.3)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      vite:
+        specifier: 8.3.4
+        version: 8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
+
   modules/dashboard:
     dependencies:
       '@iot/module-sdk':
@@ -333,6 +376,49 @@ importers:
       '@iot/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@types/react':
+        specifier: 18.3.31
+        version: 18.3.31
+      '@vitejs/plugin-react':
+        specifier: 6.1.2
+        version: 6.1.2(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+      i18next:
+        specifier: 26.5.3
+        version: 26.5.3(typescript@6.0.3)
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-i18next:
+        specifier: 17.1.0
+        version: 17.1.0(i18next@26.5.3(typescript@6.0.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@6.0.3)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      vite:
+        specifier: 8.3.4
+        version: 8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
+
+  modules/troubleshooting:
+    dependencies:
+      '@iot/module-sdk':
+        specifier: workspace:*
+        version: link:../../packages/module-sdk
+      ajv:
+        specifier: 8.20.0
+        version: 8.20.0
+      better-sqlite3:
+        specifier: 13.0.3
+        version: 13.0.3
+      fastify:
+        specifier: 5.12.7
+        version: 5.12.7
+    devDependencies:
+      '@iot/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@types/better-sqlite3':
+        specifier: 9.6.0
+        version: 9.6.0
       '@types/react':
         specifier: 18.3.31
         version: 18.3.31
@@ -387,6 +473,9 @@ importers:
       i18next:
         specifier: 26.5.3
         version: 26.5.3(typescript@6.0.3)
+      mqtt:
+        specifier: 5.16.1
+        version: 5.16.1(supports-color@10.2.2)
       react-i18next:
         specifier: 17.1.0
         version: 17.1.0(i18next@26.5.3(typescript@6.0.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@6.0.3)
@@ -7995,6 +8084,14 @@ snapshots:
       fastparallel: 2.4.1
       qlobber: 8.0.1
 
+  mqtt-packet@9.0.2(supports-color@10.2.2):
+    dependencies:
+      bl: 6.1.6
+      debug: 4.4.3(supports-color@10.2.2)
+      process-nextick-args: 2.0.1
+    transitivePeerDependencies:
+      - supports-color
+
   mqtt-packet@9.0.2(supports-color@7.2.0):
     dependencies:
       bl: 6.1.6
@@ -8002,6 +8099,28 @@ snapshots:
       process-nextick-args: 2.0.1
     transitivePeerDependencies:
       - supports-color
+
+  mqtt@5.16.1(supports-color@10.2.2):
+    dependencies:
+      '@types/readable-stream': 4.0.25
+      '@types/ws': 8.18.2
+      commist: 3.2.0
+      concat-stream: 2.0.0
+      debug: 4.4.3(supports-color@10.2.2)
+      help-me: 5.0.0
+      lru-cache: 10.4.3
+      minimist: 1.2.8
+      mqtt-packet: 9.0.2(supports-color@10.2.2)
+      readable-stream: 4.8.0
+      rfdc: 1.4.1
+      socks: 2.8.10
+      split2: 4.2.0
+      worker-timers: 8.0.34
+      ws: 8.22.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
 
   mqtt@5.16.1(supports-color@7.2.0):
     dependencies:

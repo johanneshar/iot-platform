@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { LineSnapshot } from '../data/types';
 import type { LanguageCode } from '../i18n/languages';
 
 /** Text je Sprache; Deutsch ist Pflicht, weitere Sprachen optional. */
@@ -63,6 +64,11 @@ export interface ModuleManifest {
   entry: string;
   /** Stylesheets des Moduls, lädt die Shell als <link> */
   styles?: string[];
+  /**
+   * Adresse des Modul-Backends; der Core leitet `/api/modules/<id>/…` dorthin weiter – nur mit Sitzung,
+   * mit dem angemeldeten Benutzer (ADR-002, E-36)
+   */
+  backend?: string;
 }
 
 export interface ModulePageProps {
@@ -77,8 +83,8 @@ export interface ModulePageProps {
 export interface ModuleEntry {
   /** Seite je Routenpfad aus dem Manifest */
   pages: Record<string, ComponentType<ModulePageProps>>;
-  /** Zähler in der Navigation, z. B. aktive Alarme; `null` = keiner */
-  badge?: () => number | null;
+  /** Zähler in der Navigation, z. B. aktive Alarme; `null` = keiner. Bekommt den aktuellen Stand der Linie. */
+  badge?: (line: LineSnapshot | null) => number | null;
   /** Übersetzungen im Namespace der Modul-ID */
   translations?: Partial<Record<LanguageCode, Record<string, unknown>>>;
 }

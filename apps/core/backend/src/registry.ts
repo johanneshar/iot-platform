@@ -18,6 +18,28 @@ export class Registry {
     this.db.prepare('DELETE FROM registered_modules WHERE id = ?').run(moduleId);
   }
 
+  /** Einsprungpunkte eines Moduls, z. B. `{ alarm: ['FILL-WGT-0003'] }`. */
+  setTargets(moduleId: string, targets: Record<string, string[]>): boolean {
+    const result = this.db
+      .prepare('UPDATE registered_modules SET targets = ? WHERE id = ?')
+      .run(JSON.stringify(targets), moduleId);
+    return result.changes > 0;
+  }
+
+  targets(): Record<string, Record<string, string[]>> {
+    const rows = this.db.prepare('SELECT id, targets FROM registered_modules').all() as {
+      id: string;
+      targets: string;
+    }[];
+    return Object.fromEntries(
+      rows.map((r) => [r.id, JSON.parse(r.targets) as Record<string, string[]>]),
+    );
+  }
+
+  get(moduleId: string): ModuleManifest | undefined {
+    return this.list().find((m) => m.id === moduleId);
+  }
+
   list(): ModuleManifest[] {
     const rows = this.db.prepare('SELECT manifest FROM registered_modules ORDER BY id').all() as {
       manifest: string;

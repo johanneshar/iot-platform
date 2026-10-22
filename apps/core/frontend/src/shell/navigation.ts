@@ -1,4 +1,4 @@
-import { NAV_SECTIONS, type ModuleEntry } from '@iot/module-sdk';
+import { NAV_SECTIONS, type LineSnapshot, type ModuleEntry } from '@iot/module-sdk';
 import type { SidebarSection } from '@iot/ui';
 import type { ShellModule } from '../api';
 import { localized } from '../localized';
@@ -9,6 +9,8 @@ type NavEntry = SidebarSection['items'][number];
 interface NavOptions {
   modules: readonly ShellModule[];
   entries: ReadonlyMap<string, ModuleEntry>;
+  /** aktueller Stand der Linie – für Zähler wie „aktive Alarme“ */
+  line?: LineSnapshot | null;
   activeId: string;
   language: string;
   sectionLabel: (section: string) => string;
@@ -25,6 +27,7 @@ interface NavOptions {
 export function buildSections({
   modules,
   entries,
+  line = null,
   activeId,
   language,
   sectionLabel,
@@ -45,7 +48,7 @@ export function buildSections({
         label: localized(m.manifest?.nav?.label ?? m.name, language),
         active: activeId === m.id,
         locked: !m.booked,
-        badge: m.booked ? (entries.get(m.id)?.badge?.() ?? null) : null,
+        badge: m.booked ? (entries.get(m.id)?.badge?.(line) ?? null) : null,
         onClick: () => {
           go(m.id);
         },

@@ -1,5 +1,6 @@
 import cookie from '@fastify/cookie';
 import { validateManifest } from '@iot/module-sdk/manifest';
+import { proxyHeaders } from '@iot/module-sdk/server';
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from 'fastify';
 import { AuditLog } from './audit/audit-log.js';
 import { MIN_PASSWORD_LENGTH } from './auth/passwords.js';
@@ -174,7 +175,14 @@ export async function buildServer({
   // ── Shell und Baukasten ──────────────────────────────────────────────────────
   server.get('/api/shell', async (request, reply) => {
     if (!guard(request, reply)) return reply;
-    return buildShellState(config.lineId, config.site, config.catalog, registry.list(), license);
+    return buildShellState(
+      config.lineId,
+      config.site,
+      config.catalog,
+      registry.list(),
+      license,
+      registry.targets(),
+    );
   });
 
   // Anmeldung eines Moduls beim Start (ADR-002) mit Dienst-Token (O-18)
@@ -187,6 +195,71 @@ export async function buildServer({
     registry.register(result.manifest);
     return reply.code(204).send();
   });
+
+  // Deep-Link-Ziele eines Moduls (z. B. Alarme mit Fehlerbaum) – mit Dienst-Token
+  server.put<{ Params: { id: string }; Body: unknown }>(
+    '/api/registry/modules/:id/targets',
+    async (request, reply) => {
+      if (request.headers.authorization !== `Bearer ${config.registryToken}`) {
+        return reply.code(401).send({ errors: ['Dienst-Token fehlt oder ist falsch'] });
+      }
+      const body = request.body;
+      const valid =
+        typeof body === 'object' &&
+        body !== null &&
+        Object.values(body).every(
+          (ids) => Array.isArray(ids) && ids.every((id) => typeof id === 'string'),
+        );
+      if (!valid) return reply.code(400).send({ errors: ['Ziele als { art: [id, …] } erwartet'] });
+      if (!registry.setTargets(request.params.id, body as Record<string, string[]>)) {
+        return reply.code(404).send({ errors: ['Modul nicht angemeldet'] });
+      }
+      return reply.code(204).send();
+    },
+  );
+
+  // Proxy zu Modul-Backends (E-36): nur mit Sitzung, gebuchtem Modul und mit dem angemeldeten Benutzer
+  server.all<{ Params: { id: string; '*': string } }>(
+    '/api/modules/:id/*',
+    async (request, reply) => {
+      const user = guard(request, reply);
+      if (!user) return reply;
+      const target = registry.get(request.params.id);
+      if (!target?.backend) return reply.code(404).send({ errors: ['Modul ohne Backend'] });
+      if (!license.isBooked(target.id) && !target.core)
+        return reply.code(403).send({ errors: ['Modul nicht gebucht'] });
+      const query = request.url.includes('?') ? request.url.slice(request.url.indexOf('?')) : '';
+      const url = `${target.backend.replace(/\/$/, '')}/${request.params['*']}${query}`;
+      let response: Response;
+      let body: Buffer;
+      try {
+        response = await fetch(url, {
+          method: request.method,
+          headers: {
+            ...proxyHeaders(
+              {
+                username: user.username,
+                displayName: user.displayName,
+                permissions: user.permissions,
+              },
+              config.registryToken,
+            ),
+            ...(request.body === undefined ? {} : { 'content-type': 'application/json' }),
+          },
+          ...(request.body === undefined || ['GET', 'HEAD'].includes(request.method)
+            ? {}
+            : { body: JSON.stringify(request.body) }),
+        });
+        body = Buffer.from(await response.arrayBuffer());
+      } catch {
+        return reply.code(502).send({ errors: [`Modul ${target.id} nicht erreichbar`] });
+      }
+      return reply
+        .code(response.status)
+        .header('content-type', response.headers.get('content-type') ?? 'application/json')
+        .send(body);
+    },
+  );
 
   // Buchen/Abbestellen im Baukasten – nur mit core.modules.book (E-14)
   server.put<{ Params: { id: string }; Body: { booked?: unknown } }>(

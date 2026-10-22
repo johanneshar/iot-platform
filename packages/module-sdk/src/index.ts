@@ -51,8 +51,12 @@ export {
 } from './data';
 export { currentShift, localTimeToUtc, type ShiftDefinition } from './time';
 export {
+  ModuleApiError,
   ModuleIdContext,
   ShellContext,
+  useDeepLinkAvailable,
+  useDeepLinkTargets,
+  useModuleApi,
   useAudit,
   useDeepLinkParams,
   useIsModuleBooked,
@@ -64,6 +68,7 @@ export {
   type AuditRecord,
   type LineDataSource,
   type LineInfo,
+  type ModuleApi,
   type ShellApi,
   type ShellUser,
   type SignatureRequest,

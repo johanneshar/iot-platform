@@ -205,6 +205,14 @@ export function App() {
                 setPending({ moduleId: module, request, resolve });
               }),
             data: dataSource,
+            hasDeepLinkTarget: (module, kind, id) =>
+              modules.some(
+                (m) =>
+                  m.id === module &&
+                  m.booked &&
+                  m.installed &&
+                  (m.targets[kind] ?? []).includes(id),
+              ),
           }
         : null,
     [state, user, route.params, go, modules, dataSource],
@@ -243,6 +251,7 @@ export function App() {
   const sections = buildSections({
     modules,
     entries,
+    line: lineData,
     activeId: moduleId,
     language,
     sectionLabel: (s) => t(`nav.section.${s}`),

@@ -19,6 +19,7 @@ export interface ShellModule {
   booked: boolean;
   installed: boolean;
   manifest?: ModuleManifest;
+  targets: Record<string, string[]>;
 }
 
 export interface SiteLine {

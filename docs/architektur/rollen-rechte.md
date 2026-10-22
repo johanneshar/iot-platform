@@ -3,7 +3,7 @@
 Für Projektleitung, Validierung und Entwicklung: Diese Seite legt fest, welche Rolle was in der Plattform
 darf. Sie ist die Grundlage der Rechteprüfung ab M3b.
 
-Bestätigt am 2026-10-22 (O-05). Verbindlich ist `apps/core/backend/config/roles.json`; die Tabelle unten
+Bestätigt am 2026-10-22 (O-05). Alarme werden in der Plattform nicht quittiert (E-32); ein Recht dafür gibt es nicht. Verbindlich ist `apps/core/backend/config/roles.json`; die Tabelle unten
 ist daraus erzeugt.
 
 ## Rollen
@@ -32,7 +32,6 @@ angemeldeten Benutzer und steht deshalb nicht einzeln in der Tabelle.
 | `core.ldap.configure`         | LDAP-Anbindung einrichten                         |          |             |           |     |       |    ●     |    ●    |
 | `core.line.configure`         | Linienkonfiguration, Schichtmodell (S-05)         |          |             |           |     |   ●   |          |    ●    |
 | `core.audit.view`             | Audit Trail einsehen und exportieren              |          |             |           |  ●  |   ●   |          |    ●    |
-| `alarms.acknowledge`          | Alarme quittieren                                 |    ●     |      ●      |     ●     |     |   ●   |          |    ●    |
 | `troubleshooting.use`         | geführte Fehlersuche durchlaufen                  |    ●     |      ●      |     ●     |     |   ●   |          |    ●    |
 | `troubleshooting.document`    | Lösung dokumentieren                              |          |      ●      |     ●     |     |       |          |    ●    |
 | `batch.sign`                  | Batchbericht signieren (Freigabe)                 |          |             |           |  ●  |       |          |    ●    |

@@ -385,3 +385,73 @@ describe('Benutzer', () => {
     expect((await get('/api/auth/me', operator)).statusCode).toBe(401);
   });
 });
+
+describe('Proxy zu Modul-Backends (E-36)', () => {
+  it('leitet mit Sitzung und Benutzer weiter; ohne Sitzung 401', async () => {
+    // Kleines Modul-Backend, das die weitergeleiteten Kopfzeilen zurückgibt
+    const backend = (await import('fastify')).default();
+    backend.get('/echo', (request) => ({
+      user: request.headers['x-iot-user'],
+      token: request.headers['x-iot-token'],
+    }));
+    await backend.listen({ port: 0, host: '127.0.0.1' });
+    const address = backend.server.address();
+    const port = typeof address === 'object' && address ? address.port : 0;
+
+    await server.inject({
+      method: 'POST',
+      url: '/api/registry/modules',
+      payload: { ...manifest, backend: `http://127.0.0.1:${String(port)}` },
+      headers: { authorization: `Bearer ${TOKEN}` },
+    });
+    await send('PUT', '/api/licenses/example', { booked: true }, await login('admin'));
+
+    expect((await get('/api/modules/example/echo')).statusCode).toBe(401);
+    const response = await get('/api/modules/example/echo', await login('maintenance'));
+    expect(response.statusCode).toBe(200);
+    const body = response.json<{ user: string; token: string }>();
+    expect(body.token).toBe(TOKEN);
+    expect(JSON.parse(Buffer.from(body.user, 'base64url').toString())).toMatchObject({
+      username: 'maintenance',
+    });
+    await backend.close();
+  });
+
+  it('nicht gebuchte Module erreicht man nicht', async () => {
+    await server.inject({
+      method: 'POST',
+      url: '/api/registry/modules',
+      payload: { ...manifest, backend: 'http://127.0.0.1:1' },
+      headers: { authorization: `Bearer ${TOKEN}` },
+    });
+    expect((await get('/api/modules/example/echo', await login('operator'))).statusCode).toBe(403);
+  });
+});
+
+describe('Deep-Link-Ziele', () => {
+  it('Module melden ihre Einsprungpunkte mit Dienst-Token; die Shell sieht sie', async () => {
+    await server.inject({
+      method: 'POST',
+      url: '/api/registry/modules',
+      payload: manifest,
+      headers: { authorization: `Bearer ${TOKEN}` },
+    });
+    const denied = await server.inject({
+      method: 'PUT',
+      url: '/api/registry/modules/example/targets',
+      payload: { alarm: ['A'] },
+    });
+    expect(denied.statusCode).toBe(401);
+    const ok = await server.inject({
+      method: 'PUT',
+      url: '/api/registry/modules/example/targets',
+      payload: { alarm: ['FILL-WGT-0003'] },
+      headers: { authorization: `Bearer ${TOKEN}` },
+    });
+    expect(ok.statusCode).toBe(204);
+    const state = (await get('/api/shell', await login('operator'))).json<ShellState>();
+    expect(state.modules.find((m) => m.id === 'example')?.targets).toEqual({
+      alarm: ['FILL-WGT-0003'],
+    });
+  });
+});

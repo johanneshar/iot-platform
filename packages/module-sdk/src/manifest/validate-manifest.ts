@@ -45,6 +45,11 @@ export function validateManifest(input: unknown): ManifestResult {
   if (typeof m['gxp'] !== 'boolean') errors.push('gxp: true oder false erwartet');
   if (!(CONFORMANCE_LEVELS as readonly unknown[]).includes(m['minConformance']))
     errors.push('minConformance: basic, standard oder full');
+  if (
+    m['backend'] !== undefined &&
+    (typeof m['backend'] !== 'string' || !/^https?:\/\//.test(m['backend']))
+  )
+    errors.push('backend: http(s)-Adresse erwartet');
   if (typeof m['entry'] !== 'string' || m['entry'].length === 0)
     errors.push('entry: Adresse des Einstiegsmoduls fehlt');
 

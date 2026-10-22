@@ -31,6 +31,7 @@ const mod = (id: string, booked: boolean, m?: ModuleManifest): ShellModule => ({
   booked,
   installed: m !== undefined,
   ...(m ? { manifest: m } : {}),
+  targets: {},
 });
 
 const modules = [

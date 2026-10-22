@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./manifest": "./src/manifest/index.ts",
     "./time": "./src/time/index.ts",
-    "./data": "./src/data/index.ts"
+    "./data": "./src/data/index.ts",
+    "./server": "./src/server/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -17,7 +18,8 @@
   "dependencies": {
     "i18next": "26.5.3",
     "react-i18next": "17.1.0",
-    "@iot/interface-schema": "workspace:*"
+    "@iot/interface-schema": "workspace:*",
+    "mqtt": "5.16.1"
   },
   "peerDependencies": {
     "react": "^18.3.1"

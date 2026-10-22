@@ -61,5 +61,10 @@ export function openDb(dataDir: string): Db {
     CREATE TRIGGER IF NOT EXISTS audit_log_no_delete BEFORE DELETE ON audit_log
       BEGIN SELECT RAISE(ABORT, 'audit_log ist unveränderbar'); END;
   `);
+  // Ergänzung M5: Deep-Link-Ziele je Modul (z. B. Alarme mit Fehlerbaum)
+  const columns = db.prepare('PRAGMA table_info(registered_modules)').all() as { name: string }[];
+  if (!columns.some((c) => c.name === 'targets')) {
+    db.exec("ALTER TABLE registered_modules ADD COLUMN targets TEXT NOT NULL DEFAULT '{}'");
+  }
   return db;
 }

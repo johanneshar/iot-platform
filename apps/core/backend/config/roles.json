@@ -3,14 +3,19 @@
   "roles": [
     {
       "id": "operator",
-      "name": { "de": "Operator", "en": "Operator" },
-      "permissions": ["alarms.acknowledge", "troubleshooting.use", "spares.view"]
+      "name": {
+        "de": "Operator",
+        "en": "Operator"
+      },
+      "permissions": ["troubleshooting.use", "spares.view"]
     },
     {
       "id": "maintenance",
-      "name": { "de": "Maintenance", "en": "Maintenance" },
+      "name": {
+        "de": "Maintenance",
+        "en": "Maintenance"
+      },
       "permissions": [
-        "alarms.acknowledge",
         "troubleshooting.use",
         "troubleshooting.document",
         "spares.view",
@@ -21,9 +26,11 @@
     },
     {
       "id": "setup",
-      "name": { "de": "Setup Man", "en": "Setup man" },
+      "name": {
+        "de": "Setup Man",
+        "en": "Setup man"
+      },
       "permissions": [
-        "alarms.acknowledge",
         "troubleshooting.use",
         "troubleshooting.document",
         "format.execute",
@@ -35,18 +42,23 @@
     },
     {
       "id": "qa",
-      "name": { "de": "QA", "en": "QA" },
+      "name": {
+        "de": "QA",
+        "en": "QA"
+      },
       "permissions": ["batch.sign", "batch.export", "core.audit.view"]
     },
     {
       "id": "admin",
-      "name": { "de": "Admin", "en": "Admin" },
+      "name": {
+        "de": "Admin",
+        "en": "Admin"
+      },
       "permissions": [
         "core.modules.book",
         "core.users.manage",
         "core.line.configure",
         "core.audit.view",
-        "alarms.acknowledge",
         "troubleshooting.use",
         "batch.export",
         "format.configure",
@@ -60,7 +72,10 @@
     },
     {
       "id": "it-admin",
-      "name": { "de": "IT Admin", "en": "IT admin" },
+      "name": {
+        "de": "IT Admin",
+        "en": "IT admin"
+      },
       "permissions": [
         "core.users.manage",
         "core.ldap.configure",
@@ -71,7 +86,10 @@
     },
     {
       "id": "service",
-      "name": { "de": "Service", "en": "Service" },
+      "name": {
+        "de": "Service",
+        "en": "Service"
+      },
       "permissions": ["*"]
     }
   ]
