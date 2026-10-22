@@ -23,7 +23,9 @@ Entscheidungen: [ADR-011](../../../docs/adr/ADR-011-batchbericht.md), E-40 bis E
 Databus → `subscribeLine` → `BatchStore`. Ein Batch fasst alle Maschinen zusammen, die `started` mit derselben
 `batchId` melden; er ist beendet, wenn alle `ended` gemeldet haben. Gespeichert wird nur, solange die Maschine
 einen laufenden Batch hat. Prozesswerte nur mit `gxp: true` im Wertekatalog, als Rohwerte mit Quellzeitstempel
-und Qualität. Datenlücke: mehr als 60 s ohne Nachricht der Maschine.
+und Qualität. Datenlücke: mehr als 60 s ohne Nachricht der Maschine. `batch` ist retained und trägt `startedAt`
+(ADR-012): Ein verpasster Start wird nachgetragen, die Zeit bis zur ersten Nachricht ist eine Datenlücke.
+Anstehende Alarme gleicht das Modul mit `activeAlarms` ab.
 
 ## Ablauf und Prüfung der Schritte
 
@@ -60,6 +62,6 @@ Linienräumung wird der Bericht eingefroren; ein Trigger verhindert Änderungen.
 
 ## Abweichungen vom Mockup
 
-- **Laufzeit statt Fortschritt und kein Produktname:** Sollmenge und Produktname liefert die Schnittstelle nicht (O-33).
+- **Fortschritt nur mit Sollmenge:** Meldet die Maschine keine `targetQuantity`, zeigt die Seite die Laufzeit (S-10).
 - **Audit Trail nur mit Vorgängen der Plattform:** Vorgänge an der Maschine wie „Sollfüllgewicht geändert“ sind nicht Teil der Schnittstelle (E-42, O-30).
 - **Zusätzlich:** Liste aller Batches, Linienfreigabe für den nächsten Batch und Signatur „Geprüft“ (E-40, E-41).

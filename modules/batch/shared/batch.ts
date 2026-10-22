@@ -24,6 +24,9 @@ export interface AuditRef {
 
 export interface BatchSummary {
   batchId: string;
+  /** S-10 */
+  productName: string | null;
+  targetQuantity: number | null;
   recipe: { id: string; version: number };
   formatParts: string[];
   startedAt: string;
@@ -86,6 +89,8 @@ export interface BatchReport {
   format: 'iot-batch-report/1';
   batchId: string;
   line: { id: string; name: string; timeZone: string };
+  productName: string | null;
+  targetQuantity: number | null;
   recipe: { id: string; version: number };
   formatParts: string[];
   startedAt: string;

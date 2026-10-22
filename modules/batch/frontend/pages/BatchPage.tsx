@@ -17,6 +17,7 @@ import {
   Chip,
   DataTable,
   InfoTile,
+  ProgressBar,
   StepList,
   SuccessNote,
   type ChipTone,
@@ -159,12 +160,20 @@ function BatchCard({ batch }: { batch: BatchDetail }) {
   const runtimeMs =
     (batch.endedAt ? Date.parse(batch.endedAt) : now.getTime()) - Date.parse(batch.startedAt);
   const minutes = Math.max(0, Math.round(runtimeMs / 60_000));
+  // Fortschritt aus Gutteilen am Linienende und Sollmenge der Maschine (S-10)
+  const progress =
+    batch.targetQuantity && last ? Math.min(100, (last.good / batch.targetQuantity) * 100) : null;
   return (
     <Card gap="20">
       <CardHeader
         eyebrow={batch.status === 'running' ? t('batch.running') : t('batch.selected')}
         title={batch.batchId}
-        detail={t('batch.recipe', { id: batch.recipe.id, version: batch.recipe.version })}
+        detail={[
+          batch.productName,
+          t('batch.recipe', { id: batch.recipe.id, version: batch.recipe.version }),
+        ]
+          .filter(Boolean)
+          .join(' · ')}
         size="detailLg"
         aside={<Chip tone={STATUS_TONE[batch.status]}>{t(`status.${batch.status}`)}</Chip>}
       />
@@ -181,11 +190,28 @@ function BatchCard({ batch }: { batch: BatchDetail }) {
           label={t('batch.started')}
           value={formatDateTime(batch.startedAt, line.timeZone, empty)}
         />
-        <InfoTile
-          label={t('batch.runtime')}
-          value={t('batch.minutes', { value: formatNumber(minutes, i18n.language) })}
-        />
+        {progress === null ? (
+          <InfoTile
+            label={t('batch.runtime')}
+            value={t('batch.minutes', { value: formatNumber(minutes, i18n.language) })}
+          />
+        ) : (
+          <InfoTile
+            label={t('batch.progress')}
+            value={t('batch.percent', { value: formatNumber(Math.round(progress), i18n.language) })}
+          />
+        )}
       </div>
+      {progress !== null && (
+        <ProgressBar
+          value={progress}
+          size="md"
+          label={t('batch.progressLabel', {
+            good: formatNumber(last?.good ?? 0, i18n.language),
+            target: formatNumber(batch.targetQuantity ?? 0, i18n.language),
+          })}
+        />
+      )}
       <StepList label={t('steps.label')} steps={steps(batch, t)} />
       {batch.lineRelease === null && (
         <p className={styles.warning} role="status">

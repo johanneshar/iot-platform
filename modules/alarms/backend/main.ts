@@ -1,4 +1,4 @@
-import type { AlarmData } from '@iot/interface-schema';
+import type { AlarmData, DataByClass } from '@iot/interface-schema';
 import type { ModuleManifest } from '@iot/module-sdk/manifest';
 import { registerWithCore, subscribeLine } from '@iot/module-sdk/server';
 import { existsSync, readFileSync } from 'node:fs';
@@ -67,6 +67,8 @@ subscribeLine({
   log,
   onMessage: (machineId, dataClass, message) => {
     if (dataClass === 'alarms') history.record(machineId, message.data as AlarmData, message.ts);
+    if (dataClass === 'activeAlarms')
+      history.reconcile(machineId, message.data as DataByClass['activeAlarms'], message.ts);
   },
 });
 

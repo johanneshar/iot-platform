@@ -93,6 +93,9 @@ subscribeLine({
       case 'alarms':
         store.alarm(machineId, message.data as DataByClass['alarms'], ts);
         break;
+      case 'activeAlarms':
+        store.reconcileAlarms(machineId, message.data as DataByClass['activeAlarms'], ts);
+        break;
       default:
         break;
     }

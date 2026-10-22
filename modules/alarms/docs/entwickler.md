@@ -20,8 +20,9 @@ Für Entwicklerinnen und Entwickler: Aufbau, Datenfluss und Berechnungen der Ala
 - **Verlauf:** Databus → `subscribeLine` (nur schemakonforme Nachrichten) → `AlarmHistory` → `GET history`.
   Offene Einträge im Verlauf ohne Gegenstück im Core werden nicht angezeigt.
 
-Alarme sind auf dem Databus nicht retained. Läuft das Modul während eines Ereignisses nicht, fehlt es im
-Verlauf; nach einem Neustart des Core fehlen anstehende Alarme bis zum nächsten Ereignis (O-25).
+Ereignisse (`alarms`) sind nicht retained; den Stand der anstehenden Alarme liefert `activeAlarms` (retained,
+ADR-012). Damit gleicht das Modul seinen Verlauf beim Start und bei jeder Änderung ab: verpasste Alarme mit
+`raisedAt` nachtragen, nicht mehr anstehende schließen.
 
 ## API (über `/api/modules/alarms/…`)
 

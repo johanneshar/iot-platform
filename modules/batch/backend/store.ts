@@ -21,6 +21,8 @@ interface BatchRow {
   release: string | null;
   report: string | null;
   report_hash: string | null;
+  product_name: string | null;
+  target_quantity: number | null;
 }
 
 export interface CounterRow {
@@ -58,7 +60,7 @@ export class BatchStore {
       CREATE TABLE IF NOT EXISTS batches (batch_id TEXT PRIMARY KEY, recipe_id TEXT NOT NULL,
         recipe_version INTEGER NOT NULL, format_parts TEXT NOT NULL, started_at INTEGER NOT NULL,
         ended_at INTEGER, line_release TEXT, clearance TEXT, review TEXT, release TEXT, report TEXT,
-        report_hash TEXT);
+        report_hash TEXT, product_name TEXT, target_quantity INTEGER);
       CREATE TABLE IF NOT EXISTS batch_machines (batch_id TEXT NOT NULL, machine_id TEXT NOT NULL,
         started_at INTEGER NOT NULL, ended_at INTEGER, PRIMARY KEY (batch_id, machine_id));
       CREATE TABLE IF NOT EXISTS events (batch_id TEXT NOT NULL, machine_id TEXT NOT NULL,
@@ -81,6 +83,12 @@ export class BatchStore {
         WHEN OLD.report IS NOT NULL
         BEGIN SELECT RAISE(ABORT, 'Batchbericht ist eingefroren'); END;
     `);
+    // Ergänzung S-10: Produktname und Sollmenge
+    const columns = this.db.prepare('PRAGMA table_info(batches)').all() as { name: string }[];
+    if (!columns.some((c) => c.name === 'product_name')) {
+      this.db.exec('ALTER TABLE batches ADD COLUMN product_name TEXT');
+      this.db.exec('ALTER TABLE batches ADD COLUMN target_quantity INTEGER');
+    }
   }
 
   private machine(machineId: string): { active_batch: string | null; last_message: number | null } {
@@ -132,54 +140,73 @@ export class BatchStore {
     }
   }
 
+  /**
+   * Batch-Ereignis einer Maschine. Die Meldung ist retained (S-08): Nach einem Neustart kommt die letzte
+   * Meldung erneut – Wiederholungen ändern nichts. Verpasst das Modul den Start, legt es den Batch mit
+   * `startedAt` an; die Zeit ohne Daten erscheint als Datenlücke.
+   */
   batch(machineId: string, data: DataByClass['batch'], ts: number): void {
-    const m = this.machine(machineId);
     const id = data.batchId;
-    const known = this.db.prepare('SELECT ended_at FROM batches WHERE batch_id = ?').get(id) as
-      { ended_at: number | null } | undefined;
-    // Wiederholte Meldungen (z. B. nach einem Neustart) ändern nichts
+    const startedAt = Date.parse(data.startedAt);
     const seen = this.db
       .prepare(
         'SELECT 1 FROM events WHERE batch_id = ? AND machine_id = ? AND event = ? AND ts = ?',
       )
       .get(id, machineId, data.event, ts);
     if (seen) return;
-    if (data.event === 'started') {
-      if (!known) {
-        this.db
-          .prepare(
-            'INSERT INTO batches (batch_id, recipe_id, recipe_version, format_parts, started_at) VALUES (?, ?, ?, ?, ?)',
-          )
-          .run(id, data.recipe.id, data.recipe.version, JSON.stringify(data.formatParts), ts);
-        this.attachLineRelease(id, ts);
-      } else if (known.ended_at !== null) {
-        return; // Batch ist abgeschlossen
-      }
+    const known = this.db.prepare('SELECT ended_at FROM batches WHERE batch_id = ?').get(id) as
+      { ended_at: number | null } | undefined;
+    if (known && known.ended_at !== null) return; // Batch ist abgeschlossen
+    const member = this.db
+      .prepare('SELECT ended_at FROM batch_machines WHERE batch_id = ? AND machine_id = ?')
+      .get(id, machineId) as { ended_at: number | null } | undefined;
+    if (!known) {
       this.db
         .prepare(
-          'INSERT OR IGNORE INTO batch_machines (batch_id, machine_id, started_at) VALUES (?, ?, ?)',
+          'INSERT INTO batches (batch_id, recipe_id, recipe_version, format_parts, started_at, product_name, target_quantity) VALUES (?, ?, ?, ?, ?, ?, ?)',
         )
-        .run(id, machineId, ts);
+        .run(
+          id,
+          data.recipe.id,
+          data.recipe.version,
+          JSON.stringify(data.formatParts),
+          startedAt,
+          data.productName,
+          data.targetQuantity ?? null,
+        );
+      this.attachLineRelease(id, startedAt);
+    }
+    if (!member) {
+      this.db
+        .prepare('INSERT INTO batch_machines (batch_id, machine_id, started_at) VALUES (?, ?, ?)')
+        .run(id, machineId, startedAt);
       this.db
         .prepare('UPDATE batches SET started_at = MIN(started_at, ?) WHERE batch_id = ?')
-        .run(ts, id);
+        .run(startedAt, id);
+      // Daten ab dem Start: was davor fehlt, zählt als Datenlücke (seen)
       this.db
         .prepare('UPDATE machines SET active_batch = ?, last_message = ? WHERE machine_id = ?')
-        .run(id, ts, machineId);
+        .run(id, startedAt, machineId);
+      if (data.event !== 'started') {
+        this.db
+          .prepare('INSERT INTO events (batch_id, machine_id, event, ts) VALUES (?, ?, ?, ?)')
+          .run(id, machineId, 'started', startedAt);
+      }
     }
-    if (!known && data.event !== 'started') return;
     this.db
       .prepare('INSERT INTO events (batch_id, machine_id, event, ts) VALUES (?, ?, ?, ?)')
       .run(id, machineId, data.event, ts);
-    if (data.event === 'ended') {
+    if (data.event === 'ended' && member?.ended_at == null) {
+      // Lücke bis zum Ende, wenn seit der letzten Nachricht zu viel Zeit vergangen ist
+      this.seen(machineId, ts);
       this.db
         .prepare('UPDATE batch_machines SET ended_at = ? WHERE batch_id = ? AND machine_id = ?')
         .run(ts, id, machineId);
-      if (m.active_batch === id || this.machine(machineId).active_batch === id) {
-        this.db
-          .prepare('UPDATE machines SET active_batch = NULL WHERE machine_id = ?')
-          .run(machineId);
-      }
+      this.db
+        .prepare(
+          'UPDATE machines SET active_batch = NULL WHERE machine_id = ? AND active_batch = ?',
+        )
+        .run(machineId, id);
       const open = this.db
         .prepare('SELECT COUNT(*) AS n FROM batch_machines WHERE batch_id = ? AND ended_at IS NULL')
         .get(id) as { n: number };
@@ -218,6 +245,36 @@ export class BatchStore {
     );
     for (const v of data.values)
       if (gxp.has(v.key)) insert.run(batch, machineId, v.key, ts, v.value, quality);
+  }
+
+  /** Abgleich mit dem Stand der anstehenden Alarme (S-09) während eines Batches. */
+  reconcileAlarms(machineId: string, data: DataByClass['activeAlarms'], ts: number): void {
+    const batch = this.activeBatch(machineId);
+    const open = this.db
+      .prepare('SELECT id, alarm_id FROM alarms WHERE machine_id = ? AND cleared_at IS NULL')
+      .all(machineId) as { id: number; alarm_id: string }[];
+    if (batch) {
+      for (const a of data.alarms) {
+        if (open.some((o) => o.alarm_id === a.alarmId)) continue;
+        this.db
+          .prepare(
+            'INSERT INTO alarms (batch_id, machine_id, alarm_id, class, text, raised_at) VALUES (?, ?, ?, ?, ?, ?)',
+          )
+          .run(
+            batch,
+            machineId,
+            a.alarmId,
+            a.class,
+            a.text ? JSON.stringify(a.text) : null,
+            Date.parse(a.raisedAt),
+          );
+      }
+    }
+    for (const o of open) {
+      if (!data.alarms.some((a) => a.alarmId === o.alarm_id)) {
+        this.db.prepare('UPDATE alarms SET cleared_at = ? WHERE id = ?').run(ts, o.id);
+      }
+    }
   }
 
   alarm(machineId: string, data: DataByClass['alarms'], ts: number): void {
@@ -312,7 +369,9 @@ export class BatchStore {
   private summary(row: BatchRow): BatchSummary {
     const machines = (
       this.db
-        .prepare('SELECT machine_id FROM batch_machines WHERE batch_id = ? ORDER BY started_at')
+        .prepare(
+          'SELECT machine_id FROM batch_machines WHERE batch_id = ? ORDER BY started_at, rowid',
+        )
         .all(row.batch_id) as {
         machine_id: string;
       }[]
@@ -334,6 +393,8 @@ export class BatchStore {
       batchId: row.batch_id,
       recipe: { id: row.recipe_id, version: row.recipe_version },
       formatParts: JSON.parse(row.format_parts) as string[],
+      productName: row.product_name,
+      targetQuantity: row.target_quantity,
       startedAt: new Date(row.started_at).toISOString(),
       endedAt: row.ended_at === null ? null : new Date(row.ended_at).toISOString(),
       status,

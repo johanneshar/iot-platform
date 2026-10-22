@@ -143,6 +143,32 @@ export class HistoryStore {
     }
   }
 
+  /** Abgleich mit dem Stand der anstehenden Alarme (S-09): verpasste nachtragen, gegangene schließen. */
+  reconcileAlarms(machineId: string, data: DataByClass['activeAlarms'], ts: number): void {
+    const open = this.db
+      .prepare('SELECT id, alarm_id FROM alarms WHERE machine_id = ? AND cleared_at IS NULL')
+      .all(machineId) as { id: number; alarm_id: string }[];
+    for (const a of data.alarms) {
+      if (open.some((o) => o.alarm_id === a.alarmId)) continue;
+      this.db
+        .prepare(
+          'INSERT INTO alarms (machine_id, alarm_id, class, text, raised_at) VALUES (?, ?, ?, ?, ?)',
+        )
+        .run(
+          machineId,
+          a.alarmId,
+          a.class,
+          a.text ? JSON.stringify(a.text) : null,
+          Date.parse(a.raisedAt),
+        );
+    }
+    for (const o of open) {
+      if (!data.alarms.some((a) => a.alarmId === o.alarm_id)) {
+        this.db.prepare('UPDATE alarms SET cleared_at = ? WHERE id = ?').run(ts, o.id);
+      }
+    }
+  }
+
   machineIds(): string[] {
     return (
       this.db.prepare('SELECT machine_id FROM machines').all() as { machine_id: string }[]

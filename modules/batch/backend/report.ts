@@ -104,6 +104,8 @@ export function buildReport(
     format: 'iot-batch-report/1',
     batchId,
     line: { id: line.id, name: line.name, timeZone: line.timeZone },
+    productName: batch.productName,
+    targetQuantity: batch.targetQuantity,
     recipe: batch.recipe,
     formatParts: batch.formatParts,
     startedAt: batch.startedAt,

@@ -18,7 +18,10 @@
     "bad": "Rejects",
     "started": "Started",
     "runtime": "Run time",
-    "minutes": "{{value}} min"
+    "minutes": "{{value}} min",
+    "progress": "Progress",
+    "percent": "{{value}} %",
+    "progressLabel": "Progress: {{good}} of {{target}} pieces"
   },
   "steps": {
     "label": "Batch progress",

@@ -18,7 +18,10 @@
     "bad": "Ausschuss",
     "started": "Gestartet",
     "runtime": "Laufzeit",
-    "minutes": "{{value}} min"
+    "minutes": "{{value}} min",
+    "progress": "Fortschritt",
+    "percent": "{{value}} %",
+    "progressLabel": "Fortschritt: {{good}} von {{target}} Stück"
   },
   "steps": {
     "label": "Batch-Verlauf",

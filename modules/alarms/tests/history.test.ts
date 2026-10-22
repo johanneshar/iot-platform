@@ -86,4 +86,36 @@ describe('Alarmverlauf', () => {
     expect(history.purge(90, NOW)).toBe(1);
     expect(history.list(90, NOW).map((a) => a.alarmId)).toEqual(['A-3', 'A-2']);
   });
+
+  it('gleicht mit dem Stand der anstehenden Alarme ab (S-09)', () => {
+    // verpasster Alarm wird mit seiner Zeit „kommt“ nachgetragen, quittiert an der Maschine
+    history.reconcile(
+      'filler',
+      {
+        alarms: [
+          {
+            alarmId: 'FILL-WGT-0003',
+            class: 'fault',
+            textKey: 'alarm.weighcell.tare',
+            text: { de: 'Wägezelle 3' },
+            raisedAt: at(3),
+            acknowledged: true,
+            user: 'bediener',
+          },
+        ],
+      },
+      at(1),
+    );
+    expect(history.list(1, NOW)).toEqual([
+      expect.objectContaining({
+        alarmId: 'FILL-WGT-0003',
+        raisedAt: at(3),
+        clearedAt: null,
+        acknowledgedBy: 'bediener',
+      }),
+    ]);
+    // nicht mehr anstehend: gegangen zur Zeit der Meldung
+    history.reconcile('filler', { alarms: [] }, at(0.5));
+    expect(history.list(1, NOW)[0]?.clearedAt).toBe(at(0.5));
+  });
 });

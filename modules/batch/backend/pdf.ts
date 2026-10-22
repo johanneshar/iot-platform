@@ -138,7 +138,12 @@ export function renderReportPdf(report: BatchReport, batch: BatchSummary): Promi
     .fillColor(MUTED)
     .text(`${report.line.name} · Status: ${STATUS[batch.status]}`);
   doc.moveDown(0.6);
+  line('Produkt', report.productName ?? '—');
   line('Rezept', `${report.recipe.id} · Version ${String(report.recipe.version)}`);
+  line(
+    'Sollmenge',
+    report.targetQuantity === null ? '—' : `${num(report.targetQuantity, 0)} Stück`,
+  );
   line('Formatteile', report.formatParts.length ? report.formatParts.join(', ') : '—');
   line('Start', dateTime(report.startedAt, tz));
   line('Ende', dateTime(report.endedAt, tz));

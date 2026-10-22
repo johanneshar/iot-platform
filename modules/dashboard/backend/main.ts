@@ -100,6 +100,9 @@ subscribeLine({
       case 'alarms':
         history.alarm(machineId, message.data as DataByClass['alarms'], ts);
         break;
+      case 'activeAlarms':
+        history.reconcileAlarms(machineId, message.data as DataByClass['activeAlarms'], ts);
+        break;
       default:
         break;
     }

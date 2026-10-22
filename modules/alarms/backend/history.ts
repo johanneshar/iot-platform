@@ -1,4 +1,4 @@
-import type { AlarmData } from '@iot/interface-schema';
+import type { AlarmData, DataByClass } from '@iot/interface-schema';
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -85,6 +85,38 @@ export class AlarmHistory {
       this.db
         .prepare('UPDATE occurrences SET acknowledged_at = ?, acknowledged_by = ? WHERE id = ?')
         .run(ts, alarm.user, open.id);
+    }
+  }
+
+  /**
+   * Abgleich mit dem Stand der anstehenden Alarme (S-09, retained): verpasste Alarme mit ihrer Zeit „kommt“
+   * nachtragen, nicht mehr anstehende als gegangen markieren (Zeit der Meldung).
+   */
+  reconcile(machineId: string, data: DataByClass['activeAlarms'], ts: string): void {
+    const open = this.db
+      .prepare('SELECT * FROM occurrences WHERE machine_id = ? AND cleared_at IS NULL')
+      .all(machineId) as Row[];
+    for (const a of data.alarms) {
+      const row = open.find((o) => o.alarm_id === a.alarmId);
+      if (!row) {
+        this.db
+          .prepare(
+            'INSERT INTO occurrences (machine_id, alarm_id, class, text, raised_at) VALUES (?, ?, ?, ?, ?)',
+          )
+          .run(machineId, a.alarmId, a.class, a.text ? JSON.stringify(a.text) : null, a.raisedAt);
+      }
+      if (a.acknowledged && a.user && !row?.acknowledged_at) {
+        this.db
+          .prepare(
+            'UPDATE occurrences SET acknowledged_at = ?, acknowledged_by = ? WHERE machine_id = ? AND alarm_id = ? AND cleared_at IS NULL',
+          )
+          .run(ts, a.user, machineId, a.alarmId);
+      }
+    }
+    for (const row of open) {
+      if (!data.alarms.some((a) => a.alarmId === row.alarm_id)) {
+        this.db.prepare('UPDATE occurrences SET cleared_at = ? WHERE id = ?').run(ts, row.id);
+      }
     }
   }
 

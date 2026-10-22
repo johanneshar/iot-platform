@@ -122,6 +122,9 @@ describe('Batch-Reporting', () => {
     const started = {
       event: 'started' as const,
       batchId: 'B-1',
+      productName: '[Produktname]',
+      targetQuantity: 3000,
+      startedAt: new Date(at(0)).toISOString(),
       recipe: { id: 'vial-nest', version: 1 },
       formatParts: [],
     };
@@ -187,6 +190,8 @@ describe('Batch-Reporting', () => {
     const started = {
       event: 'started' as const,
       batchId: 'B-1',
+      productName: 'P',
+      startedAt: new Date(at(0)).toISOString(),
       recipe: { id: 'r', version: 1 },
       formatParts: ['FT-1'],
     };
@@ -199,6 +204,77 @@ describe('Batch-Reporting', () => {
       status: 'ended',
       endedAt: new Date(at(21)).toISOString(),
     });
+  });
+
+  it('erkennt einen Batch, dessen Start verpasst wurde, aus der retained Meldung (S-08)', () => {
+    const late = {
+      event: 'started' as const,
+      batchId: 'B-9',
+      productName: 'P',
+      startedAt: new Date(at(0)).toISOString(),
+      recipe: { id: 'r', version: 1 },
+      formatParts: [],
+    };
+    // Modul startet bei Minute 10: retained Meldung, danach laufende Daten
+    store.batch('fill', late, at(0));
+    store.batch('fill', late, at(0)); // nach einem Neustart erneut – keine Änderung
+    store.counters(
+      'fill',
+      { good: 900, total: 1000, resetAt: new Date(at(0)).toISOString() },
+      at(10),
+    );
+    store.seen('fill', at(10));
+    store.batch('fill', { ...late, event: 'ended' }, at(20));
+    expect(store.get('B-9')).toMatchObject({
+      status: 'ended',
+      productName: 'P',
+      startedAt: new Date(at(0)).toISOString(),
+    });
+    expect(store.gapRows('B-9', 'fill')).toEqual([
+      { from: at(0), to: at(10) },
+      { from: at(10), to: at(20) },
+    ]);
+    // nur das Ende verpasst bekommen: Batch entsteht mit Start aus der Meldung
+    store.batch('cap', { ...late, batchId: 'B-10', event: 'ended' }, at(30));
+    expect(store.get('B-10')).toMatchObject({
+      status: 'ended',
+      startedAt: new Date(at(0)).toISOString(),
+    });
+  });
+
+  it('gleicht anstehende Alarme mit activeAlarms ab (S-09)', () => {
+    runBatch();
+    const started = {
+      event: 'started' as const,
+      batchId: 'B-2',
+      productName: 'P',
+      startedAt: new Date(at(40)).toISOString(),
+      recipe: { id: 'r', version: 1 },
+      formatParts: [],
+    };
+    store.batch('fill', started, at(40));
+    store.reconcileAlarms(
+      'fill',
+      {
+        alarms: [
+          {
+            alarmId: 'FILL-STP-0001',
+            class: 'fault',
+            textKey: 'a.b',
+            text: { de: 'Stopfen' },
+            raisedAt: new Date(at(41)).toISOString(),
+            acknowledged: false,
+            user: null,
+          },
+        ],
+      },
+      at(42),
+    );
+    expect(store.alarmRows('B-2', 'fill').map((a) => [a.alarmId, a.raisedAt, a.clearedAt])).toEqual(
+      [['FILL-STP-0001', at(41), null]],
+    );
+    store.reconcileAlarms('fill', { alarms: [] }, at(45));
+    expect(store.alarmRows('B-2', 'fill')[0]?.clearedAt).toBe(at(45));
   });
 
   it('Linienfreigabe gilt für den nächsten Batch (E-40)', async () => {
@@ -292,6 +368,7 @@ describe('Batch-Reporting', () => {
     const fill = report?.machines.find((m) => m.machineId === 'fill');
     const cap = report?.machines.find((m) => m.machineId === 'cap');
     expect(fill?.counts).toMatchObject({ good: 2850, total: 3000, bad: 150, implausible: 0 });
+    expect(report).toMatchObject({ productName: '[Produktname]', targetQuantity: 3000 });
     // nur GxP-Werte, mit Grenzverletzung und Qualität
     expect(fill?.values.map((v) => v.key)).toEqual(['fillWeightAvg']);
     expect(fill?.values[0]).toMatchObject({ count: 31, outOfLimits: 1, uncertain: 1, high: 2.08 });
