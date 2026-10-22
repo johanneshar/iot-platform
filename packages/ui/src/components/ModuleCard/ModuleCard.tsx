@@ -19,6 +19,8 @@ export interface ModuleCardProps {
   onToggle?: () => void;
   /** Öffnen-Button, wenn das Modul gebucht ist und eine Seite hat */
   onOpen?: () => void;
+  /** Ebene der Überschrift passend zur Seite (Standard h3) */
+  headingLevel?: 2 | 3;
 }
 
 /** Kachel eines Moduls im Baukasten. */
@@ -32,15 +34,17 @@ export function ModuleCard({
   canToggle = true,
   onToggle,
   onOpen,
+  headingLevel = 3,
 }: ModuleCardProps) {
   const t = useUiTranslation();
+  const Heading = headingLevel === 2 ? 'h2' : 'h3';
   return (
     <section className={cx(styles.card, booked && styles.booked)}>
       <div className={styles.chips}>
         <Chip tone={core ? 'primary' : 'neutral'}>{categoryLabel}</Chip>
         {gxp && <Chip tone="dark">{t('module.gxp')}</Chip>}
       </div>
-      <h3 className={styles.name}>{name}</h3>
+      <Heading className={styles.name}>{name}</Heading>
       <div className={styles.description}>{description}</div>
       {core ? (
         <div className={styles.included}>
