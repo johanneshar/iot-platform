@@ -1,0 +1,6 @@
+{
+  "home": {
+    "title": "__MODULE_NAME__",
+    "text": "Dieses Modul wurde mit pnpm create-module angelegt."
+  }
+}

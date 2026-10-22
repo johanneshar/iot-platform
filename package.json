@@ -23,7 +23,9 @@
     "prepare": "lefthook install",
     "lint:css": "stylelint \"**/*.css\"",
     "storybook": "pnpm --filter @iot/ui storybook",
-    "storybook:build": "pnpm --filter @iot/ui storybook:build"
+    "storybook:build": "pnpm --filter @iot/ui storybook:build",
+    "create-module": "node tooling/scripts/create-module.mjs",
+    "dev:line2": "node tooling/scripts/dev-line2.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

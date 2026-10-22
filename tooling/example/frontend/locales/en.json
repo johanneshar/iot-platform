@@ -1,0 +1,6 @@
+{
+  "home": {
+    "title": "Example module",
+    "text": "This module was created with pnpm create-module."
+  }
+}

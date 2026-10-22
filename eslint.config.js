@@ -18,6 +18,8 @@ export default tseslint.config(
       '**/.vitepress/dist/**',
       'playwright-report/**',
       '**/storybook-static/**',
+      // Vorlage mit Platzhaltern (__MODULE_ID__ …); geprüft wird das daraus erzeugte Modul
+      'tooling/module-template/**',
       'test-results/**',
     ],
   },
