@@ -26,6 +26,31 @@ export {
 export { validateManifest, type ManifestResult } from './manifest/validate-manifest';
 export { RESERVED_MODULE_IDS, SHARED_MODULES } from './manifest/shared-modules';
 export {
+  useAlarms,
+  useCounters,
+  useLineData,
+  useMachine,
+  useMachineState,
+  useMachines,
+  useValues,
+  type LineAlarm,
+  type ProcessValue,
+} from './shell/data-hooks';
+export {
+  currentRate,
+  findBottleneck,
+  lineState,
+  machinesInOrder,
+  type ActiveAlarm,
+  type CounterSample,
+  type DataQuality,
+  type LineSnapshot,
+  type MachineSnapshot,
+  type PackMLState,
+  type StatePeriod,
+} from './data';
+export { currentShift, localTimeToUtc, type ShiftDefinition } from './time';
+export {
   ModuleIdContext,
   ShellContext,
   useAudit,
@@ -37,6 +62,7 @@ export {
   useRequestSignature,
   useUser,
   type AuditRecord,
+  type LineDataSource,
   type LineInfo,
   type ShellApi,
   type ShellUser,

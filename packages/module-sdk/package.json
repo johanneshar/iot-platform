@@ -6,7 +6,9 @@
   "description": "Alles, was ein Modul vom System braucht: Manifest-Typen, Hooks, Navigation, Audit, Lizenz, i18n",
   "exports": {
     ".": "./src/index.ts",
-    "./manifest": "./src/manifest/index.ts"
+    "./manifest": "./src/manifest/index.ts",
+    "./time": "./src/time/index.ts",
+    "./data": "./src/data/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -14,7 +16,8 @@
   },
   "dependencies": {
     "i18next": "26.5.3",
-    "react-i18next": "17.1.0"
+    "react-i18next": "17.1.0",
+    "@iot/interface-schema": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.3.1"

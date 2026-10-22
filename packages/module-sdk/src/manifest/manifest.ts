@@ -54,7 +54,8 @@ export interface ModuleManifest {
   gxp: boolean;
   minConformance: Conformance;
   ownMachinesOnly?: boolean;
-  nav?: { section: NavSection; order: number; icon: ModuleIcon };
+  /** `label`: Text in der Navigation, falls er vom Produktnamen abweicht (z. B. „Alarme“ statt „Alarm-Analytics“) */
+  nav?: { section: NavSection; order: number; icon: ModuleIcon; label?: LocalizedText };
   routes: ModuleRoute[];
   deepLinks?: Record<string, DeepLinkParams>;
   permissions: Permission[];

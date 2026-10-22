@@ -56,6 +56,8 @@ export function validateManifest(input: unknown): ManifestResult {
         errors.push('nav.section: Linie, Service oder Plattform');
       if (typeof nav['order'] !== 'number') errors.push('nav.order: Zahl erwartet');
       if (!ICONS.includes(String(nav['icon']))) errors.push('nav.icon: unbekanntes Icon');
+      if (nav['label'] !== undefined && !isText(nav['label']))
+        errors.push('nav.label: Text mit „de“ erwartet');
     }
   }
 

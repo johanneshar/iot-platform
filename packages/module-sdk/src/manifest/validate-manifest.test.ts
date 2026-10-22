@@ -36,6 +36,15 @@ describe('validateManifest', () => {
     expect(validateManifest({ ...valid, name: { en: 'Example' } }).ok).toBe(false);
   });
 
+  it('prüft die Beschriftung in der Navigation', () => {
+    expect(
+      validateManifest({ ...valid, nav: { ...valid.nav, label: { de: 'Beispiel' } } }).ok,
+    ).toBe(true);
+    expect(validateManifest({ ...valid, nav: { ...valid.nav, label: { en: 'Example' } } }).ok).toBe(
+      false,
+    );
+  });
+
   it('lehnt reservierte IDs ab', () => {
     const result = validateManifest({ ...valid, id: 'baukasten', permissions: [] });
     expect(result.ok).toBe(false);

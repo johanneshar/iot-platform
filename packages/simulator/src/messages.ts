@@ -7,7 +7,7 @@ import {
   type Message,
 } from '@iot/interface-schema';
 import { SITE_TIME_ZONE, type SimAlarm, type SimMachine } from './config';
-import { localTimeToUtc } from './time';
+import { localTimeToUtc } from '@iot/module-sdk/time';
 
 export interface Outgoing {
   topic: string;

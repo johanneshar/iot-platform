@@ -46,3 +46,33 @@ function offsetMs(timeZone: string, at: Date): number {
   );
   return asUtc - at.getTime();
 }
+
+export interface ShiftDefinition {
+  /** Beginn als Ortszeit „HH:MM“ */
+  start: string;
+  /** Ende als Ortszeit „HH:MM“; vor dem Beginn = über Mitternacht */
+  end: string;
+}
+
+/**
+ * Aktuelle Schicht zum Zeitpunkt `now` aus dem Schichtmodell der Linie (E-29). Liefert `null`, wenn
+ * gerade keine Schicht läuft.
+ */
+export function currentShift(
+  shifts: readonly ShiftDefinition[],
+  timeZone: string,
+  now: Date,
+): { start: Date; end: Date } | null {
+  const day = 86_400_000;
+  // Schichten von gestern, heute und morgen prüfen – deckt Schichten über Mitternacht ab
+  for (const offset of [-day, 0, day]) {
+    const reference = new Date(now.getTime() + offset);
+    for (const shift of shifts) {
+      const start = localTimeToUtc(shift.start, timeZone, reference);
+      let end = localTimeToUtc(shift.end, timeZone, reference);
+      if (end <= start) end = new Date(end.getTime() + day);
+      if (start <= now && now < end) return { start, end };
+    }
+  }
+  return null;
+}

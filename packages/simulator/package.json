@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@iot/interface-schema": "workspace:*",
-    "mqtt": "5.16.1"
+    "mqtt": "5.16.1",
+    "@iot/module-sdk": "workspace:*"
   },
   "devDependencies": {
     "tsx": "4.23.15"

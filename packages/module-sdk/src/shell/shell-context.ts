@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import type { LineSnapshot } from '../data/types';
 import type { LocalizedText } from '../manifest/manifest';
 
 export interface LineInfo {
@@ -49,6 +50,12 @@ export interface SignatureResult {
   meaning: string;
 }
 
+/** Live-Daten der Linie aus dem Datenkern des Core (ADR-005). */
+export interface LineDataSource {
+  getSnapshot: () => LineSnapshot | null;
+  subscribe: (listener: () => void) => () => void;
+}
+
 /** Was die Shell jedem Modul bereitstellt (CLAUDE.md, Abschnitt 6.2). */
 export interface ShellApi {
   line: LineInfo;
@@ -65,6 +72,8 @@ export interface ShellApi {
     moduleId: string,
     request: SignatureRequest,
   ) => Promise<SignatureResult | null>;
+  /** Maschinendaten der Linie */
+  data: LineDataSource;
 }
 
 export const ShellContext = createContext<ShellApi | null>(null);
@@ -72,7 +81,7 @@ export const ShellContext = createContext<ShellApi | null>(null);
 /** Modul-ID der aktuell gerenderten Seite; die Shell setzt sie je Modul. */
 export const ModuleIdContext = createContext<string>('core');
 
-function useShell(): ShellApi {
+export function useShell(): ShellApi {
   const shell = useContext(ShellContext);
   if (!shell) throw new Error('Komponente läuft außerhalb der Shell (ShellContext fehlt)');
   return shell;
