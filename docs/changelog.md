@@ -2,6 +2,35 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M5 – Alarme und geführte Fehlersuche (2026-10-22)
+
+**Neu**
+
+- Modul `alarms`: Alarmliste nach Mockup mit Filter, Verlauf (SQLite, 90 Tage einstellbar, E-34),
+  Top-Störungen der letzten 7 Tage (E-33), Zähler in der Navigation; kein Quittieren (E-32)
+- Modul `troubleshooting`: Fehlerbaum-Format mit Schema ([ADR-007](/adr/ADR-007-fehlerbaum-format)),
+  Beispielbäume aus dem Mockup, Ja/Nein-Schritte, bisheriger Weg, Ersatzteil per Deep Link, Lösung
+  dokumentieren mit Benutzer und Zeit (E-35)
+- Core: Proxy `/api/modules/<id>/…` zu Modul-Backends und Einsprungpunkte für Deep Links
+  ([ADR-008](/adr/ADR-008-modul-backends-proxy), E-36)
+- `module-sdk`: `useModuleApi`, `useDeepLinkTargets`, `useDeepLinkAvailable`; Server-Teil
+  `@iot/module-sdk/server` (`registerWithCore`, `readProxyUser`, `userCan`, `subscribeLine`,
+  `publishDeepLinkTargets`); Manifest-Feld `backend`; `badge(line)` bekommt den Stand der Linie
+- `@iot/ui`: `Panel` (Frage / Lösung)
+- Dashboard: „Fehlersuche starten“ an Alarmen mit Fehlerbaum
+
+**Behoben**
+
+- Datenkern: Nach einem Zählerreset (neues `resetAt` oder fallender Stand) wurden Leistung und Ausbringung
+  negativ; die bisherige Menge der Schicht bleibt jetzt erhalten
+
+**Demo**
+
+1. `pnpm dev`, als `maintenance` anmelden (Passwort `entwicklung`).
+2. „Alarme“: Bei „Wägezelle 3: Tara-Abweichung“ auf „Fehlersuche“ tippen.
+3. Dreimal „Ja“ → Lösung „Wägezelle tauschen“ mit Ersatzteil ET-50100; „Lösung dokumentieren“.
+4. Als `operator`: Dasselbe aus der Linienübersicht mit „Fehlersuche starten“ – ohne „Lösung dokumentieren“.
+
 ## Nach M4 (2026-10-22)
 
 - Simulator: stehende Maschinen wechseln zwischen Stillstand und Lauf, Alarme kommen und gehen mit (O-24)

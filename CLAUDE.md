@@ -464,8 +464,8 @@ pnpm test:e2e       # E2E + axe (Playwright)
 ```
 
 Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
-Backend 4000, Beispielmodul 4100, zweite Linie 4001/5190 (`pnpm dev:line2`), Storybook 5182, Doku 5181,
-E2E-Tests 4010/4110/5185.
+Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, zweite Linie 4001/5190
+(`pnpm dev:line2`), Storybook 5182, Doku 5181, E2E-Tests 4010/4110–4113/5185.
 
 Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
 Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten aus dem
@@ -475,5 +475,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M4 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: Plan für **M5** (Alarme und
-geführte Fehlersuche) vorlegen und auf Freigabe warten.
+M0 bis M5 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: **M5a** (3D-Ansicht) – zuerst
+den Entwurf der Maschinen-Detailseite in Claude Design abstimmen (A-01.5), dann Plan vorlegen und auf
+Freigabe warten.

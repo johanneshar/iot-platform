@@ -34,9 +34,23 @@ in der Navigation der Shell gesehen.
    - Linie, Navigation und Deep Links aus dem `module-sdk`: `useLine()`, `useNavigate()`,
      `useDeepLinkParams()`, `useIsModuleBooked()`.
    - Maschinendaten nur über das SDK: `useMachines()`, `useAlarms()`, `useValues()` ([ADR-005](/adr/ADR-005-datenzugriff)).
-   - Jede Seite in `frontend/entry.tsx` unter ihrem Routenpfad eintragen.
+   - Jede Seite in `frontend/entry.tsx` unter ihrem Routenpfad eintragen; einen Zähler in der Navigation
+     liefert `badge(line)` im selben Einstiegsmodul.
 
-4. **Starten**
+   _Ergebnis:_ Die Seite verwendet nur SDK und `@iot/ui`; Lint meldet keine festen Texte.
+
+4. **Eigene API (optional)** (`backend/`)
+   - Routen in Fastify anlegen; Benutzer und Rechte mit `readProxyUser` und `userCan` aus
+     `@iot/module-sdk/server` prüfen. Aufrufe ohne gültiges Dienst-Token mit 401 ablehnen.
+   - In der Oberfläche nur über `useModuleApi()` aufrufen (`get('pfad')`, `post('pfad', body)`) – der Core
+     leitet `/api/modules/<id>/…` weiter ([ADR-008](/adr/ADR-008-modul-backends-proxy)).
+   - Eigener Verlauf aus dem Databus: `subscribeLine` (nur kanonische, schemakonforme Nachrichten).
+   - Einsprungpunkte für andere Module: `publishDeepLinkTargets(…, { alarm: [...] })`; andere Module prüfen
+     sie mit `useDeepLinkTargets()`.
+
+   _Ergebnis:_ Das Manifest enthält `backend` (setzt `backend/main.ts`), die API ist nur über den Core erreichbar.
+
+5. **Starten**
 
    ```bash
    pnpm dev
@@ -46,13 +60,13 @@ in der Navigation der Shell gesehen.
    (<http://localhost:5180>) erscheint das Modul in der Navigation – mit Schloss, solange es nicht gebucht
    ist.
 
-5. **Buchen**
+6. **Buchen**
 
    Im Baukasten auf „Modul buchen“ klicken.
 
    _Ergebnis:_ Das Schloss verschwindet, die Seite des Moduls öffnet sich.
 
-6. **Checkliste abarbeiten** (CLAUDE.md, Abschnitt 6.3): Tests, Barrierefreiheit, `docs/entwickler.md`,
+7. **Checkliste abarbeiten** (CLAUDE.md, Abschnitt 6.3): Tests, Barrierefreiheit, `docs/entwickler.md`,
    `docs/anleitung.md`, `docs/schulung.md`, Eintrag in der [Modulübersicht](/module/uebersicht).
 
 ## Wie das Laden funktioniert

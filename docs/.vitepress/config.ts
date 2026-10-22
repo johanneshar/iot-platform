@@ -49,6 +49,8 @@ export default defineConfig({
           },
           { text: 'ADR-005 Datenzugriff', link: '/adr/ADR-005-datenzugriff' },
           { text: 'ADR-006 Datenquelle', link: '/adr/ADR-006-identity-source' },
+          { text: 'ADR-007 Fehlerbäume', link: '/adr/ADR-007-fehlerbaum-format' },
+          { text: 'ADR-008 Proxy und Einsprungpunkte', link: '/adr/ADR-008-modul-backends-proxy' },
         ],
       },
       {
@@ -56,6 +58,8 @@ export default defineConfig({
         items: [
           { text: 'Übersicht', link: '/module/uebersicht' },
           { text: 'Linien-Dashboard', link: '/module/dashboard' },
+          { text: 'Alarm-Analytics', link: '/module/alarms' },
+          { text: 'Geführte Fehlersuche', link: '/module/troubleshooting' },
         ],
       },
       {
