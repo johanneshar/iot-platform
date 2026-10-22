@@ -1,31 +1,82 @@
 {
-  "$comment": "Linie 3 · Flexfill (Blockmodell, kein CAD-Export). Abschnitte nach Angabe vom 2026-10-22: Vormodul = Beutelauspacker, Isolator 1–4 = Öffner, Füll- und Verschließmaschine, Transfermodul, Bördelmodul (mit Auslaufband). Positionen der Alarmstellen sind Platzhalter (O-28), bis benannte Bauteile im CAD-Export vorliegen.",
+  "$comment": "Linie 3 · Flexfill (Blockmodell, kein CAD-Export). Abschnitte nach Angabe vom 2026-10-22: Vormodul = Beutelauspacker, Isolator 1–4 = Öffner, Füll- und Verschließmaschine, Transfermodul, Bördelmodul (mit Auslaufband). Positionen der Alarmstellen sind Platzhalter (O-28), bis benannte Bauteile im CAD-Export vorliegen. Der Isolator (Fremdmaschine, 2026-10-22) umfasst Rückwände, Scheiben, Rahmen, Handschuheingriffe der Isolatorabschnitte, Oberbau und Lüftung; per Name zugeordnete Teile haben Vorrang vor xRange.",
   "lineId": "l3",
   "model": "flexfill_blockmodell.glb",
   "machines": [
-    { "machineId": "l3-debag", "xRange": [-1, 2.6] },
-    { "machineId": "l3-delid", "xRange": [2.6, 4.92] },
-    { "machineId": "l3-fill", "xRange": [4.92, 7.02] },
-    { "machineId": "l3-transfer", "xRange": [7.02, 10.22] },
-    { "machineId": "l3-cap", "xRange": [10.22, 13.3] }
+    {
+      "machineId": "l3-iso",
+      "nodes": [
+        "Isolator_*",
+        "Handschuheingriff_01",
+        "Handschuheingriff_02",
+        "Handschuheingriff_03",
+        "Handschuheingriff_04",
+        "Handschuheingriff_05",
+        "Handschuheingriff_06",
+        "Handschuheingriff_07",
+        "Handschuheingriff_08",
+        "Handschuheingriff_09",
+        "Handschuheingriff_10",
+        "Handschuheingriff_11",
+        "Handschuheingriff_12",
+        "Handschuheingriff_13",
+        "Handschuheingriff_14",
+        "Handschuheingriff_15",
+        "Oberbau_*",
+        "Lueftungskanal_01",
+        "HVAC_Einheit_01",
+        "Abluftstutzen_01",
+        "Abluftstutzen_02",
+        "Abluftstutzen_03"
+      ]
+    },
+    {
+      "machineId": "l3-debag",
+      "xRange": [-1, 2.6]
+    },
+    {
+      "machineId": "l3-delid",
+      "xRange": [2.6, 4.92]
+    },
+    {
+      "machineId": "l3-fill",
+      "xRange": [4.92, 7.02]
+    },
+    {
+      "machineId": "l3-transfer",
+      "xRange": [7.02, 10.22]
+    },
+    {
+      "machineId": "l3-cap",
+      "xRange": [10.22, 13.3]
+    }
   ],
   "alarms": [
     {
       "alarmId": "FILL-WGT-0003",
       "machineId": "l3-fill",
-      "label": { "de": "Wägezelle 3", "en": "Load cell 3" },
+      "label": {
+        "de": "Wägezelle 3",
+        "en": "Load cell 3"
+      },
       "position": [5.6, 1.25, 0.2]
     },
     {
       "alarmId": "FILL-STP-0001",
       "machineId": "l3-fill",
-      "label": { "de": "Stopfensetzer", "en": "Stopper setter" },
+      "label": {
+        "de": "Stopfensetzer",
+        "en": "Stopper setter"
+      },
       "position": [6.35, 1.25, 0.2]
     },
     {
       "alarmId": "TRF-ROB-0001",
       "machineId": "l3-transfer",
-      "label": { "de": "Roboter", "en": "Robot" },
+      "label": {
+        "de": "Roboter",
+        "en": "Robot"
+      },
       "node": "Prozessmodul_03"
     }
   ]

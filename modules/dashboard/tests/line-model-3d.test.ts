@@ -15,27 +15,32 @@ const nodesOf = (id: string) => model?.info.machines.find((m) => m.machineId ===
 describe('3D-Zuordnung der Flexfill (ADR-010)', () => {
   it('findet die Zuordnung für Linie 3 und keine für andere Linien', () => {
     expect(model).not.toBeNull();
-    expect(loadLineModel(MODELS, 'l1', () => undefined)).toBeNull();
+    expect(loadLineModel(MODELS, 'l9', () => undefined)).toBeNull();
     expect(log).toEqual([]);
   });
 
-  it('ordnet die Abschnitte den fünf Maschinen zu', () => {
+  it('ordnet die Abschnitte den Maschinen zu; der Isolator hat Vorrang für seine Teile', () => {
     expect(nodesOf('l3-debag')).toEqual(
       expect.arrayContaining(['Vormodul_Kammer_01', 'Vormodul_Ablage_01']),
     );
-    expect(nodesOf('l3-delid')).toEqual(
-      expect.arrayContaining(['Isolator_Rueckwand_01', 'Prozessmodul_01']),
-    );
+    expect(nodesOf('l3-delid')).toEqual(expect.arrayContaining(['Prozessmodul_01']));
     expect(nodesOf('l3-fill')).toEqual(
-      expect.arrayContaining(['Isolator_Rueckwand_02', 'Prozessmodul_02']),
+      expect.arrayContaining(['Prozessmodul_02', 'Unterbau_Tuer_05']),
     );
-    expect(nodesOf('l3-transfer')).toEqual(
-      expect.arrayContaining(['Isolator_Rueckwand_03', 'Prozessmodul_03']),
-    );
+    expect(nodesOf('l3-transfer')).toEqual(expect.arrayContaining(['Prozessmodul_03']));
     expect(nodesOf('l3-cap')).toEqual(
-      expect.arrayContaining(['Isolator_Rueckwand_04', 'Auslaufband_01']),
+      expect.arrayContaining(['Prozessmodul_04', 'Auslaufband_01']),
     );
-    // Teile über mehrere Maschinen (Unterbau, Oberbau) gehören zur Linie, nicht zu einer Maschine
+    expect(nodesOf('l3-iso')).toEqual(
+      expect.arrayContaining([
+        'Isolator_Rueckwand_02',
+        'Handschuheingriff_05',
+        'Oberbau_01',
+        'HVAC_Einheit_01',
+      ]),
+    );
+    expect(nodesOf('l3-fill')).not.toContain('Isolator_Rueckwand_02');
+    // Teile über mehrere Maschinen (Unterbau) gehören zur Linie, nicht zu einer Maschine
     expect(model?.info.machines.some((m) => m.nodes.includes('Unterbau_01'))).toBe(false);
   });
 

@@ -142,14 +142,21 @@ const X_TOLERANCE = 0.05;
 export function resolveModel(config: ModelConfig, gltf: Gltf): LineModelInfo {
   const boxes = nodeBoxes(gltf);
   const names = [...boxes.keys()];
+  const byNameOf = (m: ModelConfig['machines'][number]) =>
+    (m.nodes ?? []).flatMap((p) => names.filter((n) => matches(p, n)));
+  // Per Name zugeordnete Teile gehören genau dieser Maschine – auch wenn sie im Abschnitt einer anderen liegen
+  const named = new Set(config.machines.flatMap(byNameOf));
   const machines = config.machines.map((m) => {
-    const byName = (m.nodes ?? []).flatMap((p) => names.filter((n) => matches(p, n)));
+    const byName = byNameOf(m);
     const byRange = m.xRange
       ? names.filter((n) => {
           const box = boxes.get(n);
           const [from, to] = m.xRange ?? [0, 0];
           return (
-            box !== undefined && box.min[0] >= from - X_TOLERANCE && box.max[0] <= to + X_TOLERANCE
+            !named.has(n) &&
+            box !== undefined &&
+            box.min[0] >= from - X_TOLERANCE &&
+            box.max[0] <= to + X_TOLERANCE
           );
         })
       : [];

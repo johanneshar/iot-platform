@@ -3,7 +3,8 @@ import type { FixtureLine } from './mockup';
 /**
  * Linie 3 · Flexfill – nicht im UI-Mockup. Aufbau nach Beschreibung des Projektverantwortlichen
  * (2026-10-22): Beutelauspacker → Öffner (Delid/Delining) → Füll- und Verschließmaschine → Transfermodul
- * (Gut-/Schlechtauslauf, Roboter) → Bördelmodul; alle eigene Maschinen, Stufe Voll.
+ * (Gut-/Schlechtauslauf, Roboter) → Bördelmodul; alle eigene Maschinen, Stufe Voll. Dazu der Isolator als
+ * Fremdmaschine der Stufe Basis (2026-10-22), damit Fremdmaschinen und Sammelstörung im Test vorkommen.
  *
  * ANNAHMEN (O-28, zu bestätigen): Sollleistung, Ist-Werte, Prozesswerte, Uhrzeiten der Alarme, Batch,
  * Format. Die Alarme der Füllmaschine stammen aus den Fehlerbäumen des Mockups.
@@ -16,6 +17,18 @@ export const flexfillLine: FixtureLine = {
   targets: [],
   kpis: [{ label: 'Leistung', value: '92,0', unit: '%', sub: '92 von 100 /min' }],
   machines: [
+    {
+      // Fremdmaschine, Stufe Basis: nur Zustand, Zähler (Durchsatz) und Sammelstörung – Annahmen (O-28)
+      id: 'l3-iso',
+      name: 'Isolator',
+      kind: 'foreign',
+      level: 'Basis',
+      state: 'Execute',
+      rate: '92',
+      oee: '—',
+      source: 'Fremdsteuerung · Basissignale über S7-Connector',
+      values: [{ label: 'Zähler gut', value: '18.700' }],
+    },
     {
       id: 'l3-debag',
       name: 'Beutelauspacker',
@@ -106,6 +119,22 @@ export const flexfillLine: FixtureLine = {
       text: 'Roboter: Greiferposition nicht erreicht',
       severity: 'warning',
       active: true,
+    },
+    {
+      id: 'c5',
+      time: '14:10',
+      machine: 'Bördelmodul',
+      text: 'Einlauf: keine Vials',
+      severity: 'warning',
+      active: true,
+    },
+    {
+      id: 'c4',
+      time: '12:40',
+      machine: 'Isolator',
+      text: 'Sammelstörung',
+      severity: 'fault',
+      active: false,
     },
   ],
   faults: [],

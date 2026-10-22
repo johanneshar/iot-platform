@@ -14,39 +14,32 @@ const byId = (id: string): SimMachine => {
 };
 const classes = (out: Outgoing[]) => new Set(out.map((o) => parseTopic(o.topic)?.dataClass));
 
-describe('Beispiellinien aus dem Mockup', () => {
-  it('kennt beide Linien mit den Maschinen-IDs aus S-01 und die Flexfill', () => {
+describe('Linie 3 · Flexfill (E-47)', () => {
+  it('ist die einzige Linie, mit dem Isolator als Fremdmaschine', () => {
     expect(lines.map((l) => l.machines.map((m) => m.id))).toEqual([
-      ['l1-wash', 'l1-tunnel', 'l1-fill', 'l1-insp'],
-      ['l2-detub', 'l2-fill', 'l2-label'],
-      ['l3-debag', 'l3-delid', 'l3-fill', 'l3-transfer', 'l3-cap'],
+      ['l3-iso', 'l3-debag', 'l3-delid', 'l3-fill', 'l3-transfer', 'l3-cap'],
     ]);
-  });
-
-  it('Flexfill: eigene Maschinen der Stufe Voll in der beschriebenen Reihenfolge', () => {
-    const l3 = lines.find((l) => l.id === 'l3');
-    expect(l3?.machines.every((m) => m.own && m.conformance === 'full')).toBe(true);
-    expect(l3?.machines.map((m) => m.name)).toEqual([
+    expect(lines[0]?.machines.map((m) => m.name)).toEqual([
+      'Isolator',
       'Beutelauspacker',
       'Öffner (Delid/Delining)',
       'Füll- und Verschließmaschine',
       'Transfermodul',
       'Bördelmodul',
     ]);
+  });
+
+  it('eigene Maschinen der Stufe Voll, Isolator fremd mit Stufe Basis', () => {
+    expect(byId('l3-iso')).toMatchObject({ own: false, conformance: 'basic' });
+    for (const id of ['l3-debag', 'l3-delid', 'l3-fill', 'l3-transfer', 'l3-cap'])
+      expect(byId(id)).toMatchObject({ own: true, conformance: 'full' });
+    expect(byId('l3-fill').nominalRate).toBe(100);
+    expect(byId('l3-fill').values.find((v) => v.key === 'fillWeightAvg')?.value).toBe(2.01);
+    expect(byId('l3-cap').reason).toBe('Einlauf leer');
     expect(byId('l3-fill').alarms.map((a) => a.alarmId)).toEqual([
       'FILL-WGT-0003',
       'FILL-STP-0001',
     ]);
-  });
-
-  it('übernimmt Stufen, Sollleistung und Werte aus dem Mockup', () => {
-    expect(byId('l1-tunnel').conformance).toBe('basic');
-    expect(byId('l1-wash').conformance).toBe('standard');
-    expect(byId('l1-fill').conformance).toBe('full');
-    expect(byId('l1-fill').nominalRate).toBe(320);
-    expect(byId('l2-fill').nominalRate).toBe(400);
-    expect(byId('l1-fill').values.find((v) => v.key === 'fillWeightAvg')?.value).toBe(10.02);
-    expect(byId('l1-insp').reason).toBe('Auslauf gestaut');
   });
 });
 
@@ -89,8 +82,8 @@ describe('Schemakonformität', () => {
 });
 
 describe('Konformitätsstufen', () => {
-  it('basic: nur Identität, Zustand, Zähler (gut/gesamt) und Sammelstörung', () => {
-    const out = startupMessages(byId('l1-tunnel'), NOW);
+  it('basic (Isolator): nur Identität, Zustand, Zähler (gut/gesamt) und Sammelstörung', () => {
+    const out = startupMessages(byId('l3-iso'), NOW);
     expect(classes(out)).toEqual(
       new Set(['identity', 'state', 'counters', 'alarms', 'activeAlarms']),
     );
@@ -102,40 +95,30 @@ describe('Konformitätsstufen', () => {
     expect(new Set(alarmIds)).toEqual(new Set(['COMMON-FAULT']));
   });
 
-  it('standard: Prozesswerte und Einzelalarme, aber kein Batch und keine Quittierung', () => {
-    const out = startupMessages(byId('l1-wash'), NOW);
-    expect(classes(out).has('values')).toBe(true);
-    expect(classes(out).has('batch')).toBe(false);
-    const events = out
-      .filter((o) => o.topic.endsWith('/alarms'))
-      .map((o) => (o.message.data as { event: string }).event);
-    expect(events).not.toContain('acknowledged');
-  });
-
-  it('full: Batch mit Rezept und quittierte Alarme mit Benutzer', () => {
-    const out = startupMessages(byId('l1-fill'), NOW);
+  it('full: Batch mit Produkt, Start und Rezept; quittierte Alarme mit Benutzer', () => {
+    const out = startupMessages(byId('l3-fill'), NOW);
     const batch = out.find((o) => o.topic.endsWith('/batch'))?.message.data;
     expect(batch).toEqual({
       event: 'started',
-      batchId: 'B-2026-1042',
+      batchId: 'B-2026-3001',
       productName: '[Produktname]',
       targetQuantity: expect.any(Number) as number,
-      startedAt: '2026-10-21T04:14:00.000Z',
-      recipe: { id: 'vial-10ml', version: 3 },
-      formatParts: ['FT-2041', 'FT-3110'],
+      startedAt: '2026-10-21T04:05:00.000Z',
+      recipe: { id: 'vial-nest', version: 1 },
+      formatParts: [],
     });
     const acks = out.filter((o) => (o.message.data as { event?: string }).event === 'acknowledged');
     expect(acks.length).toBeGreaterThan(0);
   });
 
   it('aktive Alarme kommen nur, vergangene kommen und gehen', () => {
-    const out = startupMessages(byId('l1-fill'), NOW).filter((o) => o.topic.endsWith('/alarms'));
+    const out = startupMessages(byId('l3-fill'), NOW).filter((o) => o.topic.endsWith('/alarms'));
     const events = (id: string) =>
       out
         .filter((o) => (o.message.data as { alarmId: string }).alarmId === id)
         .map((o) => (o.message.data as { event: string }).event);
     expect(events('FILL-WGT-0003')).toEqual(['raised']);
-    expect(events('FILL-RCP-0001')).toEqual(['raised', 'cleared', 'acknowledged']);
+    expect(events('FILL-STP-0001')).toEqual(['raised', 'cleared', 'acknowledged']);
   });
 });
 
@@ -143,23 +126,26 @@ describe('Zähler', () => {
   const total = (o: Outgoing) => (o.message.data as { total: number }).total;
 
   it('steigen monoton, solange die Maschine produziert', () => {
-    const fill = byId('l1-fill');
+    const fill = byId('l3-fill');
     const steps = [0, 5_000, 10_000, 60_000].map((ms) => total(countersMessage(fill, ms, NOW)));
     expect(steps).toEqual([...steps].sort((a, b) => a - b));
     expect(steps[3]).toBeGreaterThan(steps[0] ?? 0);
   });
 
   it('stehen still, wenn die Maschine nicht in Execute ist', () => {
-    const held = byId('l2-fill');
-    expect(total(countersMessage(held, 60_000, NOW))).toBe(total(countersMessage(held, 0, NOW)));
+    const stopped = byId('l3-cap');
+    expect(total(countersMessage(stopped, 60_000, NOW))).toBe(
+      total(countersMessage(stopped, 0, NOW)),
+    );
   });
 
-  it('starten mit den Ständen aus dem Mockup', () => {
-    expect(countersMessage(byId('l1-fill'), 0, NOW).message.data).toMatchObject({
-      good: 61880,
-      bad: 2580,
-      total: 64460,
+  it('eigene Maschinen starten mit den Batchmengen, der Isolator mit „Zähler gut“', () => {
+    expect(countersMessage(byId('l3-fill'), 0, NOW).message.data).toMatchObject({
+      good: 18400,
+      bad: 310,
+      total: 18710,
     });
+    expect(countersMessage(byId('l3-iso'), 0, NOW).message.data).toMatchObject({ good: 18700 });
   });
 });
 
@@ -194,19 +180,15 @@ describe('Stand der anstehenden Alarme (S-09)', () => {
   });
 
   it('meldet den Stand retained beim Start und bei jedem Wechsel', () => {
-    const fill = startupMessages(byId('l1-fill'), NOW).find((o) =>
-      o.topic.endsWith('/activeAlarms'),
-    );
+    const active = (id: string) =>
+      startupMessages(byId(id), NOW).find((o) => o.topic.endsWith('/activeAlarms'));
+    const fill = active('l3-fill');
     expect(fill?.retain).toBe(true);
-    const ids = (fill?.message.data as { alarms: { alarmId: string }[] }).alarms.map(
-      (a) => a.alarmId,
-    );
-    expect(ids).toEqual(['FILL-CAP-0001', 'FILL-WGT-0003']);
-    // Basis: nur Sammelstörung, ohne Text
-    const tunnel = startupMessages(byId('l1-tunnel'), NOW).find((o) =>
-      o.topic.endsWith('/activeAlarms'),
-    );
-    expect((tunnel?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
+    expect(
+      (fill?.message.data as { alarms: { alarmId: string }[] }).alarms.map((a) => a.alarmId),
+    ).toEqual(['FILL-WGT-0003']);
+    // Basis: Sammelstörung ist vergangen – leerer Stand
+    expect((active('l3-iso')?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
 
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
@@ -215,8 +197,8 @@ describe('Stand der anstehenden Alarme (S-09)', () => {
     sim.start();
     const since = published.length;
     vi.advanceTimersByTime(60_000);
-    const insp = published.slice(since).filter((o) => o.topic === 'iot/v1/l1/l1-insp/activeAlarms');
-    expect((insp.at(-1)?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
+    const cap = published.slice(since).filter((o) => o.topic === 'iot/v1/l3/l3-cap/activeAlarms');
+    expect((cap.at(-1)?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
     sim.stop();
   });
 });
@@ -238,50 +220,50 @@ describe('Zustandswechsel (O-24)', () => {
     return { sim, after, data };
   }
 
-  it('die Inspektion läuft nach 1 min an; ihr Alarm geht', () => {
+  it('das Bördelmodul läuft nach 1 min an; sein Alarm geht', () => {
     const { sim, after, data } = run();
     vi.advanceTimersByTime(60_000);
-    const insp = after().filter((o) => o.topic.startsWith('iot/v1/l1/l1-insp/'));
-    expect(insp.filter((o) => o.topic.endsWith('/state')).map((o) => data(o)['state'])).toEqual([
+    const cap = after().filter((o) => o.topic.startsWith('iot/v1/l3/l3-cap/'));
+    expect(cap.filter((o) => o.topic.endsWith('/state')).map((o) => data(o)['state'])).toEqual([
       'Execute',
     ]);
     expect(
-      insp
+      cap
         .filter((o) => o.topic.endsWith('/alarms'))
         .map((o) => [data(o)['alarmId'], data(o)['event']]),
-    ).toEqual([['INSP-OUT-0001', 'cleared']]);
+    ).toEqual([['CAP-INF-0001', 'cleared']]);
     sim.stop();
   });
 
-  it('nach 9 min Lauf steht sie wieder und der Alarm kommt erneut', () => {
+  it('nach 9 min Lauf steht es wieder und der Alarm kommt erneut', () => {
     const { sim, after, data } = run();
     vi.advanceTimersByTime(60_000 + 9 * 60_000);
     const states = after()
-      .filter((o) => o.topic === 'iot/v1/l1/l1-insp/state')
+      .filter((o) => o.topic === 'iot/v1/l3/l3-cap/state')
       .map((o) => [data(o)['state'], data(o)['reason']]);
     expect(states).toEqual([
       ['Execute', null],
-      ['Suspended', 'Auslauf gestaut'],
+      ['Suspended', 'Einlauf leer'],
     ]);
     sim.stop();
   });
 
-  it('im Lauf zählt die Inspektion mit der Linienleistung (286 /min)', () => {
+  it('im Lauf zählt das Bördelmodul mit der Linienleistung (92 /min)', () => {
     const { sim, after } = run();
     vi.advanceTimersByTime(60_000 + 60_000);
-    const counters = after().filter((o) => o.topic === 'iot/v1/l1/l1-insp/counters');
-    const totals = counters.map((o) => (o.message.data as { total: number }).total);
-    const first = totals[0] ?? 0;
-    const last = totals.at(-1) ?? 0;
-    expect(last - first).toBeGreaterThan(250);
-    expect(last - first).toBeLessThan(320);
+    const totals = after()
+      .filter((o) => o.topic === 'iot/v1/l3/l3-cap/counters')
+      .map((o) => (o.message.data as { total: number }).total);
+    const diff = (totals.at(-1) ?? 0) - (totals[0] ?? 0);
+    expect(diff).toBeGreaterThan(75);
+    expect(diff).toBeLessThan(100);
     sim.stop();
   });
 
   it('laufende Maschinen wechseln nicht', () => {
     const { sim, after } = run();
     vi.advanceTimersByTime(20 * 60_000);
-    expect(after().some((o) => o.topic === 'iot/v1/l1/l1-fill/state')).toBe(false);
+    expect(after().some((o) => o.topic === 'iot/v1/l3/l3-fill/state')).toBe(false);
     sim.stop();
   });
 
@@ -302,7 +284,7 @@ describe('Batch-Zyklus (M6)', () => {
   });
 
   it('nummeriert fortlaufend', () => {
-    expect(nextBatchId('B-2026-1042')).toBe('B-2026-1043');
+    expect(nextBatchId('B-2026-3001')).toBe('B-2026-3002');
     expect(nextBatchId('B-2026-0999')).toBe('B-2026-1000');
   });
 
@@ -322,35 +304,39 @@ describe('Batch-Zyklus (M6)', () => {
           return `${o.topic.split('/')[3] ?? ''} ${d.event} ${d.batchId}`;
         });
     vi.advanceTimersByTime(15 * 60_000);
-    expect(batchEvents()).toContain('l1-fill ended B-2026-1042');
+    expect(batchEvents()).toContain('l3-fill ended B-2026-3001');
     vi.advanceTimersByTime(2 * 60_000);
-    expect(batchEvents()).toContain('l1-fill started B-2026-1043');
-    // alle Maschinen der Flexfill (Stufe Voll) gehören zum Batch der Linie
-    expect(
-      batchEvents().filter((e) => e.startsWith('l3-') && e.includes(' started ')),
-    ).toHaveLength(5);
+    // alle eigenen Maschinen (Stufe Voll) gehören zum Batch der Linie, der Isolator (Basis) nicht
+    const started = batchEvents().filter((e) => e.includes(' started B-2026-3002'));
+    expect(started.map((e) => e.split(' ')[0])).toEqual([
+      'l3-debag',
+      'l3-delid',
+      'l3-fill',
+      'l3-transfer',
+      'l3-cap',
+    ]);
     const counters = published
       .slice(since)
-      .filter((o) => o.topic === 'iot/v1/l1/l1-fill/counters')
+      .filter((o) => o.topic === 'iot/v1/l3/l3-fill/counters')
       .at(-1);
     const data = counters?.message.data as { total: number; resetAt: string };
     expect(data.resetAt).toBe(new Date(NOW.getTime() + 17 * 60_000).toISOString());
     expect(data.total).toBe(0);
     // S-08, S-10: Start, Produkt und Sollmenge in jeder Batch-Meldung, retained
-    const started = published
+    const message = published
       .slice(since)
       .find(
         (o) =>
-          o.topic === 'iot/v1/l1/l1-fill/batch' &&
+          o.topic === 'iot/v1/l3/l3-fill/batch' &&
           (o.message.data as { event: string }).event === 'started',
       );
-    expect(started?.retain).toBe(true);
-    expect(started?.message.data).toMatchObject({
-      batchId: 'B-2026-1043',
+    expect(message?.retain).toBe(true);
+    expect(message?.message.data).toMatchObject({
+      batchId: 'B-2026-3002',
       productName: '[Produktname]',
       startedAt: new Date(NOW.getTime() + 17 * 60_000).toISOString(),
     });
-    expect((started?.message.data as { targetQuantity: number }).targetQuantity).toBeGreaterThan(0);
+    expect((message?.message.data as { targetQuantity: number }).targetQuantity).toBeGreaterThan(0);
     sim.stop();
   });
 });

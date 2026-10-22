@@ -1,8 +1,11 @@
 import { flexfillLine } from '../fixtures/flexfill';
-import { lines as mockupLines, type FixtureLine, type FixtureMachine } from '../fixtures/mockup';
+import type { FixtureLine, FixtureMachine } from '../fixtures/mockup';
 
-/** Linien des Simulators: die beiden Linien des Mockups und Linie 3 · Flexfill (Annahmen, O-28). */
-const fixtureLines: readonly FixtureLine[] = [...mockupLines, flexfillLine];
+/**
+ * Linie des Simulators: Linie 3 · Flexfill (E-47). Die Linien des Mockups bleiben Gestaltungsvorlage für
+ * Storybook (fixtures/mockup.ts) und werden nicht mehr simuliert.
+ */
+const fixtureLines: readonly FixtureLine[] = [flexfillLine];
 import { parseGermanNumber } from './parse';
 
 /**
@@ -66,45 +69,8 @@ interface MachineExtras {
 // Schlüssel und Einheiten aus den Beschriftungen des Mockups abgeleitet (Frage 3 zu M2, 2026-10-22).
 // GxP-Kennzeichnung: nur das Füllgewicht ist in der Spezifikation als GxP markiert (offen: O-16).
 const EXTRAS: Record<string, MachineExtras> = {
-  'l1-wash': {
-    values: [
-      { key: 'waterTemperature', label: 'Wassertemperatur', unit: '°C', gxp: false },
-      { key: 'wfiConductivity', label: 'Leitfähigkeit WFI', unit: 'µS/cm', gxp: false },
-      { key: 'compressedAir', label: 'Druckluft', unit: 'bar', gxp: false },
-    ],
-  },
-  'l1-tunnel': { values: [] },
-  'l1-fill': {
-    values: [
-      { key: 'fillWeightAvg', label: 'Füllgewicht Ø', unit: 'g', gxp: true, min: 9.9, max: 10.1 },
-      { key: 'fillWeightStdDev', label: 'Standardabw.', unit: 'g', gxp: true },
-      { key: 'isolatorDiffPressure', label: 'Differenzdruck Isolator', unit: 'Pa', gxp: false },
-      { key: 'closingTorqueAvg', label: 'Verschlussmoment Ø', unit: 'Nm', gxp: false },
-    ],
-  },
-  'l1-insp': {
-    values: [
-      { key: 'rejectRate', label: 'Ausschussquote', unit: '%', gxp: false },
-      { key: 'camerasActive', label: 'Kameras aktiv', unit: '', gxp: false },
-    ],
-    rejectLabel: 'Ausschussquote',
-  },
-  'l2-detub': { values: [] },
-  'l2-fill': {
-    values: [
-      { key: 'fillVolumeAvg', label: 'Füllvolumen Ø', unit: 'ml', gxp: true },
-      { key: 'isolatorDiffPressure', label: 'Differenzdruck Isolator', unit: 'Pa', gxp: false },
-    ],
-  },
-  'l2-label': {
-    values: [
-      { key: 'labelRollLevel', label: 'Etikettenrolle', unit: '%', gxp: false },
-      { key: 'codeReadRate', label: 'Lesequote Code', unit: '%', gxp: false },
-      { key: 'rejectRate', label: 'Ausschuss', unit: '%', gxp: false },
-    ],
-    rejectLabel: 'Ausschuss',
-  },
   // Linie 3 · Flexfill – Schlüssel, Einheiten und Grenzen sind Annahmen (O-28)
+  'l3-iso': { values: [] },
   'l3-debag': { values: [{ key: 'tubBuffer', label: 'Tubs im Puffer', unit: '', gxp: false }] },
   'l3-delid': {
     values: [
@@ -142,54 +108,9 @@ const EXTRAS: Record<string, MachineExtras> = {
   },
 };
 
-// Stabile alarmIds und Textschlüssel: im Mockup nicht enthalten, hier festgelegt.
-// FILL-WGT-0003 stammt aus der Spezifikation.
+// Stabile alarmIds und Textschlüssel: hier festgelegt (Annahmen, O-28); FILL-WGT-0003 stammt aus der
+// Spezifikation, FILL-… passen zu den Fehlerbäumen.
 const ALARMS: AlarmConfig[] = [
-  {
-    fixtureId: 'a1',
-    alarmId: 'INSP-OUT-0001',
-    textKey: 'alarm.inspection.outfeedJam',
-    subsystem: 'Auslauf',
-  },
-  {
-    fixtureId: 'a2',
-    alarmId: 'FILL-CAP-0001',
-    textKey: 'alarm.capFeed.levelLow',
-    subsystem: 'Verschließen',
-  },
-  {
-    fixtureId: 'a3',
-    alarmId: 'FILL-WGT-0003',
-    textKey: 'alarm.weighcell.tare',
-    subsystem: 'Wägung',
-  },
-  {
-    fixtureId: 'a4',
-    alarmId: 'WASH-NOZ-0002',
-    textKey: 'alarm.washer.nozzlePressureLow',
-    subsystem: 'Düsen',
-  },
-  { fixtureId: 'a5', alarmId: 'COMMON-FAULT' },
-  {
-    fixtureId: 'a6',
-    alarmId: 'FILL-RCP-0001',
-    textKey: 'alarm.recipe.loaded',
-    subsystem: 'Rezept',
-  },
-  {
-    fixtureId: 'b1',
-    alarmId: 'FILL-STP-0001',
-    textKey: 'alarm.stopperSetter.blocked',
-    subsystem: 'Stopfensetzen',
-  },
-  {
-    fixtureId: 'b2',
-    alarmId: 'LBL-ROL-0001',
-    textKey: 'alarm.labeler.rollLow',
-    subsystem: 'Etiketten',
-  },
-  { fixtureId: 'b3', alarmId: 'COMMON-FAULT' },
-  // Linie 3 · Flexfill (Annahmen, O-28); FILL-… wie Linie 1/2, damit die Fehlerbäume passen
   {
     fixtureId: 'c1',
     alarmId: 'FILL-WGT-0003',
@@ -208,13 +129,17 @@ const ALARMS: AlarmConfig[] = [
     textKey: 'alarm.transfer.robotGripper',
     subsystem: 'Roboter',
   },
+  { fixtureId: 'c4', alarmId: 'COMMON-FAULT' },
+  {
+    fixtureId: 'c5',
+    alarmId: 'CAP-INF-0001',
+    textKey: 'alarm.capping.infeedEmpty',
+    subsystem: 'Einlauf',
+  },
 ];
 
-/** Batch-Rezepte: l1 aus der Spezifikation; l2 aus dem Mockup-Text „Spritze 1 ml · v5“ abgeleitet. */
+/** Batch-Rezept der Flexfill – Annahme (O-28). */
 const RECIPES: Record<string, { id: string; version: number; formatParts: string[] }> = {
-  l1: { id: 'vial-10ml', version: 3, formatParts: ['FT-2041', 'FT-3110'] },
-  l2: { id: 'syringe-1ml', version: 5, formatParts: [] },
-  // Annahme (O-28)
   l3: { id: 'vial-nest', version: 1, formatParts: [] },
 };
 
