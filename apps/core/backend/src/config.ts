@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { LocalizedText, ModuleCategory } from '@iot/module-sdk/manifest';
+import type { ShiftDefinition } from '@iot/module-sdk/time';
 import type { RoleDefinition } from './auth/roles.js';
 
 export interface CatalogModule {
@@ -19,6 +20,10 @@ export interface SiteLine {
   url: string;
   /** Zeitzone des Standorts für die Anzeige (E-19) */
   timeZone: string;
+  /** Schichtmodell – legt der Kunde fest (E-29) */
+  shifts: ShiftDefinition[];
+  /** OEE-Ziel in Prozent */
+  oeeTarget?: number;
 }
 
 export interface CoreConfig {
@@ -40,6 +45,8 @@ export interface CoreConfig {
   devUsers: { password: string } | null;
   /** Passwort des Service-Zugangs beim ersten Start (Betrieb) */
   servicePassword: string | null;
+  /** Databus (MQTT) – im Dev-Betrieb Mosquitto; `null` = keine Anbindung (Tests) */
+  mqttUrl: string | null;
 }
 
 const configFile = (name: string) => fileURLToPath(new URL(`../config/${name}`, import.meta.url));
@@ -87,5 +94,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): CoreConfig {
     // Nur Entwicklung: ein bekanntes Passwort für alle Beispielbenutzer
     devUsers: devUsersWanted ? { password: env['CORE_DEV_PASSWORD'] ?? 'entwicklung' } : null,
     servicePassword: env['CORE_SERVICE_PASSWORD'] ?? null,
+    mqttUrl:
+      env['CORE_MQTT_URL'] === 'off' ? null : (env['CORE_MQTT_URL'] ?? 'mqtt://localhost:1883'),
   };
 }

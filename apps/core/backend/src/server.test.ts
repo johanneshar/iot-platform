@@ -28,7 +28,11 @@ let db: Db;
 
 beforeEach(async () => {
   const config = {
-    ...loadConfig({ CORE_REGISTRY_TOKEN: TOKEN, CORE_DEV_PASSWORD: PASSWORD }),
+    ...loadConfig({
+      CORE_REGISTRY_TOKEN: TOKEN,
+      CORE_DEV_PASSWORD: PASSWORD,
+      CORE_MQTT_URL: 'off',
+    }),
     devBooked: ['dashboard'],
   };
   db = openDb(':memory:');
@@ -319,6 +323,17 @@ describe('e-Signatur', () => {
         )
       ).statusCode,
     ).toBe(400);
+  });
+});
+
+describe('Maschinendaten', () => {
+  it('nur mit Anmeldung', async () => {
+    expect((await get('/api/data')).statusCode).toBe(401);
+    const data = (await get('/api/data', await login('operator'))).json<{
+      lineId: string;
+      oeeTarget: number;
+    }>();
+    expect(data).toMatchObject({ lineId: 'l1', oeeTarget: 82 });
   });
 });
 

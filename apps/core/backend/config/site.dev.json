@@ -1,17 +1,47 @@
 {
-  "$comment": "Linien des Standorts (Entwicklung). Jede Linie hat ein eigenes Edge Device mit eigenem Core (E-23); die Linienwahl wechselt zu dessen Adresse. timeZone: Anzeige der Zeitstempel in Ortszeit des Standorts (E-19).",
+  "$comment": "Linien des Standorts (Entwicklung). Jede Linie hat ein eigenes Edge Device mit eigenem Core (E-23); die Linienwahl wechselt zu dessen Adresse. timeZone: Anzeige in Ortszeit (E-19). oeeTarget aus dem Mockup (Ziel 82 % / 80 %). shifts: BEISPIEL – das Schichtmodell legt der Kunde fest (E-29); aus dem Mockup stammt nur der Beginn 06:00.",
   "lines": [
     {
       "id": "l1",
       "name": "Linie 1 · Vials",
       "url": "http://localhost:5180",
-      "timeZone": "Europe/Berlin"
+      "timeZone": "Europe/Berlin",
+      "oeeTarget": 82,
+      "shifts": [
+        {
+          "start": "06:00",
+          "end": "14:00"
+        },
+        {
+          "start": "14:00",
+          "end": "22:00"
+        },
+        {
+          "start": "22:00",
+          "end": "06:00"
+        }
+      ]
     },
     {
       "id": "l2",
       "name": "Linie 2 · Spritzen",
       "url": "http://localhost:5190",
-      "timeZone": "Europe/Berlin"
+      "timeZone": "Europe/Berlin",
+      "oeeTarget": 80,
+      "shifts": [
+        {
+          "start": "06:00",
+          "end": "14:00"
+        },
+        {
+          "start": "14:00",
+          "end": "22:00"
+        },
+        {
+          "start": "22:00",
+          "end": "06:00"
+        }
+      ]
     }
   ]
 }

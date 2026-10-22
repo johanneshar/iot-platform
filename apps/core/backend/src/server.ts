@@ -11,12 +11,16 @@ import type { CoreConfig } from './config.js';
 import { openDb, type Db } from './db.js';
 import { LocalLicenseProvider, type LicenseProvider } from './licenses.js';
 import { Registry } from './registry.js';
+import { connectLine } from './data/mqtt-bridge.js';
+import { LineModel } from './data/line-model.js';
 import { buildShellState } from './shell-state.js';
 
 export interface HealthResponse {
   status: 'ok';
   service: 'core';
 }
+
+export { LineModel };
 
 export interface ServerDeps {
   config: CoreConfig;
@@ -58,6 +62,21 @@ export async function buildServer({
   const sessions = new SessionStore(db, config.sessionHours, now);
   const known = new Set(config.catalog.map((c) => c.id));
   await seedUsers(config, users, audit);
+
+  // Datenkern: kanonisches Linienmodell aus dem Databus (E-08, ADR-005)
+  const line = config.site.find((l) => l.id === config.lineId);
+  const model = new LineModel({
+    lineId: config.lineId,
+    timeZone: line?.timeZone ?? 'UTC',
+    shifts: line?.shifts ?? [],
+    oeeTarget: line?.oeeTarget ?? null,
+    now,
+  });
+  const mqttClient = config.mqttUrl
+    ? connectLine(config.mqttUrl, config.lineId, model, (message) => {
+        server.log.info(message);
+      })
+    : null;
 
   const sessionUser = (user: User): SessionUser => ({
     id: user.id,
@@ -295,6 +314,39 @@ export async function buildServer({
     });
   });
 
+  // ── Maschinendaten (Datenkern) ─────────────────────────────────────────────────
+  server.get('/api/data', async (request, reply) => {
+    if (!guard(request, reply)) return reply;
+    return model.snapshot();
+  });
+
+  // Server-Sent Events: Stand beim Verbinden, danach jede Änderung (höchstens alle 500 ms)
+  server.get('/api/data/stream', async (request, reply) => {
+    if (!guard(request, reply)) return reply;
+    reply.hijack();
+    const out = reply.raw;
+    out.writeHead(200, {
+      'content-type': 'text/event-stream; charset=utf-8',
+      'cache-control': 'no-cache',
+      connection: 'keep-alive',
+    });
+    const send = () => out.write(`event: line\ndata: ${JSON.stringify(model.snapshot())}\n\n`);
+    send();
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const unsubscribe = model.subscribe(() => {
+      timer ??= setTimeout(() => {
+        timer = null;
+        send();
+      }, 500);
+    });
+    const keepAlive = setInterval(() => out.write(': keep-alive\n\n'), 25_000);
+    request.raw.on('close', () => {
+      unsubscribe();
+      clearInterval(keepAlive);
+      if (timer) clearTimeout(timer);
+    });
+  });
+
   // ── Benutzer (core.users.manage); Oberfläche folgt (O-21) ─────────────────────
   server.get('/api/users', async (request, reply) => {
     if (!guard(request, reply, 'core.users.manage')) return reply;
@@ -386,6 +438,7 @@ export async function buildServer({
   );
 
   server.addHook('onClose', () => {
+    mqttClient?.end(true);
     db.close();
   });
 
