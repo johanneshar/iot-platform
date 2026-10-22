@@ -2,6 +2,7 @@
 // Aufruf: pnpm create-module <id> "<Name>" [--port 41xx] [--dir modules]
 import {
   cpSync,
+  rmSync,
   existsSync,
   readdirSync,
   readFileSync,
@@ -36,6 +37,8 @@ if (existsSync(target)) {
 
 cpSync(join(root, 'tooling/module-template'), target, { recursive: true });
 renameSync(join(target, 'package.json.tpl'), join(target, 'package.json'));
+// VORLAGE.md beschreibt die Vorlage selbst und gehört nicht ins Modul
+rmSync(join(target, 'VORLAGE.md'));
 
 const replace = (file) => {
   const text = readFileSync(file, 'utf8')
