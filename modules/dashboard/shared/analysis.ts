@@ -60,6 +60,8 @@ export interface MachineAnalysis {
   to: string;
   /** Beginn der Zählerdaten im Zeitraum; später als `from`, wenn der Verlauf erst danach beginnt */
   observedFrom: string;
+  /** Zählersprünge im Zeitraum, die nicht gezählt wurden (Rücksprung, mehr als möglich) */
+  implausibleCounters: number;
   kpis: {
     /** 0–1 */
     availability: number | null;

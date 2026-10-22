@@ -32,6 +32,7 @@ function machine(
     quality: 'good',
     lastMessageAt: NOW.toISOString(),
     invalidMessages: 0,
+    implausibleCounters: 0,
     history: {
       states: [],
       counterBaseline: null,

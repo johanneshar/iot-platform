@@ -137,7 +137,8 @@
       "foreign": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller. Datenumfang gemäß Integrationsstufe."
     },
     "basicNote": "Stufe Basis: Zustand, Zähler und Sammelstörung – keine Einzelalarme und Prozesswerte.",
-    "observedFrom": "Daten seit {{time}} – vorher war das Modul nicht in Betrieb"
+    "observedFrom": "Daten seit {{time}} – vorher war das Modul nicht in Betrieb",
+    "implausible": "{{count}} Zählersprünge im Zeitraum waren nicht plausibel (Rücksprung oder mehr, als die Maschine schafft) und wurden nicht gezählt. Datenquelle prüfen."
   },
   "duration": {
     "hm": "{{h}} h {{m}} min",

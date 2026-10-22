@@ -4,11 +4,12 @@ import {
   type DataByClass,
   type DataClass,
 } from '@iot/interface-schema';
-import type {
-  CounterSample,
-  DataQuality,
-  LineSnapshot,
-  MachineSnapshot,
+import {
+  counterStep,
+  type CounterSample,
+  type DataQuality,
+  type LineSnapshot,
+  type MachineSnapshot,
 } from '@iot/module-sdk/data';
 import { currentShift, type ShiftDefinition } from '@iot/module-sdk/time';
 
@@ -105,6 +106,7 @@ export class LineModel {
         quality: 'good',
         lastMessageAt: null,
         invalidMessages: 0,
+        implausibleCounters: 0,
         history: { states: [], counterBaseline: null, recentCounters: [] },
         qualityByClass: {},
       };
@@ -154,21 +156,35 @@ export class LineModel {
       case 'counters': {
         const counters = data as DataByClass['counters'];
         const previous = machine.counters;
-        // Zählerreset (neues resetAt oder fallender Stand): bisher Gezähltes bleibt erhalten, indem
-        // Basis und letzte Stände um den Stand vor dem Reset verschoben werden (Spezifikation: counters)
-        if (
-          previous &&
-          (previous.resetAt !== counters.resetAt || counters.total < previous.total)
-        ) {
-          const shift = (s: CounterSample): CounterSample => ({
-            ...s,
-            good: s.good - previous.good,
-            total: s.total - previous.total,
-            ...(s.bad === undefined ? {} : { bad: s.bad - (previous.bad ?? 0) }),
-          });
-          const { history } = machine;
-          if (history.counterBaseline) history.counterBaseline = shift(history.counterBaseline);
-          history.recentCounters = history.recentCounters.map(shift);
+        // Menge seit dem letzten Stand prüfen (counterStep): Reset, Rücksprung oder unplausibler
+        // Sprung verschieben Basis und letzte Stände so, dass nur echt Produziertes zählt
+        if (previous) {
+          const step = counterStep(
+            { ...previous, ts: Date.parse(previous.ts) },
+            { ...counters, ts: Date.parse(ts) },
+            machine.identity?.nominalRate ?? null,
+          );
+          if (step.step !== 'count') {
+            const counted = { good: step.good, total: step.total };
+            const shift = (s: CounterSample): CounterSample => ({
+              ...s,
+              good: s.good + counters.good - previous.good - counted.good,
+              total: s.total + counters.total - previous.total - counted.total,
+              ...(s.bad === undefined
+                ? {}
+                : {
+                    bad:
+                      s.bad +
+                      (counters.bad ?? 0) -
+                      (previous.bad ?? 0) -
+                      (counted.total - counted.good),
+                  }),
+            });
+            const { history } = machine;
+            if (history.counterBaseline) history.counterBaseline = shift(history.counterBaseline);
+            history.recentCounters = history.recentCounters.map(shift);
+            if (step.step === 'implausible') machine.implausibleCounters += 1;
+          }
         }
         machine.counters = { ...counters, ts };
         const sample = this.sample(counters, ts);

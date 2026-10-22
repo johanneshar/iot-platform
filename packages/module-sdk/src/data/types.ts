@@ -50,6 +50,8 @@ export interface MachineSnapshot {
   lastMessageAt: string | null;
   /** Nachrichten, die das Schema nicht bestanden haben – werden nicht übernommen */
   invalidMessages: number;
+  /** Zählersprünge, die nicht gezählt wurden (Rücksprung ohne Reset, mehr als die Maschine schafft) */
+  implausibleCounters: number;
   /** Verlauf seit Beginn der Beobachtung in der laufenden Schicht */
   history: {
     states: StatePeriod[];

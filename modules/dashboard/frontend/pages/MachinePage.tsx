@@ -204,6 +204,12 @@ function Analysis({
           })}
         </p>
       )}
+      {analysis.implausibleCounters > 0 && (
+        <div className={styles.warning} role="status">
+          <Chip tone="warning">{t('quality.uncertain')}</Chip>
+          <span>{t('machine.implausible', { count: analysis.implausibleCounters })}</span>
+        </div>
+      )}
       <div className={styles.kpis}>
         <KpiTile
           variant="main"

@@ -137,7 +137,8 @@
       "foreign": "Third-party machine: spare parts and service via the respective manufacturer. Data scope according to integration level."
     },
     "basicNote": "Level basic: state, counters and common fault – no individual alarms or process values.",
-    "observedFrom": "Data since {{time}} – the module was not running before"
+    "observedFrom": "Data since {{time}} – the module was not running before",
+    "implausible": "{{count}} counter jumps in this period were not plausible (drop or more than the machine can produce) and were not counted. Check the data source."
   },
   "duration": {
     "hm": "{{h}} h {{m}} min",

@@ -1,4 +1,4 @@
-import type { PackMLState } from '@iot/module-sdk/data';
+import { counterStep, type PackMLState } from '@iot/module-sdk/data';
 import type {
   AlarmStat,
   Bucket,
@@ -7,7 +7,7 @@ import type {
   Stop,
   ValueSeries,
 } from '../shared/analysis';
-import type { CounterRow, MachineHistory } from './history-store';
+import type { MachineHistory } from './history-store';
 
 export interface AnalysisInput {
   machineId: string;
@@ -49,17 +49,6 @@ export function segmentsOf(history: MachineHistory, from: number, to: number): S
   return result;
 }
 
-/**
- * Produzierte Menge zwischen zwei Zählerständen. Nach einem Reset (neues `resetAt` oder fallender Stand)
- * zählt der neue Stand ab null.
- */
-export function delta(a: CounterRow, b: CounterRow): { good: number; total: number } {
-  if (a.resetAt !== b.resetAt || b.total < a.total || b.good < a.good) {
-    return { good: b.good, total: b.total };
-  }
-  return { good: b.good - a.good, total: b.total - a.total };
-}
-
 const executeIn = (segments: readonly Segment[], start: number, end: number) =>
   segments
     .filter((s) => s.state === 'Execute')
@@ -75,10 +64,12 @@ export function analyse(input: AnalysisInput): MachineAnalysis {
   const produced = input.buckets.map(() => ({ good: 0, total: 0 }));
   let good = 0;
   let total = 0;
+  let implausible = 0;
   history.counters.forEach((b, i) => {
     const a = history.counters[i - 1];
     if (!a || b.ts < from) return;
-    const d = delta(a, b);
+    const d = counterStep(a, b, nominal);
+    if (d.step === 'implausible') implausible += 1;
     good += d.good;
     total += d.total;
     const k = input.buckets.findIndex((x) => b.ts >= x.start && b.ts <= x.end);
@@ -194,6 +185,7 @@ export function analyse(input: AnalysisInput): MachineAnalysis {
     from: iso(from),
     to: iso(to),
     observedFrom: iso(observedFrom),
+    implausibleCounters: implausible,
     kpis: {
       availability,
       performance,

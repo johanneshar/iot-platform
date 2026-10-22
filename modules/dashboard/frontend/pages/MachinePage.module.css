@@ -137,3 +137,12 @@
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
 }
+
+.warning {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-10);
+  align-items: center;
+  font-size: var(--font-size-label);
+  color: var(--color-text-body);
+}

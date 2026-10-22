@@ -37,6 +37,7 @@ function machine(
     quality: 'good',
     lastMessageAt: at(60),
     invalidMessages: 0,
+    implausibleCounters: 0,
     history: { states, counterBaseline: { ts: at(0), good: 0, total: 0 }, recentCounters: [] },
   };
 }

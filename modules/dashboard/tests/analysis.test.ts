@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyse, delta } from '../backend/analysis';
+import { analyse } from '../backend/analysis';
 import { HistoryStore } from '../backend/history-store';
 import { bucketsOf, parsePeriods, retentionMs, windowOf } from '../backend/periods';
 
@@ -81,15 +81,6 @@ describe('Zeiträume (E-37)', () => {
     const days = bucketsOf(new Date(at(-7 * 24 * 60)), new Date(T0), tz);
     expect(days.length).toBeGreaterThanOrEqual(7);
     expect(days.length).toBeLessThanOrEqual(8);
-  });
-});
-
-describe('Zählerdifferenz', () => {
-  it('zählt nach einem Reset ab null', () => {
-    const a = { ts: 0, ...counters(500, 520) };
-    expect(delta(a, { ts: 1, ...counters(600, 630) })).toEqual({ good: 100, total: 110 });
-    expect(delta(a, { ts: 1, ...counters(20, 21, 'neu') })).toEqual({ good: 20, total: 21 });
-    expect(delta(a, { ts: 1, ...counters(10, 12) })).toEqual({ good: 10, total: 12 });
   });
 });
 
@@ -217,5 +208,30 @@ describe('Beobachtungszeitraum', () => {
     expect(result.kpis.plannedMs).toBe(30 * MIN);
     expect(result.kpis.performance).toBeCloseTo(3000 / (100 * 30));
     expect(result.buckets[0]?.rate).toBeNull();
+  });
+});
+
+describe('Unplausible Zählerstände', () => {
+  it('zählt Rücksprünge und unmögliche Sprünge nicht (zwei Quellen, Neustart)', () => {
+    const h = store();
+    h.state('fill', state('Execute'), at(-10));
+    // zwei Quellen mit unterschiedlichen Ständen im Wechsel, dazwischen echte Produktion (100 /min)
+    h.counters('fill', counters(1000, 1000), at(0));
+    h.counters('fill', counters(1100, 1100), at(1));
+    h.counters('fill', counters(60000, 60000), at(2));
+    h.counters('fill', counters(1300, 1300), at(3));
+    h.counters('fill', counters(1400, 1400), at(4));
+    const result = analyse({
+      machineId: 'fill',
+      period: '1h',
+      from: at(0),
+      to: at(4),
+      planned: [{ start: at(0), end: at(4) }],
+      buckets: bucketsOf(new Date(at(0)), new Date(at(4)), 'Europe/Berlin'),
+      history: h.load('fill', at(0), at(4)),
+    });
+    expect(result.kpis.total).toBe(200);
+    expect(result.implausibleCounters).toBe(2);
+    expect(result.kpis.performance).toBeLessThanOrEqual(1);
   });
 });
