@@ -6,7 +6,7 @@ import type { ModuleManifest } from '@iot/module-sdk/manifest';
  */
 export const manifest = {
   id: 'dashboard',
-  version: '0.2.0',
+  version: '0.3.0',
   name: { de: 'Linien-Dashboard', en: 'Line dashboard' },
   description: {
     de: 'PackML-Zustände, Linien-OEE und Engpassanalyse',
@@ -21,7 +21,17 @@ export const manifest = {
     icon: 'overview',
     label: { de: 'Linienübersicht', en: 'Line overview' },
   },
-  routes: [{ path: '', title: { de: 'Linienübersicht', en: 'Line overview' } }],
+  routes: [
+    { path: '', title: { de: 'Linienübersicht', en: 'Line overview' } },
+    // Titel setzt die Seite selbst (Name der Maschine)
+    { path: 'machine', title: { de: 'Maschinendetail', en: 'Machine details' } },
+  ],
+  deepLinks: {
+    machine: {
+      id: 'machineId – öffnet die Detailseite der Maschine',
+      period: 'Zeitraum (optional)',
+    },
+  },
   // Lesen der Linie dürfen alle angemeldeten Benutzer (Rollen und Rechte)
   permissions: [],
 } satisfies Omit<ModuleManifest, 'entry' | 'styles'>;

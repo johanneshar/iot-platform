@@ -69,10 +69,14 @@ export default defineConfig({
       reuseExistingServer: false,
     },
     {
-      command:
-        'pnpm --filter @iot/module-dashboard build && pnpm --filter @iot/module-dashboard start',
+      command: `${fresh(`${E2E_MODULE_DATA}/dashboard`)} && pnpm --filter @iot/module-dashboard build && pnpm --filter @iot/module-dashboard start`,
       url: `${DASHBOARD_MODULE}/entry.js`,
-      env: { MODULE_PORT: '4111', CORE_URL: CORE_BACKEND },
+      env: {
+        MODULE_PORT: '4111',
+        CORE_URL: CORE_BACKEND,
+        MQTT_URL: TEST_BROKER,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/dashboard`,
+      },
       reuseExistingServer: false,
     },
     {

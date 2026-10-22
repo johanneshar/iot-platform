@@ -366,9 +366,15 @@ importers:
 
   modules/dashboard:
     dependencies:
+      '@iot/interface-schema':
+        specifier: workspace:*
+        version: link:../../packages/interface-schema
       '@iot/module-sdk':
         specifier: workspace:*
         version: link:../../packages/module-sdk
+      better-sqlite3:
+        specifier: 13.0.3
+        version: 13.0.3
       fastify:
         specifier: 5.12.7
         version: 5.12.7
@@ -376,6 +382,9 @@ importers:
       '@iot/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@types/better-sqlite3':
+        specifier: 9.6.0
+        version: 9.6.0
       '@types/react':
         specifier: 18.3.31
         version: 18.3.31

@@ -1,6 +1,6 @@
 {
   "name": "@iot/module-dashboard",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Linien-Dashboard – Modul der IoT-Plattform",
@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@iot/module-sdk": "workspace:*",
-    "fastify": "5.12.7"
+    "fastify": "5.12.7",
+    "@iot/interface-schema": "workspace:*",
+    "better-sqlite3": "13.0.3"
   },
   "devDependencies": {
     "@iot/ui": "workspace:*",
@@ -23,6 +25,7 @@
     "react": "18.3.1",
     "react-i18next": "17.1.0",
     "tsx": "4.23.15",
-    "vite": "8.3.4"
+    "vite": "8.3.4",
+    "@types/better-sqlite3": "9.6.0"
   }
 }

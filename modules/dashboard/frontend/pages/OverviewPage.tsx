@@ -7,7 +7,6 @@ import {
   useMachines,
   useNavigate,
   useTranslation,
-  useValues,
   type LineAlarm,
   type MachineSnapshot,
 } from '@iot/module-sdk';
@@ -17,14 +16,11 @@ import {
   Card,
   CardHeader,
   Chip,
-  InfoTile,
   KpiTile,
   LineFlow,
-  StateChip,
   type LineFlowMachine,
 } from '@iot/ui';
-import { useState } from 'react';
-import { formatNumber, formatPercent, formatTime, formatValue } from '../format';
+import { formatNumber, formatPercent, formatTime } from '../format';
 import { lineKpis, machineKpis } from '../kpi/kpi';
 import { MODULE_ID } from '../module-id';
 import { useNow } from '../useNow';
@@ -34,9 +30,7 @@ type T = ReturnType<typeof useTranslation>['t'];
 
 // Ziele der Deep Links (Modul-IDs, CLAUDE.md Abschnitt 4)
 const ALARMS_MODULE = 'alarms';
-const SPARES_MODULE = 'spares';
-const FORMAT_MODULE = 'format';
-const PREDICTION_MODULE = 'predictive-maintenance';
+const MACHINE_PATH = 'machine';
 const TROUBLESHOOTING_MODULE = 'troubleshooting';
 // Einsprungpunkt der Fehlersuche: Alarme mit Fehlerbaum
 const ALARM_TARGET = 'alarm';
@@ -59,7 +53,6 @@ export function OverviewPage() {
   const alarms = useAlarms();
   const navigate = useNavigate();
   const now = useNow();
-  const [selected, setSelected] = useState<string | null>(null);
 
   if (!data || machines.length === 0) {
     return <Card>{t('waiting')}</Card>;
@@ -71,10 +64,10 @@ export function OverviewPage() {
   };
   const kpi = lineKpis(data, now);
   const bottleneck = findBottleneck(data, now);
-  const current =
-    machines.find((m) => m.machineId === selected) ??
-    machines.find((m) => m.machineId === bottleneck) ??
-    machines[0];
+  // Antippen öffnet die Detailseite der Maschine (E-38)
+  const openMachine = (id: string) => {
+    navigate(MODULE_ID, { id }, MACHINE_PATH);
+  };
 
   const flow: LineFlowMachine[] = machines.map((m) => {
     const k = machineKpis(m, now);
@@ -143,12 +136,10 @@ export function OverviewPage() {
         title={t('flow.title')}
         subtitle={t('flow.subtitle')}
         machines={flow}
-        {...(current ? { selectedId: current.machineId } : {})}
-        onSelect={setSelected}
+        onSelect={openMachine}
       />
 
       <div className={styles.row}>
-        {current && <MachineDetails machine={current} onNavigate={navigate} />}
         <ActiveAlarms
           alarms={alarms}
           machines={machines}
@@ -158,108 +149,6 @@ export function OverviewPage() {
         />
       </div>
     </div>
-  );
-}
-
-function MachineDetails({
-  machine,
-  onNavigate,
-}: {
-  machine: MachineSnapshot;
-  onNavigate: ReturnType<typeof useNavigate>;
-}) {
-  const { t, i18n } = useTranslation(MODULE_ID);
-  const lang = i18n.language;
-  const values = useValues(machine.machineId);
-  const own = machine.identity?.manufacturer === 'own';
-  const basic = machine.identity?.conformance === 'basic';
-  const notice = qualityNotice(machine, t);
-  const params = { machine: machine.machineId };
-  const openSpares = () => {
-    onNavigate(SPARES_MODULE, params);
-  };
-  const openFormat = () => {
-    onNavigate(FORMAT_MODULE);
-  };
-  const openPrediction = () => {
-    onNavigate(PREDICTION_MODULE, params);
-  };
-
-  const entries: { label: string; value: string }[] = [];
-  if (basic && machine.state)
-    entries.push({ label: t('details.state'), value: machine.state.state });
-  if (machine.state?.reason)
-    entries.push({ label: t('details.reason'), value: machine.state.reason });
-  for (const v of values) {
-    const name = (v.name as Record<string, string | undefined>)[lang] ?? v.name.de;
-    entries.push({ label: name, value: formatValue(v.value, v.unit, lang) });
-  }
-  if (machine.counters && !own)
-    entries.push({
-      label: t('details.goodCount'),
-      value: formatNumber(machine.counters.good, lang),
-    });
-  if (basic) {
-    const fault = machine.alarms.some((a) => a.alarmId === 'COMMON-FAULT');
-    entries.push({
-      label: t('details.commonFault'),
-      value: fault ? t('details.yes') : t('details.no'),
-    });
-  }
-
-  return (
-    <Card gap="18" className={styles.wide}>
-      <CardHeader
-        eyebrow={t('details.eyebrow')}
-        title={machine.identity?.type ?? machine.machineId}
-        size="detail"
-        aside={
-          <div className={styles.chips}>
-            {machine.state && (
-              <StateChip state={machine.state.state} prefix={t('details.packml')} />
-            )}
-            {notice && <Chip tone={notice.tone}>{notice.label}</Chip>}
-          </div>
-        }
-      />
-      <div className={styles.tiles}>
-        <InfoTile
-          label={t('details.source')}
-          value={machine.identity?.source ?? t('noValue')}
-          size="sm"
-        />
-        <InfoTile
-          label={t('details.level')}
-          value={machine.identity ? t(`level.${machine.identity.conformance}`) : t('noValue')}
-          size="sm"
-        />
-      </div>
-      {entries.length > 0 && (
-        <dl className={styles.values}>
-          {entries.map((e) => (
-            <div key={e.label} className={styles.value}>
-              <dt className={styles.valueLabel}>{e.label}</dt>
-              <dd className={styles.valueText}>{e.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
-      {own ? (
-        <div className={styles.actions}>
-          <Button variant="outline" size="sm" onClick={openSpares}>
-            {t('details.spares')}
-          </Button>
-          <Button variant="outline" size="sm" onClick={openFormat}>
-            {t('details.format')}
-          </Button>
-          <Button variant="outline" size="sm" onClick={openPrediction}>
-            {t('details.prediction')}
-          </Button>
-        </div>
-      ) : (
-        <p className={styles.note}>{t('details.foreignNote')}</p>
-      )}
-    </Card>
   );
 }
 

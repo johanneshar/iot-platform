@@ -18,66 +18,15 @@
   align-items: flex-start;
 }
 
-.wide {
-  flex: 2 1 var(--grid-column-main);
-}
-
 .narrow {
   flex: 1 1 var(--grid-column-side);
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-}
-
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-tile-min), 1fr));
-  gap: var(--space-12);
-}
-
-.values {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-value-min), 1fr));
-  margin: 0;
-  border-top: var(--border-width) solid var(--color-border-subtle);
-}
-
-.value {
-  padding: var(--space-14) var(--space-4);
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
-}
-
-.valueLabel {
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
-}
-
-.valueText {
-  margin: var(--space-4) 0 0;
-  font-size: var(--font-size-detail-title);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-10);
-}
-
-.note,
 .empty {
   margin: 0;
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
-}
-
-.empty {
   padding: var(--space-12) 0;
   font-size: var(--font-size-table);
+  color: var(--color-text-muted);
 }
 
 .alarmHead {

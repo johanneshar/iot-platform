@@ -19,7 +19,7 @@
   },
   "flow": {
     "title": "Linienfluss",
-    "subtitle": "Maschine anklicken für Details · Engpass bestimmt die Linienleistung"
+    "subtitle": "Maschine antippen für Details · Engpass bestimmt die Linienleistung"
   },
   "level": {
     "basic": "Basis",
@@ -54,5 +54,94 @@
     "commonFault": "Sammelstörung",
     "troubleshoot": "Fehlersuche starten",
     "troubleshootLabel": "Fehlersuche starten: {{text}}"
+  },
+  "machine": {
+    "back": "Linienübersicht",
+    "period": "Zeitraum",
+    "loading": "Auswertung wird geladen …",
+    "loadError": "Die Auswertung konnte nicht geladen werden.",
+    "unknown": "Diese Maschine ist auf der Linie nicht bekannt.",
+    "own": "Eigene Maschine",
+    "foreign": "Fremd · {{level}}",
+    "bottleneck": "Engpass",
+    "position": "Position {{position}} von {{count}}",
+    "kpi": {
+      "oee": "OEE Maschine",
+      "target": "Ziel Linie {{value}} %",
+      "noTarget": "kein Ziel hinterlegt",
+      "availability": "Verfügbarkeit",
+      "executeOf": "{{execute}} von {{planned}} in Execute",
+      "performance": "Leistung",
+      "rateOfNominal": "{{rate}} von {{nominal}} /min",
+      "quality": "Qualität",
+      "reject": "Ausschuss {{value}} %",
+      "good": "Gutteile",
+      "goodUnit": "Stk",
+      "badSub": "dazu {{value}} Ausschuss"
+    },
+    "states": {
+      "title": "Zustandsverlauf",
+      "subtitle": "PackML-Zustände {{from}} – {{to}}",
+      "label": "Zustandsverlauf von {{from}} bis {{to}}",
+      "segment": "{{state}} ab {{time}}, {{duration}}",
+      "stops": "Stillstände",
+      "noStops": "Keine Stillstände im Zeitraum.",
+      "col": {
+        "start": "Beginn",
+        "duration": "Dauer",
+        "state": "Zustand",
+        "reason": "Grund (Maschine)",
+        "alarm": "Alarm"
+      }
+    },
+    "rate": {
+      "title": "Leistung",
+      "subtitle": "Stück pro Minute in Execute je {{bucket}}",
+      "label": "Leistung je {{bucket}} in Stück pro Minute",
+      "nominal": "Soll {{value}}"
+    },
+    "reject": {
+      "title": "Ausschuss",
+      "subtitle": "Anteil Schlechtteile in % je {{bucket}}",
+      "label": "Ausschuss je {{bucket}} in Prozent"
+    },
+    "bucket": {
+      "5min": "5 Minuten",
+      "hour": "Stunde",
+      "day": "Tag"
+    },
+    "values": {
+      "title": "Prozesswerte",
+      "subtitle": "Verlauf mit Grenzen aus dem Wertekatalog der Maschine",
+      "gxp": "GxP",
+      "summary": "Ø {{avg}} {{unit}}",
+      "limits": "Grenzen {{min}} – {{max}}",
+      "trend": "Verlauf {{name}}",
+      "outOfLimits": "außerhalb der Grenzen"
+    },
+    "alarms": {
+      "title": "Alarme dieser Maschine",
+      "active": "{{count}} aktiv",
+      "count": "Alarme im Zeitraum",
+      "faults": "davon Störungen",
+      "downtime": "Stillstand durch Störungen",
+      "none": "Keine Alarme im Zeitraum.",
+      "top": "{{duration}} · {{count}}×",
+      "bar": "{{text}}: {{duration}}",
+      "troubleshoot": "Fehlersuche: {{text}}",
+      "all": "Alle Alarme anzeigen →"
+    },
+    "more": {
+      "title": "Weiter in anderen Modulen",
+      "subtitle": "Ersatzteile, Formatwechsel und Wartung zu dieser Maschine",
+      "foreign": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller. Datenumfang gemäß Integrationsstufe."
+    },
+    "basicNote": "Stufe Basis: Zustand, Zähler und Sammelstörung – keine Einzelalarme und Prozesswerte.",
+    "observedFrom": "Daten seit {{time}} – vorher war das Modul nicht in Betrieb"
+  },
+  "duration": {
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "lt1": "< 1 min"
   }
 }

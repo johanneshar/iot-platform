@@ -73,11 +73,6 @@ test('Linienübersicht zeigt die Linie aus dem Simulator wie im Mockup', async (
   await expect(alarms.getByText('3 aktiv')).toBeVisible();
   await expect(alarms.getByText('Wägezelle 3: Tara-Abweichung')).toBeVisible();
 
-  await expect(
-    page.getByRole('heading', { name: 'Füll- und Verschließmaschine', level: 2 }),
-  ).toBeVisible();
-  await expect(page.getByText('10,02 g')).toBeVisible();
-  await expect(page.getByText('S7-1500 · IIoT-Datenbaustein (OPC UA)')).toBeVisible();
   await new AxeBuilder({ page }).analyze().then((r) => {
     expect(r.violations.map((v) => v.id)).toEqual([]);
   });
@@ -100,20 +95,52 @@ test('Kennzahlen entstehen aus den laufenden Zählern; Engpass ist die Füllmasc
     .toBe(true);
 });
 
-test('Maschine auswählen zeigt ihre Details; Fremdmaschinen mit Hinweis', async ({ page }) => {
+test('Maschine antippen öffnet die Detailseite mit Auswertungen (E-38)', async ({ page }) => {
   await openDashboard(page);
-  await page.getByRole('button', { name: /Waschmaschine/ }).click();
-  await expect(page.getByRole('heading', { name: 'Waschmaschine', level: 2 })).toBeVisible();
-  await expect(page.getByText('82,1 °C')).toBeVisible();
+  await page.getByRole('button', { name: /Füll- und Verschließmaschine/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/machine\?id=l1-fill/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Füll- und Verschließmaschine');
+  await expect(page.getByText('S7-1500 · IIoT-Datenbaustein (OPC UA) · Voll (GxP)')).toBeVisible();
+  for (const heading of ['Zustandsverlauf', 'Leistung', 'Ausschuss', 'Prozesswerte']) {
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+  }
+  await expect(page.getByText('OEE Maschine')).toBeVisible();
+  await expect(page.getByText('Füllgewicht Ø')).toBeVisible();
+  await expect(page.getByText('GxP').first()).toBeVisible();
+
+  // Zeiträume aus der Konfiguration (E-37)
+  const periods = page.getByRole('group', { name: 'Zeitraum' });
+  await periods.getByRole('button', { name: '24 Stunden' }).click();
+  await expect(periods.getByRole('button', { name: '24 Stunden' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.getByRole('heading', { name: 'Zustandsverlauf' })).toBeVisible();
+  await new AxeBuilder({ page }).analyze().then((r) => {
+    expect(r.violations.map((v) => v.id)).toEqual([]);
+  });
+
+  await page.getByRole('link', { name: 'Linienübersicht' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Linienübersicht');
+});
+
+test('Fremdmaschine der Stufe Basis: Detailseite ohne Prozesswerte (E-39)', async ({ page }) => {
+  await openDashboard(page);
+  await page.getByRole('button', { name: /Sterilisationstunnel/ }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sterilisationstunnel');
+  await expect(page.getByText('Fremd · Basis')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Zustandsverlauf' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Prozesswerte' })).toHaveCount(0);
+  await expect(page.getByText(/Stufe Basis: Zustand, Zähler und Sammelstörung/)).toBeVisible();
   await expect(page.getByText(/Fremdmaschine: Ersatzteile und Service/)).toBeVisible();
 });
 
-test('Deep Link aus den Details führt über die Shell zum Zielmodul', async ({ page }) => {
+test('Deep Link aus der Detailseite führt über die Shell zum Zielmodul', async ({ page }) => {
   await openDashboard(page);
   await page.getByRole('button', { name: /Füll- und Verschließmaschine/ }).click();
   await page.getByRole('button', { name: 'Ersatzteile dieser Maschine' }).click();
   await expect(page).toHaveURL(/\/spares\?machine=l1-fill/);
-  // Ersatzteilkatalog ist gebucht, aber in M4 noch nicht installiert
+  // Ersatzteilkatalog ist gebucht, aber noch nicht installiert
   await expect(
     page.getByText('„Ersatzteilkatalog“ ist auf dem Edge Device dieser Linie nicht installiert.'),
   ).toBeVisible();

@@ -54,5 +54,94 @@
     "commonFault": "Common fault",
     "troubleshoot": "Start troubleshooting",
     "troubleshootLabel": "Start troubleshooting: {{text}}"
+  },
+  "machine": {
+    "back": "Line overview",
+    "period": "Period",
+    "loading": "Loading analysis …",
+    "loadError": "The analysis could not be loaded.",
+    "unknown": "This machine is not known on the line.",
+    "own": "Own machine",
+    "foreign": "Third-party · {{level}}",
+    "bottleneck": "Bottleneck",
+    "position": "Position {{position}} of {{count}}",
+    "kpi": {
+      "oee": "Machine OEE",
+      "target": "Line target {{value}} %",
+      "noTarget": "no target set",
+      "availability": "Availability",
+      "executeOf": "{{execute}} of {{planned}} in Execute",
+      "performance": "Performance",
+      "rateOfNominal": "{{rate}} of {{nominal}} /min",
+      "quality": "Quality",
+      "reject": "Reject {{value}} %",
+      "good": "Good parts",
+      "goodUnit": "pcs",
+      "badSub": "plus {{value}} rejects"
+    },
+    "states": {
+      "title": "State history",
+      "subtitle": "PackML states {{from}} – {{to}}",
+      "label": "State history from {{from}} to {{to}}",
+      "segment": "{{state}} from {{time}}, {{duration}}",
+      "stops": "Stops",
+      "noStops": "No stops in this period.",
+      "col": {
+        "start": "Start",
+        "duration": "Duration",
+        "state": "State",
+        "reason": "Reason (machine)",
+        "alarm": "Alarm"
+      }
+    },
+    "rate": {
+      "title": "Performance",
+      "subtitle": "Pieces per minute in Execute per {{bucket}}",
+      "label": "Performance per {{bucket}} in pieces per minute",
+      "nominal": "Nominal {{value}}"
+    },
+    "reject": {
+      "title": "Rejects",
+      "subtitle": "Share of rejects in % per {{bucket}}",
+      "label": "Rejects per {{bucket}} in percent"
+    },
+    "bucket": {
+      "5min": "5 minutes",
+      "hour": "hour",
+      "day": "day"
+    },
+    "values": {
+      "title": "Process values",
+      "subtitle": "History with limits from the machine's value catalogue",
+      "gxp": "GxP",
+      "summary": "Ø {{avg}} {{unit}}",
+      "limits": "Limits {{min}} – {{max}}",
+      "trend": "History {{name}}",
+      "outOfLimits": "outside the limits"
+    },
+    "alarms": {
+      "title": "Alarms of this machine",
+      "active": "{{count}} active",
+      "count": "Alarms in period",
+      "faults": "of which faults",
+      "downtime": "Downtime from faults",
+      "none": "No alarms in this period.",
+      "top": "{{duration}} · {{count}}×",
+      "bar": "{{text}}: {{duration}}",
+      "troubleshoot": "Troubleshoot: {{text}}",
+      "all": "Show all alarms →"
+    },
+    "more": {
+      "title": "More in other modules",
+      "subtitle": "Spare parts, format change and maintenance for this machine",
+      "foreign": "Third-party machine: spare parts and service via the respective manufacturer. Data scope according to integration level."
+    },
+    "basicNote": "Level basic: state, counters and common fault – no individual alarms or process values.",
+    "observedFrom": "Data since {{time}} – the module was not running before"
+  },
+  "duration": {
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "lt1": "< 1 min"
   }
 }
