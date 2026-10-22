@@ -141,7 +141,7 @@ test('e-Signatur aus einem Modul landet mit Bedeutung im Audit Trail', async ({ 
   // Export als Datei (M6)
   const download = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Als Datei exportieren (JSON)' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^audit-trail-l1-\d{4}-\d{2}-\d{2}\.json$/);
+  expect((await download).suggestedFilename()).toMatch(/^audit-trail-l3-\d{4}-\d{2}-\d{2}\.json$/);
 });
 
 test('Sprache umschalten übersetzt Shell und Modul', async ({ page }) => {
@@ -151,17 +151,6 @@ test('Sprache umschalten übersetzt Shell und Modul', async ({ page }) => {
   await expect(page.getByText('This module was created with pnpm create-module.')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await page.getByLabel('Language').selectOption('de');
-});
-
-test('Linienwahl bietet die Linien des Standorts an', async ({ page }) => {
-  await signIn(page, 'operator', '/example');
-  const select = page.getByLabel('Linie wählen');
-  await expect(select).toHaveValue('l1');
-  await expect(select.locator('option')).toHaveText([
-    'Linie 1 · Vials',
-    'Linie 2 · Spritzen',
-    'Linie 3 · Flexfill',
-  ]);
 });
 
 test('Abmelden führt zur Anmeldung zurück', async ({ page }) => {

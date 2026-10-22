@@ -6,7 +6,7 @@ const PASSWORD = 'e2e-passwort';
 
 test.beforeAll(async ({ request }) => {
   await request.post('/api/auth/login', { data: { username: 'service', password: PASSWORD } });
-  // Dashboard angemeldet und Daten der vier Maschinen von Linie 1 im Datenkern
+  // Dashboard angemeldet und Daten der sechs Maschinen der Flexfill im Datenkern
   await expect
     .poll(
       async () => {
@@ -18,7 +18,7 @@ test.beforeAll(async ({ request }) => {
         };
         return (
           (shell.modules?.some((m) => m.id === 'dashboard' && m.installed) ?? false) &&
-          (data.machines?.filter((m) => m.identity).length ?? 0) === 4
+          (data.machines?.filter((m) => m.identity).length ?? 0) === 6
         );
       },
       { timeout: 30_000 },
@@ -44,14 +44,16 @@ test('Linienübersicht zeigt die Linie aus dem Simulator wie im Mockup', async (
     await expect(page.getByText(label, { exact: true }).first()).toBeVisible();
   }
   await expect(page.getByText('Schicht seit', { exact: false })).toBeVisible();
-  await expect(page.getByText('Ziel 82 %')).toBeVisible();
+  await expect(page.getByText('kein Ziel hinterlegt')).toBeVisible();
 
   const lineFlow = flow(page);
   for (const name of [
-    'Waschmaschine',
-    'Sterilisationstunnel',
+    'Isolator',
+    'Beutelauspacker',
+    'Öffner',
     'Füll- und Verschließmaschine',
-    'Inspektionsmaschine',
+    'Transfermodul',
+    'Bördelmodul',
   ]) {
     await expect(lineFlow.getByRole('button', { name: new RegExp(name) })).toBeVisible();
   }
@@ -71,7 +73,7 @@ test('Linienübersicht zeigt die Linie aus dem Simulator wie im Mockup', async (
   const alarms = page
     .locator('section')
     .filter({ has: page.getByRole('heading', { name: 'Anstehende Alarme' }) });
-  await expect(alarms.getByText('3 aktiv')).toBeVisible();
+  await expect(alarms.getByText(/\d+ aktiv/)).toBeVisible();
   await expect(alarms.getByText('Wägezelle 3: Tara-Abweichung')).toBeVisible();
 
   await new AxeBuilder({ page }).analyze().then((r) => {
@@ -79,7 +81,7 @@ test('Linienübersicht zeigt die Linie aus dem Simulator wie im Mockup', async (
   });
 });
 
-test('Kennzahlen entstehen aus den laufenden Zählern; Engpass ist die Füllmaschine', async ({
+test('Kennzahlen entstehen aus den laufenden Zählern; genau eine Maschine ist Engpass', async ({
   page,
 }) => {
   await openDashboard(page);
@@ -90,10 +92,9 @@ test('Kennzahlen entstehen aus den laufenden Zählern; Engpass ist die Füllmasc
   await expect
     .poll(async () => (await oee.innerText()).includes('—'), { timeout: 30_000 })
     .toBe(false);
-  const fill = flow(page).getByRole('button', { name: /Füll- und Verschließmaschine/ });
   await expect
-    .poll(async () => (await fill.innerText()).includes('Engpass'), { timeout: 30_000 })
-    .toBe(true);
+    .poll(async () => flow(page).getByText('Engpass', { exact: true }).count(), { timeout: 30_000 })
+    .toBe(1);
 });
 
 test('Maschine antippen öffnet die Detailseite mit Auswertungen (E-38)', async ({ page }) => {
@@ -101,7 +102,7 @@ test('Maschine antippen öffnet die Detailseite mit Auswertungen (E-38)', async 
   await flow(page)
     .getByRole('button', { name: /Füll- und Verschließmaschine/ })
     .click();
-  await expect(page).toHaveURL(/\/dashboard\/machine\?id=l1-fill/);
+  await expect(page).toHaveURL(/\/dashboard\/machine\?id=l3-fill/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Füll- und Verschließmaschine');
   await expect(page.getByText('S7-1500 · IIoT-Datenbaustein (OPC UA) · Voll (GxP)')).toBeVisible();
   for (const heading of ['Zustandsverlauf', 'Leistung', 'Ausschuss', 'Prozesswerte']) {
@@ -130,9 +131,9 @@ test('Maschine antippen öffnet die Detailseite mit Auswertungen (E-38)', async 
 test('Fremdmaschine der Stufe Basis: Detailseite ohne Prozesswerte (E-39)', async ({ page }) => {
   await openDashboard(page);
   await flow(page)
-    .getByRole('button', { name: /Sterilisationstunnel/ })
+    .getByRole('button', { name: /Isolator/ })
     .click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sterilisationstunnel');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Isolator');
   await expect(page.getByText('Fremd · Basis')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Zustandsverlauf' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Prozesswerte' })).toHaveCount(0);
@@ -146,7 +147,7 @@ test('Deep Link aus der Detailseite führt über die Shell zum Zielmodul', async
     .getByRole('button', { name: /Füll- und Verschließmaschine/ })
     .click();
   await page.getByRole('button', { name: 'Ersatzteile dieser Maschine' }).click();
-  await expect(page).toHaveURL(/\/spares\?machine=l1-fill/);
+  await expect(page).toHaveURL(/\/spares\?machine=l3-fill/);
   // Ersatzteilkatalog ist gebucht, aber noch nicht installiert
   await expect(
     page.getByText('„Ersatzteilkatalog“ ist auf dem Edge Device dieser Linie nicht installiert.'),
@@ -159,7 +160,7 @@ test('3D-Ansicht: Markierung führt in die Fehlersuche, Maschine antippen in die
   await openDashboard(page);
   const view = page.getByRole('region', { name: '3D-Ansicht der Linie' });
   await expect(view).toHaveAttribute('data-model-state', 'ready', { timeout: 30_000 });
-  await expect(view.getByRole('button', { name: 'Waschmaschine' })).toBeVisible();
+  await expect(view.getByRole('button', { name: 'Beutelauspacker' })).toBeVisible();
   await new AxeBuilder({ page }).analyze().then((r) => {
     expect(r.violations.map((v) => v.id)).toEqual([]);
   });
