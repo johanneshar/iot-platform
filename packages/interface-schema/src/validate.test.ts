@@ -110,6 +110,13 @@ describe('Datenklassen', () => {
     expect(validateData('identity', withoutRate).valid).toBe(false);
   });
 
+  it('identity: Datenquelle ist optional (S-07)', () => {
+    expect(
+      validateData('identity', { ...examples.identity, source: 'OPC UA · PackML-Tags' }).valid,
+    ).toBe(true);
+    expect(validateData('identity', { ...examples.identity, source: '' }).valid).toBe(false);
+  });
+
   it('counters: basic ohne Schlechtzähler ist gültig', () => {
     expect(
       validateData('counters', { good: 58020, total: 58020, resetAt: '2026-10-21T04:00:00Z' })

@@ -15,14 +15,23 @@
     "nominalRate"
   ],
   "properties": {
-    "type": { "description": "Maschinentyp im Klartext", "type": "string", "minLength": 1 },
+    "type": {
+      "description": "Maschinentyp im Klartext",
+      "type": "string",
+      "minLength": 1
+    },
     "manufacturer": {
       "description": "own für eigene Maschinen, sonst der Herstellername",
       "type": "string",
       "minLength": 1
     },
-    "serial": { "type": "string", "minLength": 1 },
-    "lineId": { "$ref": "common.schema.json#/$defs/id" },
+    "serial": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lineId": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
     "position": {
       "description": "Position in der Linie, beginnend bei 1",
       "type": "integer",
@@ -33,11 +42,18 @@
       "type": "string",
       "pattern": "^1\\.[0-9]+$"
     },
-    "conformance": { "$ref": "common.schema.json#/$defs/conformance" },
+    "conformance": {
+      "$ref": "common.schema.json#/$defs/conformance"
+    },
     "nominalRate": {
       "description": "Sollleistung in Stück pro Minute – Grundlage der OEE-Leistung (S-03)",
       "type": "number",
       "exclusiveMinimum": 0
+    },
+    "source": {
+      "description": "Anbindung der Maschine im Klartext, z. B. „OPC UA · PackML-Tags“ – optional, setzt der Normalizer aus der Mapping-Datei (S-07)",
+      "type": "string",
+      "minLength": 1
     }
   },
   "additionalProperties": false

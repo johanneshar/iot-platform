@@ -82,6 +82,10 @@ export interface IdentityData {
    * Sollleistung in Stück pro Minute – Grundlage der OEE-Leistung (S-03)
    */
   nominalRate: number;
+  /**
+   * Anbindung der Maschine im Klartext, z. B. „OPC UA · PackML-Tags“ – optional, setzt der Normalizer aus der Mapping-Datei (S-07)
+   */
+  source?: string;
 }
 /**
  * Topic meta (retained): Katalog der Prozesswerte. Nur Schlüssel aus diesem Katalog sind in values zulässig.
