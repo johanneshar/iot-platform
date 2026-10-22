@@ -1,0 +1,37 @@
+{
+  "loading": "Fehlerbäume werden geladen …",
+  "loadError": "Die Fehlerbäume konnten nicht geladen werden.",
+  "noTreeForAlarm": "Zu diesem Alarm ist kein Fehlerbaum hinterlegt.",
+  "choose": {
+    "alarmTitle": "Zu aktivem Alarm",
+    "alarmText": "Die Fehlersuche startet mit dem Kontext des Alarms.",
+    "noAlarm": "Kein aktiver Alarm mit hinterlegtem Fehlerbaum.",
+    "symptomTitle": "Nach Symptom",
+    "symptomText": "Alle hinterlegten Fehlerbäume der Linie.",
+    "noTrees": "Für die Maschinen dieser Linie sind keine Fehlerbäume hinterlegt."
+  },
+  "step": {
+    "number": "Schritt {{number}}",
+    "hint": "Hinweis: {{hint}}",
+    "media": "[Bild oder 3D-Ansicht der Baugruppe]",
+    "yes": "Ja",
+    "no": "Nein",
+    "solution": "Lösung",
+    "part": "Ersatzteil {{part}} anzeigen",
+    "document": "Lösung dokumentieren",
+    "documented": "Dokumentiert.",
+    "documentedText": "Lösungsweg ist im Störungsverlauf gespeichert und verbessert die Trefferquote des Fehlerbaums.",
+    "documentError": "Der Lösungsweg konnte nicht gespeichert werden.",
+    "back": "← Schritt zurück",
+    "restart": "Neu starten",
+    "exit": "Andere Störung wählen"
+  },
+  "trail": {
+    "title": "Bisheriger Weg",
+    "empty": "Noch keine Antworten.",
+    "label": "Bisherige Antworten",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "commonFault": "Sammelstörung"
+}

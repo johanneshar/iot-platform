@@ -1,0 +1,43 @@
+/* Aufbau nach Mockup „Geführte Fehlersuche“ */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: flex-start;
+}
+
+.half {
+  flex: 1 1 var(--grid-column-half);
+}
+
+.wide {
+  flex: 2 1 var(--grid-column-main-md);
+}
+
+.narrow {
+  flex: 1 1 var(--grid-column-side);
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--font-size-table);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
+
+.answer {
+  min-width: var(--size-choice-min-width);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  padding-top: var(--space-16);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}

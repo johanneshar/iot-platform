@@ -1,0 +1,61 @@
+{
+  "id": "verschluss",
+  "version": 1,
+  "title": {
+    "de": "Verschlusszuführung: Füllstand niedrig"
+  },
+  "machineType": "Füll- und Verschließmaschine",
+  "alarmIds": ["FILL-CAP-0001"],
+  "start": "q1",
+  "nodes": {
+    "q1": {
+      "type": "question",
+      "text": {
+        "de": "Ist der Vorratsbehälter der Verschlüsse ausreichend befüllt?"
+      },
+      "hint": {
+        "de": "Füllstand am Schauglas des Vorratsbehälters"
+      },
+      "yes": "q2",
+      "no": "r1"
+    },
+    "q2": {
+      "type": "question",
+      "text": {
+        "de": "Laufen die Verschlüsse gleichmäßig über die Sortierschiene?"
+      },
+      "hint": {
+        "de": "Sortierschiene bei laufendem Vibrationsförderer beobachten"
+      },
+      "yes": "r3",
+      "no": "r2"
+    },
+    "r1": {
+      "type": "result",
+      "text": {
+        "de": "Verschlüsse nachfüllen"
+      },
+      "detail": {
+        "de": "Verschlüsse nachfüllen und Komponentencharge im Batch erfassen."
+      }
+    },
+    "r2": {
+      "type": "result",
+      "text": {
+        "de": "Sortierschiene reinigen, Förderer einstellen"
+      },
+      "detail": {
+        "de": "Schiene reinigen, Amplitude des Vibrationsförderers laut Rezept prüfen."
+      }
+    },
+    "r3": {
+      "type": "result",
+      "text": {
+        "de": "Füllstandssensor prüfen"
+      },
+      "detail": {
+        "de": "Sensor B214 reinigen und Schaltpunkt kontrollieren."
+      }
+    }
+  }
+}

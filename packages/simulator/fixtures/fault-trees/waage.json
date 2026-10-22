@@ -1,0 +1,83 @@
+{
+  "id": "waage",
+  "version": 1,
+  "title": {
+    "de": "Wägezelle 3: Tara-Abweichung"
+  },
+  "machineType": "Füll- und Verschließmaschine",
+  "alarmIds": ["FILL-WGT-0003"],
+  "start": "q1",
+  "nodes": {
+    "q1": {
+      "type": "question",
+      "text": {
+        "de": "Ist die Wägezelle frei von Glasbruch und Produktresten?"
+      },
+      "hint": {
+        "de": "Sichtprüfung über den Handschuheingriff am Isolator"
+      },
+      "yes": "q2",
+      "no": "r1"
+    },
+    "q2": {
+      "type": "question",
+      "text": {
+        "de": "Liegt die Abweichung nach erneutem Tarieren weiterhin über 0,05 g?"
+      },
+      "hint": {
+        "de": "Tarieren über HMI › Wägung › Tara"
+      },
+      "yes": "q3",
+      "no": "r2"
+    },
+    "q3": {
+      "type": "question",
+      "text": {
+        "de": "Sind Anschlusskabel und Stecker der Wägezelle unbeschädigt?"
+      },
+      "hint": {
+        "de": "Stecker X12 am Wägemodul prüfen"
+      },
+      "yes": "r4",
+      "no": "r3"
+    },
+    "r1": {
+      "type": "result",
+      "text": {
+        "de": "Wägezelle reinigen und neu tarieren"
+      },
+      "detail": {
+        "de": "Reinigung gemäß SOP [Nr.], danach Tara-Ermittlung und Kontrollwägung mit 10 Behältern."
+      }
+    },
+    "r2": {
+      "type": "result",
+      "text": {
+        "de": "Drift der Wägezelle"
+      },
+      "detail": {
+        "de": "Tarierintervall im Rezept von 30 auf 15 min verkürzen und Verlauf beobachten."
+      }
+    },
+    "r3": {
+      "type": "result",
+      "text": {
+        "de": "Anschlusskabel tauschen"
+      },
+      "detail": {
+        "de": "Kabel ersetzen und Kalibrierung mit Prüfgewicht kontrollieren."
+      },
+      "part": "ET-50112"
+    },
+    "r4": {
+      "type": "result",
+      "text": {
+        "de": "Wägezelle tauschen"
+      },
+      "detail": {
+        "de": "Wägezelle tauschen und mit Prüfgewichten kalibrieren; Freigabe durch QA."
+      },
+      "part": "ET-50100"
+    }
+  }
+}

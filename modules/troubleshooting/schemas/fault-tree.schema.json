@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/fault-tree.schema.json",
+  "title": "FaultTree",
+  "description": "Fehlerbaum der geführten Fehlersuche (ADR-007): Ja/Nein-Fragen bis zur Lösung, zugeordnet zu stabilen alarmIds.",
+  "type": "object",
+  "required": ["id", "version", "title", "machineType", "alarmIds", "start", "nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "$ref": "#/$defs/text"
+    },
+    "machineType": {
+      "description": "Maschinentyp wie in identity.type",
+      "type": "string",
+      "minLength": 1
+    },
+    "alarmIds": {
+      "description": "Alarme, zu denen dieser Baum passt",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$"
+      }
+    },
+    "start": {
+      "type": "string"
+    },
+    "nodes": {
+      "type": "object",
+      "minProperties": 2,
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/question"
+          },
+          {
+            "$ref": "#/$defs/result"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "object",
+      "required": ["de"],
+      "properties": {
+        "de": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "propertyNames": {
+        "pattern": "^[a-z]{2}$"
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["type", "text", "yes", "no"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "question"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "hint": {
+          "$ref": "#/$defs/text"
+        },
+        "media": {
+          "description": "Bild oder 3D-Ansicht der Baugruppe (Adresse); fehlt = Platzhalter",
+          "type": "string"
+        },
+        "yes": {
+          "type": "string"
+        },
+        "no": {
+          "type": "string"
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "required": ["type", "text", "detail"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "result"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "detail": {
+          "$ref": "#/$defs/text"
+        },
+        "part": {
+          "description": "Teilenummer für den Deep Link zum Ersatzteilkatalog",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

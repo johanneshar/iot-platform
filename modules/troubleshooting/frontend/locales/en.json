@@ -1,0 +1,37 @@
+{
+  "loading": "Loading fault trees …",
+  "loadError": "The fault trees could not be loaded.",
+  "noTreeForAlarm": "There is no fault tree for this alarm.",
+  "choose": {
+    "alarmTitle": "From an active alarm",
+    "alarmText": "Troubleshooting starts with the context of the alarm.",
+    "noAlarm": "No active alarm with a fault tree.",
+    "symptomTitle": "By symptom",
+    "symptomText": "All fault trees for this line.",
+    "noTrees": "There are no fault trees for the machines of this line."
+  },
+  "step": {
+    "number": "Step {{number}}",
+    "hint": "Hint: {{hint}}",
+    "media": "[Image or 3D view of the assembly]",
+    "yes": "Yes",
+    "no": "No",
+    "solution": "Solution",
+    "part": "Show spare part {{part}}",
+    "document": "Document solution",
+    "documented": "Documented.",
+    "documentedText": "The solution path is stored in the fault history and improves the hit rate of the fault tree.",
+    "documentError": "The solution path could not be saved.",
+    "back": "← Step back",
+    "restart": "Restart",
+    "exit": "Choose another fault"
+  },
+  "trail": {
+    "title": "Path so far",
+    "empty": "No answers yet.",
+    "label": "Answers so far",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "commonFault": "Common fault"
+}

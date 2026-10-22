@@ -1,0 +1,83 @@
+{
+  "id": "stopfen",
+  "version": 1,
+  "title": {
+    "de": "Stopfensetzer: Blockade erkannt"
+  },
+  "machineType": "Füll- und Verschließmaschine",
+  "alarmIds": ["FILL-STP-0001"],
+  "start": "q1",
+  "nodes": {
+    "q1": {
+      "type": "question",
+      "text": {
+        "de": "Ist ein Stopfen in der Übergabe sichtbar verklemmt?"
+      },
+      "hint": {
+        "de": "Übergabestation über Isolatorscheibe prüfen"
+      },
+      "yes": "r1",
+      "no": "q2"
+    },
+    "q2": {
+      "type": "question",
+      "text": {
+        "de": "Erreicht das Vakuum am Saugnapf den Sollwert von 0,6 bar?"
+      },
+      "hint": {
+        "de": "Istwert unter HMI › Stopfensetzer › Vakuum"
+      },
+      "yes": "r2",
+      "no": "q3"
+    },
+    "q3": {
+      "type": "question",
+      "text": {
+        "de": "Sind die Saugnäpfe sichtbar verschlissen oder rissig?"
+      },
+      "hint": {
+        "de": "Sichtprüfung beim nächsten Handschuheingriff"
+      },
+      "yes": "r3",
+      "no": "r4"
+    },
+    "r1": {
+      "type": "result",
+      "text": {
+        "de": "Stopfen entfernen"
+      },
+      "detail": {
+        "de": "Stopfen entfernen, betroffene Behälter als Ausschuss markieren, Achse referenzieren."
+      }
+    },
+    "r2": {
+      "type": "result",
+      "text": {
+        "de": "Achse referenzieren"
+      },
+      "detail": {
+        "de": "Stopfensetzer-Achse neu referenzieren und Probelauf mit 20 Behältern."
+      }
+    },
+    "r3": {
+      "type": "result",
+      "text": {
+        "de": "Saugnapf-Set tauschen"
+      },
+      "detail": {
+        "de": "Saugnäpfe tauschen; Vakuumtest im Anschluss."
+      },
+      "part": "ET-30905"
+    },
+    "r4": {
+      "type": "result",
+      "text": {
+        "de": "Vakuumpumpe prüfen"
+      },
+      "detail": {
+        "de": "Leistung der Vakuumpumpe prüfen und ggf. tauschen."
+      },
+      "part": "ET-30871"
+    }
+  }
+}
