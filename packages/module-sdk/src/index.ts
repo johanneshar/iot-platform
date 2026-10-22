@@ -24,6 +24,7 @@ export {
   type Permission,
 } from './manifest/manifest';
 export { validateManifest, type ManifestResult } from './manifest/validate-manifest';
+export { RESERVED_MODULE_IDS, SHARED_MODULES } from './manifest/shared-modules';
 export {
   ShellContext,
   useDeepLinkParams,

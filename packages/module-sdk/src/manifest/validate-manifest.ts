@@ -4,6 +4,7 @@ import {
   NAV_SECTIONS,
   type ModuleManifest,
 } from './manifest';
+import { RESERVED_MODULE_IDS } from './shared-modules';
 
 const ID = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 const SEMVER = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
@@ -33,6 +34,8 @@ export function validateManifest(input: unknown): ManifestResult {
   const m = input;
 
   if (typeof m['id'] !== 'string' || !ID.test(m['id'])) errors.push('id: kebab-case erwartet');
+  else if ((RESERVED_MODULE_IDS as readonly string[]).includes(m['id']))
+    errors.push(`id: „${m['id']}“ ist für die Shell reserviert`);
   if (typeof m['version'] !== 'string' || !SEMVER.test(m['version']))
     errors.push('version: SemVer erwartet');
   if (!isText(m['name'])) errors.push('name: Text mit „de“ erwartet');

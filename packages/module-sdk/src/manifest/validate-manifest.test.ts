@@ -36,6 +36,11 @@ describe('validateManifest', () => {
     expect(validateManifest({ ...valid, name: { en: 'Example' } }).ok).toBe(false);
   });
 
+  it('lehnt reservierte IDs ab', () => {
+    const result = validateManifest({ ...valid, id: 'baukasten', permissions: [] });
+    expect(result.ok).toBe(false);
+  });
+
   it('verlangt die Adresse des Einstiegsmoduls', () => {
     expect(validateManifest({ ...valid, entry: '' }).ok).toBe(false);
   });
