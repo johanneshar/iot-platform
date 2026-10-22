@@ -29,6 +29,8 @@ export const RUN_PHASE_MS = 9 * 60_000;
  */
 export const BATCH_RUN_MS = 15 * 60_000;
 export const BATCH_PAUSE_MS = 2 * 60_000;
+/** Produktname laut Mockup (Platzhalter, S-10) */
+export const PRODUCT_NAME = '[Produktname]';
 
 const LEVEL: Record<string, Conformance> = {
   Basis: 'basic',
@@ -257,6 +259,10 @@ export interface SimMachine {
     start: string;
     recipe: { id: string; version: number };
     formatParts: string[];
+    /** S-10; im Mockup nur der Platzhalter „[Produktname]“ */
+    productName: string;
+    /** S-10; Annahme: aus Menge und Fortschritt des Mockups abgeleitet */
+    targetQuantity: number;
   };
 }
 
@@ -346,6 +352,14 @@ function buildMachine(line: FixtureLine, machine: FixtureMachine, index: number)
             start: line.batch.start,
             recipe: { id: recipe.id, version: recipe.version },
             formatParts: recipe.formatParts,
+            productName: PRODUCT_NAME,
+            // Annahme: Sollmenge = (gut + schlecht) ÷ Fortschritt aus dem Mockup, auf 100 gerundet
+            targetQuantity:
+              Math.round(
+                (parseGermanNumber(line.batch.good) + parseGermanNumber(line.batch.bad)) /
+                  (line.batch.progress / 100) /
+                  100,
+              ) * 100,
           },
         }
       : {}),

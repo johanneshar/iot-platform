@@ -8,6 +8,7 @@ import {
   type SimMachine,
 } from './config';
 import {
+  activeAlarmsMessage,
   alarmEvent,
   batchEvent,
   countersFor,
@@ -28,11 +29,6 @@ export interface SimulatorOptions {
   valuesIntervalMs?: number;
   /** Zustandswechsel stehender Maschinen (O-24); aus = Schnappschuss wie im Mockup */
   cycle?: boolean;
-  /**
-   * Anstehende Alarme mit ihrem ursprünglichen Zeitstempel wiederholen (0 = aus). Alarme sind nicht
-   * retained; so sieht auch ein später gestarteter Core oder ein Modul, was ansteht (O-25).
-   */
-  alarmRepeatMs?: number;
   /** Batch-Zyklus (M6); aus = nur der Batch aus dem Mockup */
   batchCycle?: boolean;
   /** Laufzeit und Pause im Batch-Zyklus (Standard: BATCH_RUN_MS, BATCH_PAUSE_MS) */
@@ -57,6 +53,8 @@ interface Runtime {
 interface LineBatch {
   line: SimLine;
   batchId: string;
+  startedAt: Date;
+  targetQuantity: number;
   running: boolean;
   /** Beginn der aktuellen Phase (Lauf oder Pause) */
   since: number;
@@ -120,14 +118,6 @@ export class Simulator {
         this.tickValues();
       }, this.options.valuesIntervalMs ?? 10_000),
     );
-    const repeat = this.options.alarmRepeatMs ?? 30_000;
-    if (repeat > 0) {
-      this.timers.push(
-        setInterval(() => {
-          this.tickAlarms();
-        }, repeat),
-      );
-    }
     if (this.options.batchCycle ?? true) {
       this.batches = this.lines
         .map((line) => ({ line, batch: line.machines.find((m) => m.batch)?.batch }))
@@ -135,6 +125,8 @@ export class Simulator {
         .map(({ line, batch }) => ({
           line,
           batchId: batch?.id ?? '',
+          startedAt: local(batch?.start ?? '00:00', now),
+          targetQuantity: batch?.targetQuantity ?? 0,
           running: true,
           since: now.getTime(),
         }));
@@ -202,6 +194,10 @@ export class Simulator {
         if (running) this.active.set(key, { machine, alarm, at: now });
         else this.active.delete(key);
       }
+      if (machine.alarms.some((a) => a.active)) {
+        const own = [...this.active.values()].filter((a) => a.machine === machine);
+        this.publish(activeAlarmsMessage(machine, own, now));
+      }
     }
   }
 
@@ -213,13 +209,20 @@ export class Simulator {
       const machines = b.line.machines.filter((m) => m.batch);
       if (b.running && elapsed >= (this.options.batchRunMs ?? BATCH_RUN_MS)) {
         for (const m of machines) {
-          const out = batchEvent(m, 'ended', b.batchId, now);
+          const out = batchEvent(m, 'ended', b, now);
           if (out) this.publish(out);
         }
         b.running = false;
         b.since = now.getTime();
       } else if (!b.running && elapsed >= (this.options.batchPauseMs ?? BATCH_PAUSE_MS)) {
         b.batchId = nextBatchId(b.batchId);
+        b.startedAt = now;
+        // Annahme: Sollmenge = was die Linie in einem Batch-Lauf schafft (Leistung der ersten Maschine)
+        const first = machines[0];
+        const rate = first ? (first.cycle?.runRate ?? first.rate) : 0;
+        b.targetQuantity =
+          Math.round((rate * (this.options.batchRunMs ?? BATCH_RUN_MS)) / 60_000 / 100) * 100 ||
+          100;
         b.running = true;
         b.since = now.getTime();
         for (const runtime of this.runtimes.filter((r) => machines.includes(r.machine))) {
@@ -230,17 +233,10 @@ export class Simulator {
           this.publish(countersFor(runtime.machine, 0, now, runtime.counterBase));
         }
         for (const m of machines) {
-          const out = batchEvent(m, 'started', b.batchId, now);
+          const out = batchEvent(m, 'started', b, now);
           if (out) this.publish(out);
         }
       }
-    }
-  }
-
-  /** Anstehende Alarme erneut melden – gleiche Nachricht, gleicher Zeitstempel der Quelle. */
-  tickAlarms(): void {
-    for (const { machine, alarm, at } of this.active.values()) {
-      this.publish(alarmEvent(machine, alarm, 'raised', at));
     }
   }
 

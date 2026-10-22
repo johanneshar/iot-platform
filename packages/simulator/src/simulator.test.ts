@@ -67,7 +67,11 @@ describe('Schemakonformität', () => {
   it('setzt retained nach Spezifikation', () => {
     for (const o of all) {
       const dataClass = parseTopic(o.topic)?.dataClass;
-      expect(o.retain).toBe(['identity', 'meta', 'state', 'counters'].includes(dataClass ?? ''));
+      expect(o.retain).toBe(
+        ['identity', 'meta', 'state', 'counters', 'activeAlarms', 'batch'].includes(
+          dataClass ?? '',
+        ),
+      );
     }
   });
 
@@ -87,7 +91,9 @@ describe('Schemakonformität', () => {
 describe('Konformitätsstufen', () => {
   it('basic: nur Identität, Zustand, Zähler (gut/gesamt) und Sammelstörung', () => {
     const out = startupMessages(byId('l1-tunnel'), NOW);
-    expect(classes(out)).toEqual(new Set(['identity', 'state', 'counters', 'alarms']));
+    expect(classes(out)).toEqual(
+      new Set(['identity', 'state', 'counters', 'alarms', 'activeAlarms']),
+    );
     const counters = out.find((o) => o.topic.endsWith('/counters'))?.message.data;
     expect(counters).not.toHaveProperty('bad');
     const alarmIds = out
@@ -112,6 +118,9 @@ describe('Konformitätsstufen', () => {
     expect(batch).toEqual({
       event: 'started',
       batchId: 'B-2026-1042',
+      productName: '[Produktname]',
+      targetQuantity: expect.any(Number) as number,
+      startedAt: '2026-10-21T04:14:00.000Z',
       recipe: { id: 'vial-10ml', version: 3 },
       formatParts: ['FT-2041', 'FT-3110'],
     });
@@ -166,7 +175,6 @@ describe('Simulator', () => {
     const sim = new Simulator((o) => published.push(o), {
       countersIntervalMs: 5_000,
       valuesIntervalMs: 10_000,
-      alarmRepeatMs: 0,
     });
     sim.start();
     const afterStart = published.length;
@@ -180,34 +188,35 @@ describe('Simulator', () => {
   });
 });
 
-describe('Wiederholung anstehender Alarme (O-25)', () => {
+describe('Stand der anstehenden Alarme (S-09)', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  it('meldet anstehende Alarme erneut mit ihrem ursprünglichen Zeitstempel', () => {
+  it('meldet den Stand retained beim Start und bei jedem Wechsel', () => {
+    const fill = startupMessages(byId('l1-fill'), NOW).find((o) =>
+      o.topic.endsWith('/activeAlarms'),
+    );
+    expect(fill?.retain).toBe(true);
+    const ids = (fill?.message.data as { alarms: { alarmId: string }[] }).alarms.map(
+      (a) => a.alarmId,
+    );
+    expect(ids).toEqual(['FILL-CAP-0001', 'FILL-WGT-0003']);
+    // Basis: nur Sammelstörung, ohne Text
+    const tunnel = startupMessages(byId('l1-tunnel'), NOW).find((o) =>
+      o.topic.endsWith('/activeAlarms'),
+    );
+    expect((tunnel?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
+
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
     const published: Outgoing[] = [];
-    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 30_000, cycle: false });
+    const sim = new Simulator((o) => published.push(o), { batchCycle: false });
     sim.start();
-    const first = published.find(
-      (o) =>
-        o.topic === 'iot/v1/l3/l3-fill/alarms' &&
-        (o.message.data as { event: string }).event === 'raised',
-    );
     const since = published.length;
-    vi.advanceTimersByTime(30_000);
-    const repeated = published
-      .slice(since)
-      .filter((o) => o.topic.endsWith('/alarms'))
-      .map(
-        (o) => `${o.topic.split('/')[3] ?? ''} ${(o.message.data as { alarmId: string }).alarmId}`,
-      );
-    expect(repeated).toContain('l3-fill FILL-WGT-0003');
-    expect(repeated).not.toContain('l3-fill FILL-STP-0001');
-    const again = published.slice(since).find((o) => o.topic === 'iot/v1/l3/l3-fill/alarms');
-    expect(again?.message.ts).toBe(first?.message.ts);
+    vi.advanceTimersByTime(60_000);
+    const insp = published.slice(since).filter((o) => o.topic === 'iot/v1/l1/l1-insp/activeAlarms');
+    expect((insp.at(-1)?.message.data as { alarms: unknown[] }).alarms).toEqual([]);
     sim.stop();
   });
 });
@@ -221,7 +230,7 @@ describe('Zustandswechsel (O-24)', () => {
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
     const published: Outgoing[] = [];
-    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 0 });
+    const sim = new Simulator((o) => published.push(o));
     sim.start();
     const since = published.length;
     const after = () => published.slice(since);
@@ -301,7 +310,7 @@ describe('Batch-Zyklus (M6)', () => {
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
     const published: Outgoing[] = [];
-    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 0, cycle: false });
+    const sim = new Simulator((o) => published.push(o), { cycle: false });
     sim.start();
     const since = published.length;
     const batchEvents = () =>
@@ -327,6 +336,21 @@ describe('Batch-Zyklus (M6)', () => {
     const data = counters?.message.data as { total: number; resetAt: string };
     expect(data.resetAt).toBe(new Date(NOW.getTime() + 17 * 60_000).toISOString());
     expect(data.total).toBe(0);
+    // S-08, S-10: Start, Produkt und Sollmenge in jeder Batch-Meldung, retained
+    const started = published
+      .slice(since)
+      .find(
+        (o) =>
+          o.topic === 'iot/v1/l1/l1-fill/batch' &&
+          (o.message.data as { event: string }).event === 'started',
+      );
+    expect(started?.retain).toBe(true);
+    expect(started?.message.data).toMatchObject({
+      batchId: 'B-2026-1043',
+      productName: '[Produktname]',
+      startedAt: new Date(NOW.getTime() + 17 * 60_000).toISOString(),
+    });
+    expect((started?.message.data as { targetQuantity: number }).targetQuantity).toBeGreaterThan(0);
     sim.stop();
   });
 });

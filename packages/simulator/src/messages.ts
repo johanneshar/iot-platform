@@ -186,27 +186,75 @@ export function alarmMessages(machine: SimMachine, now: Date): Outgoing[] {
   });
 }
 
-export function batchMessage(machine: SimMachine, now: Date): Outgoing | null {
-  if (!machine.batch) return null;
-  const { id, start, recipe, formatParts } = machine.batch;
-  return envelope(
-    machine,
-    'batch',
-    { event: 'started', batchId: id, recipe, formatParts },
-    local(start, now),
-  );
+/** Batch, zu dem eine Meldung gehört (S-08, S-10). */
+export interface BatchRef {
+  batchId: string;
+  startedAt: Date;
+  targetQuantity?: number;
 }
 
-/** Batch-Ereignis zu einem beliebigen Batch (Batch-Zyklus des Simulators). */
 export function batchEvent(
   machine: SimMachine,
   event: 'started' | 'ended',
-  batchId: string,
+  batch: BatchRef,
   at: Date,
 ): Outgoing | null {
   if (!machine.batch) return null;
-  const { recipe, formatParts } = machine.batch;
-  return envelope(machine, 'batch', { event, batchId, recipe, formatParts }, at);
+  const { recipe, formatParts, productName } = machine.batch;
+  return envelope(
+    machine,
+    'batch',
+    {
+      event,
+      batchId: batch.batchId,
+      productName,
+      ...(batch.targetQuantity ? { targetQuantity: batch.targetQuantity } : {}),
+      startedAt: batch.startedAt.toISOString(),
+      recipe,
+      formatParts,
+    },
+    at,
+  );
+}
+
+/** Batch aus dem Mockup, gestartet zur Uhrzeit des Mockups. */
+export function batchMessage(machine: SimMachine, now: Date): Outgoing | null {
+  if (!machine.batch) return null;
+  const { id, start, targetQuantity } = machine.batch;
+  const startedAt = local(start, now);
+  return batchEvent(machine, 'started', { batchId: id, startedAt, targetQuantity }, startedAt);
+}
+
+/**
+ * Stand der anstehenden Alarme (S-09, retained) – bei jeder Änderung vollständig. Stufe basic nur mit
+ * Sammelstörung.
+ */
+export function activeAlarmsMessage(
+  machine: SimMachine,
+  active: readonly { alarm: SimAlarm; at: Date }[],
+  now: Date,
+): Outgoing {
+  const alarms = active.map(({ alarm, at }) =>
+    alarm.alarmId === 'COMMON-FAULT'
+      ? {
+          alarmId: alarm.alarmId,
+          class: 'fault' as const,
+          raisedAt: at.toISOString(),
+          acknowledged: false,
+          user: null,
+        }
+      : {
+          alarmId: alarm.alarmId,
+          class: alarm.class,
+          textKey: alarm.textKey ?? '',
+          text: { de: alarm.text },
+          ...(alarm.subsystem ? { subsystem: alarm.subsystem } : {}),
+          raisedAt: at.toISOString(),
+          acknowledged: false,
+          user: null,
+        },
+  );
+  return envelope(machine, 'activeAlarms', { alarms }, now);
 }
 
 /** Alle Nachrichten beim Start einer Maschine, in sinnvoller Reihenfolge. */
@@ -218,6 +266,13 @@ export function startupMessages(machine: SimMachine, now: Date): Outgoing[] {
     countersMessage(machine, 0, now),
     batchMessage(machine, now),
     ...alarmMessages(machine, now),
+    activeAlarmsMessage(
+      machine,
+      machine.alarms
+        .filter((a) => a.active)
+        .map((alarm) => ({ alarm, at: local(alarm.time, now) })),
+      now,
+    ),
     valuesMessage(machine, now),
   ].filter((m): m is Outgoing => m !== null);
 }
