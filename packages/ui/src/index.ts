@@ -13,6 +13,8 @@ export {
   type AppShellProps,
   type StackProps,
 } from './components/AppShell/AppShell';
+export { BackLink, type BackLinkProps } from './components/BackLink/BackLink';
+export { BarChart, type BarChartBar, type BarChartProps } from './components/BarChart/BarChart';
 export { Button, type ButtonProps, type ButtonVariant } from './components/Button/Button';
 export { Card, CardHeader, type CardHeaderProps, type CardProps } from './components/Card/Card';
 export { Chip, type ChipProps, type ChipTone } from './components/Chip/Chip';
@@ -82,4 +84,10 @@ export {
   SignatureDialog,
   type SignatureDialogProps,
 } from './components/SignatureDialog/SignatureDialog';
+export {
+  StateTimeline,
+  type StateTimelineProps,
+  type TimelineSegment,
+} from './components/StateTimeline/StateTimeline';
 export { SuccessNote, type SuccessNoteProps } from './components/SuccessNote/SuccessNote';
+export { ValueTrend, type ValueTrendProps } from './components/ValueTrend/ValueTrend';

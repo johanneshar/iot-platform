@@ -1,0 +1,57 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: 0;
+}
+
+.bar {
+  display: flex;
+  gap: var(--space-2);
+  height: var(--size-timeline-height);
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.segment {
+  display: flex;
+  flex-basis: 0;
+  flex-shrink: 1;
+  align-items: center;
+  min-width: var(--space-2);
+  padding: 0 var(--space-8);
+  overflow: hidden;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.accent {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning-fg);
+  border: var(--border-width) solid var(--color-warning);
+}
+
+.fault {
+  background: var(--color-fault-bg);
+  color: var(--color-fault-fg);
+  border: var(--border-width) solid var(--color-fault);
+}
+
+.neutral {
+  background: var(--color-border);
+  color: var(--color-text-body);
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}

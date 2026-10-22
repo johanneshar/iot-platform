@@ -139,6 +139,9 @@
   --size-choice-min-width: 140px;
   --size-table-min-width: 600px;
   --size-table-min-width-lg: 720px;
+  --size-timeline-height: 36px;
+  --size-chart-height: 200px;
+  --size-trend-height: 56px;
   --grid-kpi-min: 180px;
   --grid-value-min: 160px;
   --grid-tile-min: 200px;

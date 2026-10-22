@@ -1,0 +1,88 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.plot {
+  position: relative;
+  display: flex;
+  gap: var(--space-6);
+  align-items: flex-end;
+  height: var(--size-chart-height);
+  padding-top: var(--space-20);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.column {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: stretch;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 0;
+}
+
+.value {
+  overflow: hidden;
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bar {
+  min-height: var(--space-1);
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+}
+
+.primary {
+  background: var(--color-primary);
+}
+
+.secondary {
+  background: var(--color-chart-secondary);
+}
+
+.highlight {
+  background: var(--color-warning);
+}
+
+.reference {
+  position: absolute;
+  right: 0;
+  left: 0;
+  border-top: var(--border-width-strong) dashed var(--color-text-body);
+  pointer-events: none;
+}
+
+.referenceWarning {
+  border-top-color: var(--color-warning);
+}
+
+.referenceLabel {
+  position: absolute;
+  top: calc(-1 * var(--space-18));
+  right: 0;
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-body);
+  background: var(--color-surface);
+}
+
+.axis {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.axisLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+  white-space: nowrap;
+}

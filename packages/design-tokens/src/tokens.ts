@@ -184,6 +184,10 @@ export const size = {
   'choice-min-width': '140px',
   'table-min-width': '600px',
   'table-min-width-lg': '720px',
+  // Auswertungen der Maschinen-Detailseite (M5a)
+  'timeline-height': '36px',
+  'chart-height': '200px',
+  'trend-height': '56px',
 } as const;
 
 /** Mindestbreiten für automatische Raster (`repeat(auto-fit, minmax(…, 1fr))`). */
