@@ -31,10 +31,10 @@
     "@axe-core/playwright": "4.14.0",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
-    "@eslint/js": "9.39.5",
+    "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
-    "@types/node": "22.20.5",
-    "eslint": "9.39.5",
+    "@types/node": "26.6.5",
+    "eslint": "10.13.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-i18next": "6.1.5",
     "eslint-plugin-jsx-a11y": "6.10.2",
@@ -48,7 +48,7 @@
     "stylelint-config-standard": "40.0.0",
     "stylelint-declaration-strict-value": "1.12.1",
     "turbo": "2.11.9",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.72.0",
     "vitest": "5.0.5"
   }
