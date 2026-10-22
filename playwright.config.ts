@@ -8,9 +8,15 @@ const CORE_BACKEND = 'http://localhost:4010';
 const SHELL_URL = 'http://localhost:5185';
 const EXAMPLE_MODULE = 'http://localhost:4110';
 const DASHBOARD_MODULE = 'http://localhost:4111';
+const ALARMS_MODULE = 'http://localhost:4112';
+const TROUBLESHOOTING_MODULE = 'http://localhost:4113';
 const TEST_BROKER = 'mqtt://localhost:1885';
 const STORYBOOK_URL = 'http://localhost:5183';
 const E2E_DATA_DIR = fileURLToPath(new URL('./test-results/core-data', import.meta.url));
+const E2E_MODULE_DATA = fileURLToPath(new URL('./test-results/module-data', import.meta.url));
+// Frische Datenbank je Lauf
+const fresh = (dir: string) =>
+  `node -e "require('fs').rmSync(process.argv[1],{recursive:true,force:true})" "${dir}"`;
 
 export default defineConfig({
   forbidOnly: CI,
@@ -45,7 +51,7 @@ export default defineConfig({
     },
     {
       // Frische Datenbank je Lauf; Buchungsstand aus config/licenses.dev.json
-      command: `node -e "require('fs').rmSync(process.argv[1],{recursive:true,force:true})" "${E2E_DATA_DIR}" && pnpm --filter @iot/core-backend start`,
+      command: `${fresh(E2E_DATA_DIR)} && pnpm --filter @iot/core-backend start`,
       url: `${CORE_BACKEND}/api/health`,
       env: {
         CORE_PORT: '4010',
@@ -67,6 +73,27 @@ export default defineConfig({
         'pnpm --filter @iot/module-dashboard build && pnpm --filter @iot/module-dashboard start',
       url: `${DASHBOARD_MODULE}/entry.js`,
       env: { MODULE_PORT: '4111', CORE_URL: CORE_BACKEND },
+      reuseExistingServer: false,
+    },
+    {
+      command: `${fresh(`${E2E_MODULE_DATA}/alarms`)} && pnpm --filter @iot/module-alarms build && pnpm --filter @iot/module-alarms start`,
+      url: `${ALARMS_MODULE}/entry.js`,
+      env: {
+        MODULE_PORT: '4112',
+        CORE_URL: CORE_BACKEND,
+        MQTT_URL: TEST_BROKER,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/alarms`,
+      },
+      reuseExistingServer: false,
+    },
+    {
+      command: `${fresh(`${E2E_MODULE_DATA}/troubleshooting`)} && pnpm --filter @iot/module-troubleshooting build && pnpm --filter @iot/module-troubleshooting start`,
+      url: `${TROUBLESHOOTING_MODULE}/entry.js`,
+      env: {
+        MODULE_PORT: '4113',
+        CORE_URL: CORE_BACKEND,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/troubleshooting`,
+      },
       reuseExistingServer: false,
     },
     {
