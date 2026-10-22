@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Alles, was ein Modul vom System braucht: Manifest-Typen, Hooks, Navigation, Audit, Lizenz, i18n",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./manifest": "./src/manifest/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
