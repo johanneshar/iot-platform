@@ -1,6 +1,6 @@
 import type { AlarmData, DataByClass } from '@iot/interface-schema';
 import type { ModuleManifest } from '@iot/module-sdk/manifest';
-import { registerWithCore, subscribeLine } from '@iot/module-sdk/server';
+import { fetchLineConfig, registerWithCore, subscribeLine } from '@iot/module-sdk/server';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,7 +16,14 @@ const core = {
   // Dienst-Token für Registry und Proxy (O-18); im Betrieb aus der Konfiguration der Edge App
   token: process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token',
 };
-const lineId = process.env['LINE_ID'] ?? 'l1';
+// Linie dieses Edge Device vom Core (E-47) – kein eigener Schalter, der falsch stehen könnte
+const lineConfig = await fetchLineConfig({
+  ...core,
+  log: (m) => {
+    console.log(m);
+  },
+});
+const lineId = lineConfig.id;
 const mqttUrl = process.env['MQTT_URL'] ?? 'mqtt://localhost:1883';
 // Aufbewahrung des Alarmverlaufs, je Kunde einstellbar (E-34)
 const retentionDays = Number(process.env['ALARMS_RETENTION_DAYS'] ?? 90);

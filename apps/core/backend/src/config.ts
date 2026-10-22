@@ -67,7 +67,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): CoreConfig {
   const roles = readJson(env['CORE_ROLES_FILE'] ?? configFile('roles.json')) as {
     roles: RoleDefinition[];
   };
-  const lineId = env['CORE_LINE_ID'] ?? 'l1';
+  const lineId = env['CORE_LINE_ID'] ?? 'l3';
   if (!site.lines.some((l) => l.id === lineId)) {
     throw new Error(`CORE_LINE_ID „${lineId}“ steht nicht in der Standortkonfiguration`);
   }

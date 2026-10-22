@@ -71,7 +71,7 @@ describe('Anmeldung', () => {
     expect((await get('/api/shell')).statusCode).toBe(401);
     const cookie = await login('operator');
     const state = (await get('/api/shell', cookie)).json<ShellState>();
-    expect(state.line).toEqual({ id: 'l1', name: 'Linie 1 · Vials', timeZone: 'Europe/Berlin' });
+    expect(state.line).toEqual({ id: 'l3', name: 'Linie 3 · Flexfill', timeZone: 'Europe/Berlin' });
     expect(state.modules).toHaveLength(14);
   });
 
@@ -331,9 +331,9 @@ describe('Maschinendaten', () => {
     expect((await get('/api/data')).statusCode).toBe(401);
     const data = (await get('/api/data', await login('operator'))).json<{
       lineId: string;
-      oeeTarget: number;
+      oeeTarget: number | null;
     }>();
-    expect(data).toMatchObject({ lineId: 'l1', oeeTarget: 82 });
+    expect(data).toMatchObject({ lineId: 'l3', oeeTarget: null });
   });
 });
 
@@ -464,9 +464,9 @@ describe('Linienkonfiguration für Modul-Backends', () => {
       headers: { authorization: `Bearer ${TOKEN}` },
     });
     expect(response.json()).toMatchObject({
-      id: 'l1',
+      id: 'l3',
       timeZone: 'Europe/Berlin',
-      oeeTarget: 82,
+      oeeTarget: null,
       shifts: expect.arrayContaining([{ start: '06:00', end: '14:00' }]) as unknown,
     });
   });
@@ -524,7 +524,7 @@ describe('Export des Audit Trail', () => {
     const response = await get('/api/audit/export', await login('qa'));
     expect(response.statusCode).toBe(200);
     expect(response.headers['content-disposition']).toMatch(
-      /attachment; filename="audit-trail-l1-/,
+      /attachment; filename="audit-trail-l3-/,
     );
     const body = response.json<{
       format: string;

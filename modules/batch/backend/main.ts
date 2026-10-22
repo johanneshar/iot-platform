@@ -6,7 +6,6 @@ import {
   fetchLineConfig,
   registerWithCore,
   subscribeLine,
-  type LineConfig,
 } from '@iot/module-sdk/server';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
@@ -23,14 +22,20 @@ const core = {
   // Dienst-Token für Registry, Proxy und Audit Trail (O-18); im Betrieb aus der Konfiguration der Edge App
   token: process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token',
 };
-const lineId = process.env['LINE_ID'] ?? 'l1';
+// Linie dieses Edge Device vom Core (E-47) – kein eigener Schalter, der falsch stehen könnte
+const lineConfig = await fetchLineConfig({
+  ...core,
+  log: (m) => {
+    console.log(m);
+  },
+});
+const lineId = lineConfig.id;
 const mqttUrl = process.env['MQTT_URL'] ?? 'mqtt://localhost:1883';
 const dataDir =
   process.env['MODULE_DATA_DIR'] ?? fileURLToPath(new URL(`../.data/${lineId}/`, import.meta.url));
 const distDir = fileURLToPath(new URL('../dist/', import.meta.url));
 
 const store = new BatchStore(dataDir);
-let lineConfig: LineConfig | null = null;
 const log = (m: string) => {
   app.log.info(m);
 };
@@ -105,4 +110,3 @@ subscribeLine({
 
 await app.listen({ port, host });
 await registerWithCore(connection, fullManifest);
-lineConfig = await fetchLineConfig(connection);

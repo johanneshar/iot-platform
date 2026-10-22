@@ -1,11 +1,6 @@
 import type { DataByClass } from '@iot/interface-schema';
 import type { ModuleManifest } from '@iot/module-sdk/manifest';
-import {
-  fetchLineConfig,
-  registerWithCore,
-  subscribeLine,
-  type LineConfig,
-} from '@iot/module-sdk/server';
+import { fetchLineConfig, registerWithCore, subscribeLine } from '@iot/module-sdk/server';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,7 +18,14 @@ const core = {
   // Dienst-Token für Registry und Proxy (O-18); im Betrieb aus der Konfiguration der Edge App
   token: process.env['CORE_REGISTRY_TOKEN'] ?? 'dev-registry-token',
 };
-const lineId = process.env['LINE_ID'] ?? 'l1';
+// Linie dieses Edge Device vom Core (E-47) – kein eigener Schalter, der falsch stehen könnte
+const lineConfig = await fetchLineConfig({
+  ...core,
+  log: (m) => {
+    console.log(m);
+  },
+});
+const lineId = lineConfig.id;
 const mqttUrl = process.env['MQTT_URL'] ?? 'mqtt://localhost:1883';
 // Zeiträume der Detailseite stellt der Kunde ein (E-37)
 const periods = parsePeriods(process.env['DASHBOARD_PERIODS'] ?? 'shift,24h,7d');
@@ -37,7 +39,6 @@ const modelDir =
   fileURLToPath(new URL('../../../packages/simulator/fixtures/models/', import.meta.url));
 
 const history = new HistoryStore(dataDir);
-let lineConfig: LineConfig | null = null;
 const model = loadLineModel(modelDir, lineId, (m) => {
   console.warn(m);
 });
@@ -112,4 +113,3 @@ subscribeLine({
 await app.listen({ port, host });
 const connection = { ...core, log };
 await registerWithCore(connection, fullManifest);
-lineConfig = await fetchLineConfig(connection);

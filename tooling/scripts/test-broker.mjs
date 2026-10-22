@@ -11,7 +11,7 @@ const server = createServer(broker.handle);
 await new Promise((resolve) => server.listen(port, '127.0.0.1', resolve));
 console.log(`test-broker: mqtt://localhost:${String(port)}`);
 
-// Optional den Simulator starten (Linie 1 und 2 aus dem Mockup) – erst, wenn ein Core die Topics
+// Optional den Simulator starten (Linie 3 · Flexfill) – erst, wenn ein Core die Topics
 // abonniert hat: Alarm- und Batch-Ereignisse sind nicht retained und gingen sonst verloren.
 let simulator = null;
 if (args.includes('--with-simulator')) {
