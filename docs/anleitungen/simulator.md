@@ -90,8 +90,10 @@ Fehlerbaum); Batch `B-2026-3001`, Rezept `vial-nest` v1; Positionen der Alarmste
 
 ## Einschränkungen
 
-- Alarm- und Batch-Ereignisse sind nicht retained. Anstehende Alarme wiederholt der Simulator alle 30 s mit dem
-  ursprünglichen Zeitstempel (O-25), damit auch später gestartete Cores und Module sie sehen; vergangene Alarme
-  und Batch-Ereignisse sieht nur, wer beim Start verbunden war.
+- Anstehende Alarme (`activeAlarms`) und der laufende Batch (`batch`) sind retained (Entwurf 0.4, ADR-012):
+  Später gestartete Cores und Module kennen den Stand sofort. Vergangene Alarmereignisse sieht nur, wer beim
+  Start verbunden war.
+- Produktname aller Batches ist der Platzhalter „[Produktname]“ aus dem Mockup. Sollmenge (Annahme): für den
+  Batch aus dem Mockup Menge ÷ Fortschritt, für die folgenden Batches die Menge eines Batch-Laufs.
 - Prozesswerte ändern sich nicht. Weitere Dynamik (Rauschen, neue Alarme) kommt bei Bedarf mit den Modulen,
   die sie brauchen.

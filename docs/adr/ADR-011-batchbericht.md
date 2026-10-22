@@ -48,8 +48,8 @@ nur; den Batch starten und beenden die Maschinen (Topic `batch`).
 ## Konsequenzen
 
 - Prüfbar: Hash des Berichts neu berechnen und mit den Signaturen im Audit Trail vergleichen.
-- Batch-Ereignisse sind nicht retained: Ein Batch, dessen Start das Modul verpasst, fehlt (O-31).
+- Batch-Ereignisse sind seit Entwurf 0.4 retained ([ADR-012](/adr/ADR-012-retained-alarme-batch)): Ein verpasster Start wird nachgetragen, die Zeit ohne Daten als Datenlücke ausgewiesen.
 - PDF/A-Konformität ist strukturell geprüft (Tests: XMP `pdfaid`, eingebettete Schriften, Farbprofil); eine
   Validierung mit veraPDF steht aus (O-32).
-- Sollmenge und Produktname des Mockups liefert die Schnittstelle nicht (O-33); die Seite zeigt Laufzeit statt
-  Fortschritt.
+- Produktname und Sollmenge kommen seit Entwurf 0.4 aus der Maschine (S-10); ohne Sollmenge zeigt die Seite die
+  Laufzeit statt des Fortschritts.

@@ -131,9 +131,10 @@ des Maschinenstandorts anzeigen.
 ## 5. Schnittstelle Maschinendaten (Kurzfassung)
 
 Maschinenlesbar und für die Struktur verbindlich: `packages/interface-schema/schemas/` (ADR-003). Der Text
-der Spezifikation in Claude Docs (Entwurf 0.2) wird bei jeder Schemaänderung nachgezogen.
+der Spezifikation in Claude Docs (Entwurf 0.4) wird bei jeder Schemaänderung nachgezogen.
 
-- Topics: `iot/v1/{lineId}/{machineId}/{identity|meta|state|counters|alarms|values|batch}`
+- Topics: `iot/v1/{lineId}/{machineId}/{identity|meta|state|counters|alarms|activeAlarms|values|batch}`;
+  retained sind alle außer `alarms` und `values` (ADR-012)
 - Einheitlicher Umschlag: `schema`, `machineId`, `ts` (Quelle, UTC), `tsEdge`, `quality`, `data`
 - Konformitätsstufen: `basic`, `standard`, `full` – jedes Modul deklariert seine Mindeststufe
 - Zustände nach PackML, Alarme mit stabiler `alarmId`, Prozesswerte nur mit Eintrag im `meta`-Katalog

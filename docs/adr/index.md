@@ -17,5 +17,6 @@ Kontext, Alternativen und Konsequenzen.
 | [ADR-009](./ADR-009-verlauf-dashboard)        | Verlauf und Auswertungen im Dashboard-Modul                            | angenommen |
 | [ADR-010](./ADR-010-3d-ansicht)               | 3D-Ansicht der Linie und Zuordnung der Alarmstellen                    | angenommen |
 | [ADR-011](./ADR-011-batchbericht)             | Batchbericht, Einfrieren und Signaturbindung                           | angenommen |
+| [ADR-012](./ADR-012-retained-alarme-batch)    | Anstehende Alarme und laufender Batch für Nachzügler (Entwurf 0.4)     | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.

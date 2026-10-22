@@ -1,7 +1,7 @@
 # Schnittstellenspezifikation Maschinendaten (Entwurf)
 
 ::: warning Kopie zur Ansicht
-Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie entspricht Entwurf 0.3 vom 2026-10-22 und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
+Verbindlich ist die Fassung in Claude Docs: <https://claude.ai/artifact/CD4cdHpGA6wZkm5tfSJDE8>. Diese Kopie entspricht Entwurf 0.4 vom 2026-10-22 und wird bei Änderungen nachgezogen. Eingebettete Diagramme sind nur im Original sichtbar.
 :::
 
 Oct 21, 2026 · @Johannes
@@ -13,7 +13,7 @@ Diese Spezifikation ist der Vertrag zwischen Automatisierung und Plattform: Jede
 - **Gilt für:** alle neuen eigenen Maschinen, nachgerüstete Bestandsmaschinen und Fremdmaschinen in einer Linie
 - **Regelt:** welche Daten in welcher Struktur, mit welchen Metadaten und in welcher Qualität auf dem Edge Device ankommen
 - **Regelt nicht:** wie die Daten in der Steuerung erzeugt werden (Sache der Automatisierung) und wie die Module sie darstellen (Sache der Plattform)
-- **Status:** Entwurf, Version 0.3 (Stand 2026-10-22) – zur Abstimmung mit der Automatisierung; Änderungen gegenüber 0.1 im Abschnitt „Änderungen seit Entwurf 0.1“
+- **Status:** Entwurf, Version 0.4 (Stand 2026-10-22) – zur Abstimmung mit der Automatisierung; Änderungen gegenüber 0.1 im Abschnitt „Änderungen seit Entwurf 0.1“
 
 ## Verantwortlichkeiten und Schnittstellengrenze
 
@@ -39,8 +39,9 @@ Jede Maschine erfüllt eine von drei Stufen; jedes Modul nennt die Mindeststufe,
 | Zustand | PackML-State und Mode | PackML-State und Mode | PackML-State und Mode |
 | Zähler | Gut, Gesamt | Gut, Schlecht, Gesamt | Gut, Schlecht, Gesamt |
 | Alarme | Sammelstörung (COMMON-FAULT, ohne Text) | Einzelalarme mit Klasse und Text | Einzelalarme inkl. Quittierung und Benutzer |
+| Anstehende Alarme (`activeAlarms`) | Pflicht (nur COMMON-FAULT) | Pflicht | Pflicht |
 | Prozesswerte | – | Ausgewählte Werte mit Metadaten | Alle GxP-relevanten Werte mit Metadaten |
-| Batch und Rezept | – | – | Pflicht |
+| Batch und Rezept | – | – | Pflicht (inkl. Produktname, Start; Sollmenge optional) |
 
 **Mindeststufe je Modul (Vorschlag)**
 
@@ -71,8 +72,13 @@ iot/v1/{lineId}/{machineId}/{datenklasse}
 | `state` | Zustand bei jeder Änderung | ja |
 | `counters` | Zählerstände, zyklisch (Vorschlag 5 s) | ja |
 | `alarms` | Alarmereignisse (kommt, geht, quittiert) | nein |
+| `activeAlarms` | Stand der anstehenden Alarme, bei jeder Änderung vollständig (S-09) | ja |
 | `values` | Prozesswerte, zyklisch oder bei Änderung | nein |
-| `batch` | Batch- und Rezeptereignisse | nein |
+| `batch` | Batch- und Rezeptereignisse; die letzte Meldung zeigt den laufenden Batch (S-08) | ja |
+
+**Retained:** Der Broker hält je Topic die letzte Nachricht. Wer sich später verbindet oder neu startet, kennt
+damit sofort Identität, Katalog, Zustand, Zähler, anstehende Alarme und den laufenden Batch. Ereignisse
+(`alarms`) und Prozesswerte (`values`) sind nicht retained.
 
 **IDs:** `lineId` und `machineId` sind kleingeschrieben, ohne Leerzeichen, eindeutig je Standort, z. B. `l1` und `l1-fill`. Sie ändern sich während der Lebensdauer der Maschine nicht.
 
@@ -156,6 +162,29 @@ Stufe Basis liefert `good` und `total`; `bad` gibt es ab Stufe Standard.
 
 Stufe Basis meldet nur die Sammelstörung: `alarmId` `COMMON-FAULT`, Klasse `fault`, ohne `textKey` und `text`. Ab Stufe Standard sind `textKey` und `text` Pflicht; `text` enthält je Sprache einen Eintrag, Deutsch (`de`) ist Pflicht. `user` ist bei `acknowledged` Pflicht und sonst `null`.
 
+**activeAlarms** – Stand der anstehenden Alarme (retained, S-09)
+
+```json
+{
+  "alarms": [
+    {
+      "alarmId": "FILL-WGT-0003",
+      "class": "fault",
+      "textKey": "alarm.weighcell.tare",
+      "text": { "de": "Wägezelle 3: Tara-Abweichung" },
+      "raisedAt": "2026-10-21T11:48:00Z",
+      "acknowledged": false,
+      "user": null
+    }
+  ]
+}
+```
+
+Die Maschine sendet die vollständige Liste bei jeder Änderung (kommt, geht, quittiert), auch die leere Liste.
+`raisedAt` ist der Zeitpunkt „kommt“ an der Quelle. Für die Einträge gelten dieselben Regeln wie bei `alarms`;
+Stufe Basis meldet nur `COMMON-FAULT`. Ergänzt `alarms`, ersetzt es nicht: Der Verlauf entsteht aus den
+Ereignissen, der aktuelle Stand aus dieser Liste.
+
 **meta** – Katalog der Prozesswerte
 
 ```json
@@ -185,12 +214,17 @@ Nur Schlüssel, die im `meta`-Katalog stehen, sind zulässig.
 {
   "event": "started",
   "batchId": "B-2026-1042",
+  "productName": "[Produktname]",
+  "targetQuantity": 104000,
+  "startedAt": "2026-10-21T04:14:00Z",
   "recipe": { "id": "vial-10ml", "version": 3 },
   "formatParts": ["FT-2041", "FT-3110"]
 }
 ```
 
-`event` ist `started`, `paused`, `resumed` oder `ended`.
+`event` ist `started`, `paused`, `resumed` oder `ended`. Die Meldung ist retained (S-08): Die letzte zeigt, ob
+und welcher Batch läuft. `startedAt` (Pflicht) ist der Start des Batches und steht in jeder Meldung dieses
+Batches. `productName` ist Pflicht, `targetQuantity` (Sollmenge in Stück) optional (S-10).
 
 ## Retrofit älterer Maschinen
 
@@ -231,7 +265,7 @@ Der Prüfbericht wird Teil der Inbetriebnahmedokumentation der Maschine.
 
 ## Änderungen seit Entwurf 0.1
 
-Entwurf 0.2 und 0.3 übernehmen die Entscheidungen vom 21. und 22.10.2026; die JSON Schemas im Plattform-Repository setzen sie um (ADR-003, ADR-006).
+Entwurf 0.2 bis 0.4 übernehmen die Entscheidungen vom 21. und 22.10.2026; die JSON Schemas im Plattform-Repository setzen sie um (ADR-003, ADR-006, ADR-012).
 
 | Nr. | Änderung | Datenklasse |
 | --- | --- | --- |
@@ -242,6 +276,9 @@ Entwurf 0.2 und 0.3 übernehmen die Entscheidungen vom 21. und 22.10.2026; die J
 | S-06 | `min`/`max` im Katalog sind optional | `meta` |
 | – | Zeitstempel RFC 3339 in UTC mit `Z`; Texte je Sprache, Deutsch Pflicht; `value` immer Zahl | alle |
 | S-07 | Optionales Feld `source`: Datenquelle der Maschine im Klartext (Entwurf 0.3) | `identity` |
+| S-08 | `batch` retained; Pflichtfeld `startedAt` in jeder Batch-Meldung (Entwurf 0.4) | `batch` |
+| S-09 | Neue Datenklasse `activeAlarms` (retained): vollständiger Stand der anstehenden Alarme (Entwurf 0.4) | `activeAlarms` |
+| S-10 | `productName` (Pflicht) und `targetQuantity` (optional) in Batch-Meldungen (Entwurf 0.4) | `batch` |
 
 ## Offene Punkte
 

@@ -29,7 +29,7 @@ Detailseite. Die Zuordnung Alarm → Stelle erfolgt in der Plattform über die s
 5. **Namensregel für CAD-Exporte** (Konstruktion, A-01.10): Baugruppe je Maschine heißt wie ihre `machineId`
    (z. B. `l3-fill`), Bauteile darunter `l3-fill/<funktion>` (z. B. `l3-fill/waegezelle-3`). Dann genügt
    `"nodes": ["l3-fill", "l3-fill/*"]` und je Alarmstelle `"node": "l3-fill/waegezelle-3"` – keine Koordinaten.
-6. **Anstehende Alarme nach einem Neustart (O-25):** Bis die Spezifikation das regelt, wiederholt der Simulator
+6. **Anstehende Alarme nach einem Neustart (O-25)** – ersetzt durch [ADR-012](/adr/ADR-012-retained-alarme-batch): Bis die Spezifikation das regelt, wiederholt der Simulator
    anstehende Alarme alle 30 s mit dem ursprünglichen Zeitstempel. Core, Alarm- und Dashboard-Modul behandeln
    eine wiederholte Meldung „kommt“ als dieselbe Meldung.
 

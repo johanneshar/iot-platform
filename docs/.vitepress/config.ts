@@ -54,6 +54,7 @@ export default defineConfig({
           { text: 'ADR-009 Verlauf im Dashboard', link: '/adr/ADR-009-verlauf-dashboard' },
           { text: 'ADR-010 3D-Ansicht', link: '/adr/ADR-010-3d-ansicht' },
           { text: 'ADR-011 Batchbericht', link: '/adr/ADR-011-batchbericht' },
+          { text: 'ADR-012 Alarme und Batch retained', link: '/adr/ADR-012-retained-alarme-batch' },
         ],
       },
       {

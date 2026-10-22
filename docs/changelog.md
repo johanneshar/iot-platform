@@ -2,6 +2,14 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## Nach M6: Schnittstelle Entwurf 0.4 (2026-10-22)
+
+- `batch` retained mit `startedAt`, neue Datenklasse `activeAlarms` (retained), `productName` und
+  `targetQuantity` in Batch-Meldungen ([ADR-012](/adr/ADR-012-retained-alarme-batch); E-45, E-46)
+- Datenkern übernimmt `activeAlarms` als Stand; Alarm-, Dashboard- und Batch-Modul gleichen ihren Verlauf ab
+- Batch-Reporting: Produktname und Fortschritt wie im Mockup; verpasste Batch-Starts werden nachgetragen
+- Simulator: Wiederholung der Alarme entfällt
+
 ## M6 – Batch-Reporting mit e-Signatur (2026-10-22)
 
 **Neu**

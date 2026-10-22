@@ -7,13 +7,13 @@ die verbindliche Fassung liegt und wie man Nachrichten im Code prüft.
 
 1. **Schemas (maschinenlesbar):** `packages/interface-schema/schemas/*.schema.json` – die einzige verbindliche
    Quelle für die Struktur der Nachrichten ([ADR-003](/adr/ADR-003-schnittstelle-v0-2)).
-2. **Spezifikation (Text):** _Schnittstellenspezifikation Maschinendaten_ in Claude Docs, Entwurf 0.2; eine
+2. **Spezifikation (Text):** _Schnittstellenspezifikation Maschinendaten_ in Claude Docs, Entwurf 0.4; eine
    Kopie liegt unter [Referenz](/referenz/schnittstellenspezifikation).
 
 ## Kurzfassung
 
-- Topics: `iot/v1/{lineId}/{machineId}/{identity|meta|state|counters|alarms|values|batch}`
-- Retained: `identity`, `meta`, `state`, `counters`
+- Topics: `iot/v1/{lineId}/{machineId}/{identity|meta|state|counters|alarms|activeAlarms|values|batch}`
+- Retained: `identity`, `meta`, `state`, `counters`, `activeAlarms`, `batch` (Entwurf 0.4, [ADR-012](/adr/ADR-012-retained-alarme-batch))
 - Umschlag: `schema` (z. B. `iot.state/1.0`), `machineId`, `ts` (Quelle, UTC), `tsEdge`, `quality`, `data`
 - Konformitätsstufen `basic`, `standard`, `full`; jedes Modul nennt seine Mindeststufe
 
@@ -23,8 +23,9 @@ die verbindliche Fassung liegt und wie man Nachrichten im Code prüft.
 | `state`          | PackML-Zustand, Betriebsart, Grund                                                 | alle        |
 | `counters`       | gut, gesamt (ab standard: schlecht), Rücksetzzeitpunkt                             | alle        |
 | `alarms`         | basic: nur `COMMON-FAULT`; ab standard Einzelalarme mit Text; full mit Quittierung | alle        |
+| `activeAlarms`   | Stand der anstehenden Alarme, bei jeder Änderung vollständig (retained)            | alle        |
 | `meta`, `values` | Katalog und Werte der Prozessgrößen                                                | ab standard |
-| `batch`          | Batch- und Rezeptereignisse                                                        | full        |
+| `batch`          | Batch- und Rezeptereignisse mit Start, Produktname, optional Sollmenge (retained)  | full        |
 
 ## Im Code verwenden
 
