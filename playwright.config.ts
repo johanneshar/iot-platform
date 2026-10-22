@@ -48,11 +48,9 @@ export default defineConfig({
       // Läuft gegen das gebaute Storybook: vorher `pnpm storybook:build`
       name: 'ui',
       testMatch: ['packages/ui/e2e/**/*.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: STORYBOOK_URL,
-        launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
-      },
+      // ohne Software-WebGL-Flags: sie verändern die Kantenglättung und damit die Referenzbilder;
+      // die WebGL-Fläche des ModelViewer wird im Bildvergleich ohnehin ausgeblendet
+      use: { ...devices['Desktop Chrome'], baseURL: STORYBOOK_URL },
     },
   ],
   webServer: [
