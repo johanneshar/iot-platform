@@ -2,6 +2,24 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M4 – Linien-Dashboard (2026-10-22)
+
+**Neu**
+
+- Datenkern im Core: Linienmodell aus dem Databus, nur schemakonforme Nachrichten, Verlauf der Schicht,
+  Live-Daten per Server-Sent Events ([ADR-005](/adr/ADR-005-datenzugriff))
+- `module-sdk`: `useMachines`, `useAlarms`, `useValues` u. a.; `findBottleneck`, `lineState`, `currentShift`
+- Modul `dashboard`: Linienübersicht nach Mockup mit OEE (E-27), Engpass (E-28), Datenqualität, Deep Links
+- Shell: Zustand der Linie im Kopf; Manifest-Feld `nav.label`
+- Schichtmodell und OEE-Ziel in der Linienkonfiguration (E-29)
+- E2E Simulator → Core → Dashboard mit MQTT-Broker im Testprozess (ohne Docker)
+
+**Demo**
+
+1. Docker Desktop starten, `pnpm dev`, als `operator` anmelden.
+2. „Linienübersicht“: Maschinen von Linie 1 aus dem Simulator, Engpass Füll- und Verschließmaschine, drei
+   anstehende Alarme; Kennzahlen erscheinen nach wenigen Sekunden.
+
 ## M3b – Benutzer, Rollen, Audit Trail, e-Signatur (2026-10-22)
 
 **Neu**

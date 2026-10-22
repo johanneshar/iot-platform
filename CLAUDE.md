@@ -175,7 +175,10 @@ export interface ModuleManifest {
 Umgesetzt ist das Manifest in zwei Teilen (ADR-002): `ModuleManifest` ist reines JSON und enthält
 zusätzlich `entry` (Adresse des Einstiegsmoduls) und `styles`; das Modul-Backend meldet es beim Start an.
 `badge` und die Seitenkomponenten liefert das Einstiegsmodul (`ModuleEntry`). Reservierte IDs:
-`baukasten`, `api`, `shared`, `assets`.
+`baukasten`, `audit`, `core`, `api`, `shared`, `assets`. Optional `nav.label`, wenn die Navigation anders
+heißt als das Produkt (z. B. „Linienübersicht“ für „Linien-Dashboard“).
+
+Maschinendaten lesen Module über die Hooks des SDK aus dem Datenkern des Core (ADR-005).
 
 ### 6.2 Modul-SDK (`packages/module-sdk`)
 
@@ -471,5 +474,5 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M3 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: Plan für **M4** (Linien-Dashboard)
-vorlegen und auf Freigabe warten.
+M0 bis M4 sind abgeschlossen (siehe `docs/changelog.md`). Nächster Schritt: Plan für **M5** (Alarme und
+geführte Fehlersuche) vorlegen und auf Freigabe warten.

@@ -10,5 +10,6 @@ Kontext, Alternativen und Konsequenzen.
 | [ADR-002](./ADR-002-modul-einbindung)         | Einbindung der Modul-UIs per ES-Module und Import-Map       | angenommen |
 | [ADR-003](./ADR-003-schnittstelle-v0-2)       | Schnittstelle Maschinendaten – Entwurf 0.2 und JSON Schemas | angenommen |
 | [ADR-004](./ADR-004-anmeldung-audit-signatur) | Anmeldung, Rechte, Audit Trail und e-Signatur im Core       | angenommen |
+| [ADR-005](./ADR-005-datenzugriff)             | Datenzugriff über den Datenkern des Core                    | angenommen |
 
 Neue ADRs: Vorlage kopieren, fortlaufend nummerieren, in diese Tabelle eintragen.

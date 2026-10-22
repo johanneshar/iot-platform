@@ -47,11 +47,15 @@ export default defineConfig({
             text: 'ADR-004 Anmeldung, Audit, Signatur',
             link: '/adr/ADR-004-anmeldung-audit-signatur',
           },
+          { text: 'ADR-005 Datenzugriff', link: '/adr/ADR-005-datenzugriff' },
         ],
       },
       {
         text: 'Module',
-        items: [{ text: 'Übersicht', link: '/module/uebersicht' }],
+        items: [
+          { text: 'Übersicht', link: '/module/uebersicht' },
+          { text: 'Linien-Dashboard', link: '/module/dashboard' },
+        ],
       },
       {
         text: 'Anleitungen',

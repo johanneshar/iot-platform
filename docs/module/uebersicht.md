@@ -14,7 +14,7 @@ Mindeststufe, GxP-Relevanz und dem Meilenstein, in dem sie entstehen.
 
 | ID                       | Name                    | Kategorie      | Mindeststufe                                           | GxP           | Meilenstein |
 | ------------------------ | ----------------------- | -------------- | ------------------------------------------------------ | ------------- | ----------- |
-| `dashboard`              | Linien-Dashboard        | Produktion     | basic                                                  | nein          | M4          |
+| `dashboard`              | Linien-Dashboard        | Produktion     | basic                                                  | nein          | M4 ✓        |
 | `alarms`                 | Alarm-Analytics         | Produktion     | standard                                               | nein          | M5          |
 | `troubleshooting`        | Geführte Fehlersuche    | Instandhaltung | standard                                               | nein          | M5          |
 | `batch`                  | Batch-Reporting         | Produktion     | full                                                   | ja            | M6          |
@@ -31,3 +31,4 @@ Kategorien und Beschreibungen entsprechen dem Baukasten im Mockup. Mindeststufen
 Schnittstellenspezifikation; offene Fälle stehen in den [offenen Punkten](/offene-punkte).
 
 Jedes Modul bekommt mit seiner Umsetzung eine eigene Seite mit Entwickler-, Anwender- und Schulungsdoku.
+✓ = umgesetzt ([Linien-Dashboard](/module/dashboard)).

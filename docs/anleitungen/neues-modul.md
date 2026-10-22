@@ -17,14 +17,14 @@ in der Navigation der Shell gesehen.
 
 2. **Manifest ausfüllen** (`manifest.ts`)
 
-   | Feld                    | Inhalt                                                                                                      |
-   | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
-   | `name`, `description`   | Deutsch Pflicht, Englisch empfohlen; die Beschreibung erscheint auf dem Sperrbildschirm (ohne Schlusspunkt) |
-   | `category`              | `Kern`, `Produktion`, `Instandhaltung` oder `Integration`                                                   |
-   | `gxp`, `minConformance` | aus der [Modulübersicht](/module/uebersicht)                                                                |
-   | `nav`                   | Abschnitt `Linie`, `Service` oder `Plattform`, Reihenfolge, Icon                                            |
-   | `routes`                | eine Zeile je Seite; `''` ist die Startseite                                                                |
-   | `permissions`           | Rechte mit Präfix der Modul-ID, z. B. `alarms.acknowledge`                                                  |
+   | Feld                    | Inhalt                                                                                                                                     |
+   | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+   | `name`, `description`   | Deutsch Pflicht, Englisch empfohlen; die Beschreibung erscheint auf dem Sperrbildschirm (ohne Schlusspunkt)                                |
+   | `category`              | `Kern`, `Produktion`, `Instandhaltung` oder `Integration`                                                                                  |
+   | `gxp`, `minConformance` | aus der [Modulübersicht](/module/uebersicht)                                                                                               |
+   | `nav`                   | Abschnitt `Linie`, `Service` oder `Plattform`, Reihenfolge, Icon; optional `label`, wenn die Navigation anders heißen soll als das Produkt |
+   | `routes`                | eine Zeile je Seite; `''` ist die Startseite                                                                                               |
+   | `permissions`           | Rechte mit Präfix der Modul-ID, z. B. `alarms.acknowledge`                                                                                 |
 
    _Ergebnis:_ `pnpm --filter @iot/module-alarms test` meldet ein gültiges Manifest.
 
@@ -33,6 +33,7 @@ in der Navigation der Shell gesehen.
    - Texte über `useTranslation('<modul-id>')` und `frontend/locales/de.json`, `en.json`.
    - Linie, Navigation und Deep Links aus dem `module-sdk`: `useLine()`, `useNavigate()`,
      `useDeepLinkParams()`, `useIsModuleBooked()`.
+   - Maschinendaten nur über das SDK: `useMachines()`, `useAlarms()`, `useValues()` ([ADR-005](/adr/ADR-005-datenzugriff)).
    - Jede Seite in `frontend/entry.tsx` unter ihrem Routenpfad eintragen.
 
 4. **Starten**
