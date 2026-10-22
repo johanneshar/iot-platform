@@ -31,6 +31,7 @@ export default defineConfig({
           { text: 'Übersicht', link: '/architektur/uebersicht' },
           { text: 'Schnittstelle Maschinendaten', link: '/architektur/schnittstelle' },
           { text: 'GxP', link: '/architektur/gxp' },
+          { text: 'Rollen und Rechte', link: '/architektur/rollen-rechte' },
           { text: 'Design-System', link: '/architektur/design-system' },
         ],
       },
