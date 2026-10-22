@@ -152,7 +152,11 @@ test('Linienwahl bietet die Linien des Standorts an', async ({ page }) => {
   await signIn(page, 'operator', '/example');
   const select = page.getByLabel('Linie wählen');
   await expect(select).toHaveValue('l1');
-  await expect(select.locator('option')).toHaveText(['Linie 1 · Vials', 'Linie 2 · Spritzen']);
+  await expect(select.locator('option')).toHaveText([
+    'Linie 1 · Vials',
+    'Linie 2 · Spritzen',
+    'Linie 3 · Flexfill',
+  ]);
 });
 
 test('Abmelden führt zur Anmeldung zurück', async ({ page }) => {

@@ -1,4 +1,8 @@
-import { lines as fixtureLines, type FixtureLine, type FixtureMachine } from '../fixtures/mockup';
+import { flexfillLine } from '../fixtures/flexfill';
+import { lines as mockupLines, type FixtureLine, type FixtureMachine } from '../fixtures/mockup';
+
+/** Linien des Simulators: die beiden Linien des Mockups und Linie 3 · Flexfill (Annahmen, O-28). */
+const fixtureLines: readonly FixtureLine[] = [...mockupLines, flexfillLine];
 import { parseGermanNumber } from './parse';
 
 /**
@@ -91,6 +95,42 @@ const EXTRAS: Record<string, MachineExtras> = {
     ],
     rejectLabel: 'Ausschuss',
   },
+  // Linie 3 · Flexfill – Schlüssel, Einheiten und Grenzen sind Annahmen (O-28)
+  'l3-debag': { values: [{ key: 'tubBuffer', label: 'Tubs im Puffer', unit: '', gxp: false }] },
+  'l3-delid': {
+    values: [
+      {
+        key: 'peelForceAvg',
+        label: 'Abzugskraft Folie Ø',
+        unit: 'N',
+        gxp: false,
+        min: 10,
+        max: 30,
+      },
+    ],
+  },
+  'l3-fill': {
+    values: [
+      { key: 'fillWeightAvg', label: 'Füllgewicht Ø', unit: 'g', gxp: true, min: 1.95, max: 2.05 },
+      { key: 'fillWeightStdDev', label: 'Standardabw.', unit: 'g', gxp: true },
+      {
+        key: 'isolatorDiffPressure',
+        label: 'Differenzdruck Isolator',
+        unit: 'Pa',
+        gxp: false,
+        min: 10,
+        max: 30,
+      },
+    ],
+  },
+  'l3-transfer': {
+    values: [{ key: 'robotCycleTime', label: 'Robotertakt', unit: 's', gxp: false }],
+  },
+  'l3-cap': {
+    values: [
+      { key: 'crimpForceAvg', label: 'Bördelkraft Ø', unit: 'N', gxp: false, min: 1300, max: 1600 },
+    ],
+  },
 };
 
 // Stabile alarmIds und Textschlüssel: im Mockup nicht enthalten, hier festgelegt.
@@ -140,12 +180,33 @@ const ALARMS: AlarmConfig[] = [
     subsystem: 'Etiketten',
   },
   { fixtureId: 'b3', alarmId: 'COMMON-FAULT' },
+  // Linie 3 · Flexfill (Annahmen, O-28); FILL-… wie Linie 1/2, damit die Fehlerbäume passen
+  {
+    fixtureId: 'c1',
+    alarmId: 'FILL-WGT-0003',
+    textKey: 'alarm.weighcell.tare',
+    subsystem: 'Wägung',
+  },
+  {
+    fixtureId: 'c2',
+    alarmId: 'FILL-STP-0001',
+    textKey: 'alarm.stopperSetter.blocked',
+    subsystem: 'Stopfensetzen',
+  },
+  {
+    fixtureId: 'c3',
+    alarmId: 'TRF-ROB-0001',
+    textKey: 'alarm.transfer.robotGripper',
+    subsystem: 'Roboter',
+  },
 ];
 
 /** Batch-Rezepte: l1 aus der Spezifikation; l2 aus dem Mockup-Text „Spritze 1 ml · v5“ abgeleitet. */
 const RECIPES: Record<string, { id: string; version: number; formatParts: string[] }> = {
   l1: { id: 'vial-10ml', version: 3, formatParts: ['FT-2041', 'FT-3110'] },
   l2: { id: 'syringe-1ml', version: 5, formatParts: [] },
+  // Annahme (O-28)
+  l3: { id: 'vial-nest', version: 1, formatParts: [] },
 };
 
 export interface SimAlarm {

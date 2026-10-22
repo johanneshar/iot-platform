@@ -117,6 +117,21 @@ describe('Linienmodell', () => {
     expect((recent.at(-1)?.total ?? 0) - (recent.at(-2)?.total ?? 0)).toBe(20);
   });
 
+  it('eine wiederholte Meldung „kommt“ ändert einen anstehenden Alarm nicht (O-25)', () => {
+    const m = model();
+    feed(m, messages);
+    const before = m.snapshot().machines.find((x) => x.machineId === 'l1-fill')?.alarms;
+    const raised = messages.find(
+      (o) =>
+        o.topic === 'iot/v1/l1/l1-fill/alarms' &&
+        (o.message.data as { event: string; alarmId: string }).alarmId === 'FILL-WGT-0003',
+    );
+    if (!raised) throw new Error('Alarm fehlt');
+    m.apply(raised.topic, { ...raised.message, ts: '2026-10-21T12:19:00.000Z' });
+    const after = m.snapshot().machines.find((x) => x.machineId === 'l1-fill')?.alarms;
+    expect(after).toEqual(before);
+  });
+
   it('meldet Änderungen an Abonnenten', () => {
     const m = model();
     let calls = 0;

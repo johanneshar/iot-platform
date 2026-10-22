@@ -21,7 +21,9 @@ const simulator = new Simulator((outgoing) => {
 });
 
 client.once('connect', () => {
-  console.log(`Simulator: verbunden mit ${url}, sende Linie 1 · Vials und Linie 2 · Spritzen`);
+  console.log(
+    `Simulator: verbunden mit ${url}, sende ${simulator.lines.map((l) => l.name).join(', ')}`,
+  );
   simulator.start();
 });
 

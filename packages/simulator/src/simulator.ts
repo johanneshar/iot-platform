@@ -2,6 +2,7 @@ import { buildLines, RUN_PHASE_MS, STOP_PHASE_MS, type SimLine, type SimMachine 
 import {
   alarmEvent,
   countersFor,
+  local,
   stateChange,
   startupMessages,
   valuesMessage,
@@ -17,6 +18,11 @@ export interface SimulatorOptions {
   valuesIntervalMs?: number;
   /** Zustandswechsel stehender Maschinen (O-24); aus = Schnappschuss wie im Mockup */
   cycle?: boolean;
+  /**
+   * Anstehende Alarme mit ihrem ursprünglichen Zeitstempel wiederholen (0 = aus). Alarme sind nicht
+   * retained; so sieht auch ein später gestarteter Core oder ein Modul, was ansteht (O-25).
+   */
+  alarmRepeatMs?: number;
   /** Uhr – in Tests ersetzbar */
   now?: () => Date;
 }
@@ -31,11 +37,16 @@ interface Runtime {
   phaseStart: number;
 }
 
-/** Erzeugt die Daten beider Linien aus dem Mockup und gibt sie über `publish` aus. */
+/** Erzeugt die Daten der Beispiellinien (Mockup und Flexfill) und gibt sie über `publish` aus. */
 export class Simulator {
   readonly lines: SimLine[] = buildLines();
   private timers: ReturnType<typeof setInterval>[] = [];
   private runtimes: Runtime[] = [];
+  /** anstehende Alarme mit Zeitpunkt des Kommens */
+  private readonly active = new Map<
+    string,
+    { machine: SimMachine; alarm: SimMachine['alarms'][number]; at: Date }
+  >();
 
   constructor(
     private readonly publish: Publish,
@@ -60,7 +71,16 @@ export class Simulator {
       lastTick: now.getTime(),
       phaseStart: now.getTime(),
     }));
-    for (const machine of this.machines) startupMessages(machine, now).forEach(this.publish);
+    for (const machine of this.machines) {
+      startupMessages(machine, now).forEach(this.publish);
+      for (const alarm of machine.alarms.filter((a) => a.active)) {
+        this.active.set(`${machine.id}/${alarm.alarmId}`, {
+          machine,
+          alarm,
+          at: local(alarm.time, now),
+        });
+      }
+    }
 
     this.timers.push(
       setInterval(() => {
@@ -70,6 +90,14 @@ export class Simulator {
         this.tickValues();
       }, this.options.valuesIntervalMs ?? 10_000),
     );
+    const repeat = this.options.alarmRepeatMs ?? 30_000;
+    if (repeat > 0) {
+      this.timers.push(
+        setInterval(() => {
+          this.tickAlarms();
+        }, repeat),
+      );
+    }
     if (this.options.cycle ?? true) {
       this.timers.push(
         setInterval(() => {
@@ -124,7 +152,17 @@ export class Simulator {
       // Der Alarm zum Stillstand kommt und geht mit ihm
       for (const alarm of machine.alarms.filter((a) => a.active)) {
         this.publish(alarmEvent(machine, alarm, running ? 'raised' : 'cleared', now));
+        const key = `${machine.id}/${alarm.alarmId}`;
+        if (running) this.active.set(key, { machine, alarm, at: now });
+        else this.active.delete(key);
       }
+    }
+  }
+
+  /** Anstehende Alarme erneut melden – gleiche Nachricht, gleicher Zeitstempel der Quelle. */
+  tickAlarms(): void {
+    for (const { machine, alarm, at } of this.active.values()) {
+      this.publish(alarmEvent(machine, alarm, 'raised', at));
     }
   }
 

@@ -15,10 +15,27 @@ const byId = (id: string): SimMachine => {
 const classes = (out: Outgoing[]) => new Set(out.map((o) => parseTopic(o.topic)?.dataClass));
 
 describe('Beispiellinien aus dem Mockup', () => {
-  it('kennt beide Linien mit den Maschinen-IDs aus S-01', () => {
+  it('kennt beide Linien mit den Maschinen-IDs aus S-01 und die Flexfill', () => {
     expect(lines.map((l) => l.machines.map((m) => m.id))).toEqual([
       ['l1-wash', 'l1-tunnel', 'l1-fill', 'l1-insp'],
       ['l2-detub', 'l2-fill', 'l2-label'],
+      ['l3-debag', 'l3-delid', 'l3-fill', 'l3-transfer', 'l3-cap'],
+    ]);
+  });
+
+  it('Flexfill: eigene Maschinen der Stufe Voll in der beschriebenen Reihenfolge', () => {
+    const l3 = lines.find((l) => l.id === 'l3');
+    expect(l3?.machines.every((m) => m.own && m.conformance === 'full')).toBe(true);
+    expect(l3?.machines.map((m) => m.name)).toEqual([
+      'Beutelauspacker',
+      'Öffner (Delid/Delining)',
+      'Füll- und Verschließmaschine',
+      'Transfermodul',
+      'Bördelmodul',
+    ]);
+    expect(byId('l3-fill').alarms.map((a) => a.alarmId)).toEqual([
+      'FILL-WGT-0003',
+      'FILL-STP-0001',
     ]);
   });
 
@@ -149,6 +166,7 @@ describe('Simulator', () => {
     const sim = new Simulator((o) => published.push(o), {
       countersIntervalMs: 5_000,
       valuesIntervalMs: 10_000,
+      alarmRepeatMs: 0,
     });
     sim.start();
     const afterStart = published.length;
@@ -162,6 +180,38 @@ describe('Simulator', () => {
   });
 });
 
+describe('Wiederholung anstehender Alarme (O-25)', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('meldet anstehende Alarme erneut mit ihrem ursprünglichen Zeitstempel', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+    const published: Outgoing[] = [];
+    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 30_000, cycle: false });
+    sim.start();
+    const first = published.find(
+      (o) =>
+        o.topic === 'iot/v1/l3/l3-fill/alarms' &&
+        (o.message.data as { event: string }).event === 'raised',
+    );
+    const since = published.length;
+    vi.advanceTimersByTime(30_000);
+    const repeated = published
+      .slice(since)
+      .filter((o) => o.topic.endsWith('/alarms'))
+      .map(
+        (o) => `${o.topic.split('/')[3] ?? ''} ${(o.message.data as { alarmId: string }).alarmId}`,
+      );
+    expect(repeated).toContain('l3-fill FILL-WGT-0003');
+    expect(repeated).not.toContain('l3-fill FILL-STP-0001');
+    const again = published.slice(since).find((o) => o.topic === 'iot/v1/l3/l3-fill/alarms');
+    expect(again?.message.ts).toBe(first?.message.ts);
+    sim.stop();
+  });
+});
+
 describe('Zustandswechsel (O-24)', () => {
   afterEach(() => {
     vi.useRealTimers();
@@ -171,7 +221,7 @@ describe('Zustandswechsel (O-24)', () => {
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
     const published: Outgoing[] = [];
-    const sim = new Simulator((o) => published.push(o));
+    const sim = new Simulator((o) => published.push(o), { alarmRepeatMs: 0 });
     sim.start();
     const since = published.length;
     const after = () => published.slice(since);

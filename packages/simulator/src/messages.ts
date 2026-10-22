@@ -40,7 +40,7 @@ function envelope<C extends DataClass>(
   };
 }
 
-const local = (hhmm: string, now: Date) => localTimeToUtc(hhmm, SITE_TIME_ZONE, now);
+export const local = (hhmm: string, now: Date) => localTimeToUtc(hhmm, SITE_TIME_ZONE, now);
 
 export function identityMessage(machine: SimMachine, now: Date): Outgoing {
   return envelope(

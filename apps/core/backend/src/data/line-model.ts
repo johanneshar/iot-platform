@@ -188,7 +188,9 @@ export class LineModel {
         const alarm = data as DataByClass['alarms'];
         const others = machine.alarms.filter((a) => a.alarmId !== alarm.alarmId);
         const existing = machine.alarms.find((a) => a.alarmId === alarm.alarmId);
-        if (alarm.event === 'raised') {
+        if (alarm.event === 'raised' && existing) {
+          // Wiederholung eines anstehenden Alarms (O-25): Zeitpunkt und Quittierung bleiben
+        } else if (alarm.event === 'raised') {
           machine.alarms = [
             ...others,
             {

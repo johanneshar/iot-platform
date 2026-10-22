@@ -1,0 +1,32 @@
+{
+  "$comment": "Linie 3 · Flexfill (Blockmodell, kein CAD-Export). Abschnitte nach Angabe vom 2026-10-22: Vormodul = Beutelauspacker, Isolator 1–4 = Öffner, Füll- und Verschließmaschine, Transfermodul, Bördelmodul (mit Auslaufband). Positionen der Alarmstellen sind Platzhalter (O-28), bis benannte Bauteile im CAD-Export vorliegen.",
+  "lineId": "l3",
+  "model": "flexfill_blockmodell.glb",
+  "machines": [
+    { "machineId": "l3-debag", "xRange": [-1, 2.6] },
+    { "machineId": "l3-delid", "xRange": [2.6, 4.92] },
+    { "machineId": "l3-fill", "xRange": [4.92, 7.02] },
+    { "machineId": "l3-transfer", "xRange": [7.02, 10.22] },
+    { "machineId": "l3-cap", "xRange": [10.22, 13.3] }
+  ],
+  "alarms": [
+    {
+      "alarmId": "FILL-WGT-0003",
+      "machineId": "l3-fill",
+      "label": { "de": "Wägezelle 3", "en": "Load cell 3" },
+      "position": [5.6, 1.25, 0.2]
+    },
+    {
+      "alarmId": "FILL-STP-0001",
+      "machineId": "l3-fill",
+      "label": { "de": "Stopfensetzer", "en": "Stopper setter" },
+      "position": [6.35, 1.25, 0.2]
+    },
+    {
+      "alarmId": "TRF-ROB-0001",
+      "machineId": "l3-transfer",
+      "label": { "de": "Roboter", "en": "Robot" },
+      "node": "Prozessmodul_03"
+    }
+  ]
+}
