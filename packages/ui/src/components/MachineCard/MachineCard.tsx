@@ -18,6 +18,8 @@ export interface MachineCardProps {
   bottleneck?: boolean;
   selected?: boolean;
   onSelect?: () => void;
+  /** Hinweis auf Datenqualität `uncertain`/`bad` – wird nie verschluckt (CLAUDE.md, Abschnitt 12) */
+  notice?: { tone: 'warning' | 'fault'; label: string };
 }
 
 /** Maschinenkarte im Linienfluss. */
@@ -31,6 +33,7 @@ export function MachineCard({
   bottleneck = false,
   selected = false,
   onSelect,
+  notice,
 }: MachineCardProps) {
   const t = useUiTranslation();
   return (
@@ -52,6 +55,11 @@ export function MachineCard({
       </span>
       <span className={styles.name}>{name}</span>
       <StateChip state={state} />
+      {notice && (
+        <Chip tone={notice.tone} size="sm">
+          {notice.label}
+        </Chip>
+      )}
       <span className={styles.metrics}>
         <span>
           <span className={styles.metricLabel}>{t('machine.rate')}</span>

@@ -52,3 +52,11 @@ export const FremdmaschineSuspended: Story = {
     selected: false,
   },
 };
+
+export const DatenUnsicher: Story = {
+  args: {
+    selected: false,
+    bottleneck: false,
+    notice: { tone: 'warning', label: 'Daten unsicher' },
+  },
+};
