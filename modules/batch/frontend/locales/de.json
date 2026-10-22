@@ -1,0 +1,96 @@
+{
+  "loading": "Batches werden geladen …",
+  "loadError": "Die Batches konnten nicht geladen werden.",
+  "none": "Noch kein Batch auf dieser Linie.",
+  "noValue": "—",
+  "status": {
+    "running": "In Produktion",
+    "ended": "Linienräumung offen",
+    "frozen": "Prüfung offen",
+    "reviewed": "Freigabe offen",
+    "released": "Freigegeben"
+  },
+  "batch": {
+    "running": "Laufender Batch",
+    "selected": "Batch",
+    "recipe": "Rezept {{id}} · v{{version}}",
+    "good": "Gutteile",
+    "bad": "Ausschuss",
+    "started": "Gestartet",
+    "runtime": "Laufzeit",
+    "minutes": "{{value}} min"
+  },
+  "steps": {
+    "label": "Batch-Verlauf",
+    "setup": "Rüsten",
+    "lineRelease": "Linienfreigabe",
+    "production": "Produktion",
+    "clearance": "Linienräumung",
+    "report": "Bericht & Freigabe"
+  },
+  "lineRelease": {
+    "title": "Linienfreigabe für den nächsten Batch",
+    "subtitle": "e-Signatur der QA, bevor die Maschinen den nächsten Batch starten",
+    "sign": "Linie freigeben (e-Signatur)",
+    "given": "Linie freigegeben",
+    "wait": "Die Linienfreigabe erteilt die QA.",
+    "subject": "Linienfreigabe {{line}}",
+    "missingChip": "Linienfreigabe fehlt",
+    "missing": "Für diesen Batch liegt keine Linienfreigabe vor. Die QA kann sie während des Batches nachholen; der Bericht vermerkt das.",
+    "lateChip": "Linienfreigabe nachträglich",
+    "late": "Die Linienfreigabe wurde nach dem Batchstart erteilt; der Bericht vermerkt das."
+  },
+  "implausibleChip": "Daten unsicher",
+  "implausible": "Einige Zählersprünge waren nicht plausibel und wurden nicht gezählt. Datenquelle prüfen.",
+  "audit": {
+    "title": "Audit Trail",
+    "subtitle": "Unveränderbar · 21 CFR Part 11 / Annex 11 – Vorgänge der Plattform zu diesem Batch",
+    "none": "Noch keine Einträge zu diesem Batch.",
+    "time": "Zeit",
+    "user": "Benutzer",
+    "action": "Aktion",
+    "change": "Alt → Neu",
+    "meaning": "Bedeutung: {{meaning}}",
+    "actions": {
+      "line-released": "Linienfreigabe erteilt (e-Signatur)",
+      "line-cleared": "Linienräumung bestätigt",
+      "report-reviewed": "Bericht geprüft (e-Signatur)",
+      "report-released": "Bericht freigegeben (e-Signatur)",
+      "report-exported": "Bericht als PDF/A exportiert"
+    }
+  },
+  "report": {
+    "title": "Batchbericht",
+    "text": "Enthält Prozesswerte aller Maschinen der Linie mit Quelle, Quellzeitstempel und Qualitätsstatus.",
+    "afterEnd": "Der Bericht entsteht nach Batchende und Linienräumung.",
+    "clear": "Linienräumung bestätigen",
+    "waitClearance": "Die Linienräumung bestätigt das Bedienpersonal.",
+    "hash": "Bericht-Hash (wird signiert)",
+    "review": "Bericht prüfen (e-Signatur „Geprüft“)",
+    "waitReview": "Die Prüfung signiert der Einrichter.",
+    "sign": "Elektronisch signieren (Freigabe)",
+    "waitRelease": "Die Freigabe signiert die QA.",
+    "fourEyes": "Vier-Augen-Prinzip: Du hast geprüft – die Freigabe signiert eine andere Person.",
+    "reviewed": "Geprüft",
+    "released": "Signiert",
+    "signedBy": "von {{user}} · Bedeutung: {{meaning}} · {{time}} · im Audit Trail erfasst",
+    "export": "Bericht als PDF exportieren",
+    "fileName": "Batchbericht-{{id}}.pdf",
+    "subject": "Batchbericht {{id}}",
+    "error": "Der Schritt konnte nicht abgeschlossen werden.",
+    "forbidden": "Dafür fehlt das Recht – oder das Vier-Augen-Prinzip ist verletzt."
+  },
+  "list": {
+    "title": "Batches",
+    "subtitle": "Laufende und abgeschlossene Batches dieser Linie",
+    "batch": "Batch",
+    "recipe": "Rezept",
+    "start": "Start",
+    "end": "Ende",
+    "status": "Status",
+    "action": "Aktion",
+    "open": "Öffnen",
+    "openLabel": "Batch {{id}} öffnen",
+    "shown": "angezeigt"
+  }
+}

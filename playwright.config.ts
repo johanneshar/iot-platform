@@ -10,6 +10,7 @@ const EXAMPLE_MODULE = 'http://localhost:4110';
 const DASHBOARD_MODULE = 'http://localhost:4111';
 const ALARMS_MODULE = 'http://localhost:4112';
 const TROUBLESHOOTING_MODULE = 'http://localhost:4113';
+const BATCH_MODULE = 'http://localhost:4114';
 const TEST_BROKER = 'mqtt://localhost:1885';
 const STORYBOOK_URL = 'http://localhost:5183';
 const E2E_DATA_DIR = fileURLToPath(new URL('./test-results/core-data', import.meta.url));
@@ -58,6 +59,8 @@ export default defineConfig({
       // MQTT-Broker im Prozess mit Simulator – E2E ohne Docker
       command: 'node tooling/scripts/test-broker.mjs 1885 --with-simulator',
       port: 1885,
+      // kurzer Batch-Zyklus, damit der Ablauf bis zur Freigabe im Test durchläuft (M6)
+      env: { SIM_BATCH_RUN_MS: '20000', SIM_BATCH_PAUSE_MS: '5000' },
       reuseExistingServer: false,
     },
     {
@@ -109,6 +112,17 @@ export default defineConfig({
         MODULE_PORT: '4113',
         CORE_URL: CORE_BACKEND,
         MODULE_DATA_DIR: `${E2E_MODULE_DATA}/troubleshooting`,
+      },
+      reuseExistingServer: false,
+    },
+    {
+      command: `${fresh(`${E2E_MODULE_DATA}/batch`)} && pnpm --filter @iot/module-batch build && pnpm --filter @iot/module-batch start`,
+      url: `${BATCH_MODULE}/entry.js`,
+      env: {
+        MODULE_PORT: '4114',
+        CORE_URL: CORE_BACKEND,
+        MQTT_URL: TEST_BROKER,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/batch`,
       },
       reuseExistingServer: false,
     },

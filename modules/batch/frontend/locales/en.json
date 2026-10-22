@@ -1,0 +1,96 @@
+{
+  "loading": "Loading batches …",
+  "loadError": "The batches could not be loaded.",
+  "none": "No batch on this line yet.",
+  "noValue": "—",
+  "status": {
+    "running": "In production",
+    "ended": "Line clearance open",
+    "frozen": "Review open",
+    "reviewed": "Release open",
+    "released": "Released"
+  },
+  "batch": {
+    "running": "Running batch",
+    "selected": "Batch",
+    "recipe": "Recipe {{id}} · v{{version}}",
+    "good": "Good parts",
+    "bad": "Rejects",
+    "started": "Started",
+    "runtime": "Run time",
+    "minutes": "{{value}} min"
+  },
+  "steps": {
+    "label": "Batch progress",
+    "setup": "Setup",
+    "lineRelease": "Line release",
+    "production": "Production",
+    "clearance": "Line clearance",
+    "report": "Report & release"
+  },
+  "lineRelease": {
+    "title": "Line release for the next batch",
+    "subtitle": "Electronic signature by QA before the machines start the next batch",
+    "sign": "Release line (e-signature)",
+    "given": "Line released",
+    "wait": "QA gives the line release.",
+    "subject": "Line release {{line}}",
+    "missingChip": "Line release missing",
+    "missing": "There is no line release for this batch. QA can give it while the batch is running; the report records this.",
+    "lateChip": "Line release afterwards",
+    "late": "The line release was given after the batch started; the report records this."
+  },
+  "implausibleChip": "Data uncertain",
+  "implausible": "Some counter jumps were not plausible and were not counted. Check the data source.",
+  "audit": {
+    "title": "Audit trail",
+    "subtitle": "Immutable · 21 CFR Part 11 / Annex 11 – platform actions for this batch",
+    "none": "No entries for this batch yet.",
+    "time": "Time",
+    "user": "User",
+    "action": "Action",
+    "change": "Old → new",
+    "meaning": "Meaning: {{meaning}}",
+    "actions": {
+      "line-released": "Line released (e-signature)",
+      "line-cleared": "Line clearance confirmed",
+      "report-reviewed": "Report reviewed (e-signature)",
+      "report-released": "Report released (e-signature)",
+      "report-exported": "Report exported as PDF/A"
+    }
+  },
+  "report": {
+    "title": "Batch report",
+    "text": "Contains process values of all machines of the line with source, source timestamp and quality status.",
+    "afterEnd": "The report is created after batch end and line clearance.",
+    "clear": "Confirm line clearance",
+    "waitClearance": "Operating staff confirm the line clearance.",
+    "hash": "Report hash (is signed)",
+    "review": "Review report (e-signature “Reviewed”)",
+    "waitReview": "The setup man signs the review.",
+    "sign": "Sign electronically (release)",
+    "waitRelease": "QA signs the release.",
+    "fourEyes": "Four-eyes principle: you reviewed – another person signs the release.",
+    "reviewed": "Reviewed",
+    "released": "Signed",
+    "signedBy": "by {{user}} · meaning: {{meaning}} · {{time}} · recorded in the audit trail",
+    "export": "Export report as PDF",
+    "fileName": "Batch-report-{{id}}.pdf",
+    "subject": "Batch report {{id}}",
+    "error": "The step could not be completed.",
+    "forbidden": "You lack the permission – or the four-eyes principle is violated."
+  },
+  "list": {
+    "title": "Batches",
+    "subtitle": "Running and completed batches of this line",
+    "batch": "Batch",
+    "recipe": "Recipe",
+    "start": "Start",
+    "end": "End",
+    "status": "Status",
+    "action": "Action",
+    "open": "Open",
+    "openLabel": "Open batch {{id}}",
+    "shown": "shown"
+  }
+}

@@ -1,5 +1,5 @@
 // Dritte Linie im Dev-Betrieb: „Linie 3 · Flexfill“ mit eigenem Core (Backend 4002, Shell 5195) und den
-// Modulen Dashboard (4201), Alarme (4202), Fehlersuche (4203). Jede Linie hat im Betrieb ihr eigenes
+// Modulen Dashboard (4201), Alarme (4202), Fehlersuche (4203), Batch (4204). Jede Linie hat im Betrieb ihr eigenes
 // Edge Device (E-23). Voraussetzung: `pnpm dev` läuft (Broker, Simulator, gebaute Einstiegsmodule).
 import { spawn } from 'node:child_process';
 
@@ -19,6 +19,7 @@ const modules = [
   ['@iot/module-dashboard', '4201', 'dashboard'],
   ['@iot/module-alarms', '4202', 'alarms'],
   ['@iot/module-troubleshooting', '4203', 'troubleshooting'],
+  ['@iot/module-batch', '4204', 'batch'],
 ];
 for (const [filter, port, id] of modules) {
   run(filter, 'start', {
