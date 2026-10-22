@@ -2,6 +2,26 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M6 – Batch-Reporting mit e-Signatur (2026-10-22)
+
+**Neu**
+
+- Modul `batch` (GxP): Batchdaten aller Maschinen der Linie, GxP-Rohwerte mit Quellzeitstempel und Qualität,
+  Datenlücken; Seite nach Mockup mit Verlauf, Audit Trail des Batches, Batchbericht und Liste der Batches
+- Ablauf: Linienfreigabe (e-Signatur QA) → Linienräumung → Bericht eingefroren → „Geprüft“ → „Freigabe“ im
+  Vier-Augen-Prinzip (E-40, E-41); Signaturen an den Bericht-Hash gebunden ([ADR-011](/adr/ADR-011-batchbericht))
+- Bericht als PDF/A-2b mit eingebetteter Schrift (E-44)
+- Core: Audit-Einträge mit Bezug (`reference`), Lesen für Modul-Backends, Export des Audit Trail als Datei
+- SDK: `useAudit().record` liefert die laufende Nummer; `fetchAudit`, `fetchAuditEntry`
+- Simulator: Batch-Zyklus (15 min Lauf, 2 min Pause, Zählerreset), in Tests verkürzbar
+- `create-module` legt eine passende README im Modul an (statt der Beschreibung der Vorlage)
+
+**Demo**
+
+1. `pnpm dev` (neu starten, damit Modul und Simulator-Zyklus laufen); als `qa` die Linie freigeben.
+2. Nach Batchende als `operator` die Linienräumung bestätigen, als `setup` prüfen, als `qa` freigeben.
+3. „Bericht als PDF exportieren“ – PDF/A mit Hash und Signaturen.
+
 ## M5a-2 – 3D-Ansicht (2026-10-22)
 
 **Neu**

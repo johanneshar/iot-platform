@@ -17,7 +17,7 @@ Mindeststufe, GxP-Relevanz und dem Meilenstein, in dem sie entstehen.
 | `dashboard`              | Linien-Dashboard        | Produktion     | basic                                                  | nein          | M4 ✓        |
 | `alarms`                 | Alarm-Analytics         | Produktion     | standard                                               | nein          | M5 ✓        |
 | `troubleshooting`        | Geführte Fehlersuche    | Instandhaltung | standard                                               | nein          | M5 ✓        |
-| `batch`                  | Batch-Reporting         | Produktion     | full                                                   | ja            | M6          |
+| `batch`                  | Batch-Reporting         | Produktion     | full                                                   | ja            | M6 ✓        |
 | `format`                 | Geführter Formatwechsel | Produktion     | full (eigene), basic (Fremdmaschinen: nur Bestätigung) | ja            | M7          |
 | `spares`                 | Ersatzteilkatalog       | Instandhaltung | Identität, nur eigene Maschinen                        | nein          | M7          |
 | `condition-monitoring`   | Condition Monitoring    | Instandhaltung | full, nur eigene Maschinen                             | nein          | M8          |
@@ -32,4 +32,4 @@ Schnittstellenspezifikation; offene Fälle stehen in den [offenen Punkten](/offe
 
 Jedes Modul bekommt mit seiner Umsetzung eine eigene Seite mit Entwickler-, Anwender- und Schulungsdoku.
 ✓ = umgesetzt ([Linien-Dashboard](/module/dashboard), [Alarm-Analytics](/module/alarms),
-[Geführte Fehlersuche](/module/troubleshooting)).
+[Geführte Fehlersuche](/module/troubleshooting), [Batch-Reporting](/module/batch)).

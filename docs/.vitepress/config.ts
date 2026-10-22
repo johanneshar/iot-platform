@@ -53,6 +53,7 @@ export default defineConfig({
           { text: 'ADR-008 Proxy und Einsprungpunkte', link: '/adr/ADR-008-modul-backends-proxy' },
           { text: 'ADR-009 Verlauf im Dashboard', link: '/adr/ADR-009-verlauf-dashboard' },
           { text: 'ADR-010 3D-Ansicht', link: '/adr/ADR-010-3d-ansicht' },
+          { text: 'ADR-011 Batchbericht', link: '/adr/ADR-011-batchbericht' },
         ],
       },
       {
@@ -62,6 +63,7 @@ export default defineConfig({
           { text: 'Linien-Dashboard', link: '/module/dashboard' },
           { text: 'Alarm-Analytics', link: '/module/alarms' },
           { text: 'Geführte Fehlersuche', link: '/module/troubleshooting' },
+          { text: 'Batch-Reporting', link: '/module/batch' },
         ],
       },
       {

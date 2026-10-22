@@ -465,9 +465,9 @@ pnpm test:e2e       # E2E + axe (Playwright)
 ```
 
 Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
-Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, zweite Linie 4001/5190
-(`pnpm dev:line2`), dritte Linie Flexfill 4002/5195 mit Modulen 4201–4203 (`pnpm dev:line3`), Storybook 5182,
-Doku 5181, E2E-Tests 4010/4110–4113/5185.
+Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, Batch 4104, zweite Linie
+4001/5190 (`pnpm dev:line2`), dritte Linie Flexfill 4002/5195 mit Modulen 4201–4204 (`pnpm dev:line3`),
+Storybook 5182, Doku 5181, E2E-Tests 4010/4110–4114/5185.
 
 Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
 Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten aus dem
@@ -477,6 +477,6 @@ Mockup (Linie 1 Vials, Linie 2 Spritzen), damit Entwicklung ohne Maschine und oh
 
 ## 14. Stand
 
-M0 bis M5a (Maschinen-Detailseite und 3D-Ansicht) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
-Schritt: Plan für **M6** (Batch-Reporting inkl. e-Signatur) vorlegen und auf Freigabe warten. Offen aus M5a:
-Simulator-Annahmen der Flexfill (O-28), echter CAD-Export nach Namensregel (ADR-010).
+M0 bis M6 (Batch-Reporting mit e-Signatur) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
+Schritt: Plan für **M7** (Formatwechsel, Ersatzteilkatalog) vorlegen und auf Freigabe warten. Offen aus
+M5a/M6: Flexfill-Annahmen (O-28), Rechte im Batch (O-29), veraPDF-Prüfung (O-32).

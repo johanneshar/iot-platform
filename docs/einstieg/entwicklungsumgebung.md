@@ -81,7 +81,7 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | 5182                  | Storybook                                    |
 | 4100                  | Beispielmodul (`tooling/example`)            |
 | 4001, 5190            | zweite Linie mit `pnpm dev:line2`            |
-| 4002, 5195, 4201–4203 | dritte Linie (Flexfill) mit `pnpm dev:line3` |
+| 4002, 5195, 4201–4204 | dritte Linie (Flexfill) mit `pnpm dev:line3` |
 | 4101, 4102, 4103      | Module Dashboard, Alarme, Fehlersuche        |
 | 4010, 4110, 5185      | E2E-Tests (`pnpm test:e2e`)                  |
 

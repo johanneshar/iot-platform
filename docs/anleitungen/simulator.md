@@ -67,6 +67,13 @@ Diese Werte hat der Simulator festgelegt. Sie sind Platzhalter für die Entwickl
 | Leistung im Lauf           | für diese Maschinen die Linienleistung aus der KPI „Leistung“: 286 bzw. 348 /min                                                                                                    |
 | Datenquelle                | Texte aus dem Mockup in `identity.source` (S-07)                                                                                                                                    |
 
+## Batch-Zyklus (M6)
+
+Annahme für die Entwicklung: Ein Batch läuft 15 min; nach 2 min Pause startet der nächste mit fortlaufender
+Nummer (B-2026-1042 → B-2026-1043), die Zähler der Maschinen mit Batch beginnen bei null (`resetAt` =
+Batchstart). Alle Maschinen der Stufe Voll einer Linie gehören zum selben Batch. Verkürzbar mit
+`SIM_BATCH_RUN_MS` und `SIM_BATCH_PAUSE_MS` (E2E: 20 s / 5 s).
+
 ## Linie 3 · Flexfill (nicht im Mockup)
 
 Aufbau nach Beschreibung vom 2026-10-22 (`fixtures/flexfill.ts`): Beutelauspacker → Öffner (Delid/Delining) →
