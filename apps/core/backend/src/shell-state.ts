@@ -17,7 +17,7 @@ export interface ShellModule {
 }
 
 export interface ShellState {
-  line: { id: string; name: string };
+  line: { id: string; name: string; timeZone: string };
   lines: SiteLine[];
   modules: ShellModule[];
 }
@@ -69,7 +69,7 @@ export function buildShellState(
     }));
 
   return {
-    line: { id: line.id, name: line.name },
+    line: { id: line.id, name: line.name, timeZone: line.timeZone },
     lines: [...site],
     modules: [...fromCatalog, ...extra],
   };

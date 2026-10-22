@@ -1,0 +1,78 @@
+{
+  "$comment": "Rollen und Rechte (bestätigt 2026-10-22, docs/architektur/rollen-rechte.md). Lesen der Linie dürfen alle angemeldeten Benutzer. Service hat alle Rechte (E-12), auch GxP-Signaturen.",
+  "roles": [
+    {
+      "id": "operator",
+      "name": { "de": "Operator", "en": "Operator" },
+      "permissions": ["alarms.acknowledge", "troubleshooting.use", "spares.view"]
+    },
+    {
+      "id": "maintenance",
+      "name": { "de": "Maintenance", "en": "Maintenance" },
+      "permissions": [
+        "alarms.acknowledge",
+        "troubleshooting.use",
+        "troubleshooting.document",
+        "spares.view",
+        "spares.request",
+        "condition-monitoring.view",
+        "predictive-maintenance.plan"
+      ]
+    },
+    {
+      "id": "setup",
+      "name": { "de": "Setup Man", "en": "Setup man" },
+      "permissions": [
+        "alarms.acknowledge",
+        "troubleshooting.use",
+        "troubleshooting.document",
+        "format.execute",
+        "format.sign",
+        "spares.view",
+        "spares.request",
+        "condition-monitoring.view"
+      ]
+    },
+    {
+      "id": "qa",
+      "name": { "de": "QA", "en": "QA" },
+      "permissions": ["batch.sign", "batch.export", "core.audit.view"]
+    },
+    {
+      "id": "admin",
+      "name": { "de": "Admin", "en": "Admin" },
+      "permissions": [
+        "core.modules.book",
+        "core.users.manage",
+        "core.line.configure",
+        "core.audit.view",
+        "alarms.acknowledge",
+        "troubleshooting.use",
+        "batch.export",
+        "format.configure",
+        "spares.view",
+        "spares.request",
+        "condition-monitoring.view",
+        "predictive-maintenance.plan",
+        "remote-service.allow",
+        "data-export.export"
+      ]
+    },
+    {
+      "id": "it-admin",
+      "name": { "de": "IT Admin", "en": "IT admin" },
+      "permissions": [
+        "core.users.manage",
+        "core.ldap.configure",
+        "remote-service.allow",
+        "mes-integration.configure",
+        "data-export.export"
+      ]
+    },
+    {
+      "id": "service",
+      "name": { "de": "Service", "en": "Service" },
+      "permissions": ["*"]
+    }
+  ]
+}
