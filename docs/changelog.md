@@ -10,6 +10,7 @@ Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-No
   `CAP-INF-0001` „Einlauf: keine Vials“ am Bördelmodul
 - Module übernehmen die Linie vom Core (`fetchLineConfig`); `pnpm dev:line2` und `pnpm dev:line3` entfallen
 - E2E-Test der Linienwahl entfällt (die Funktion bleibt)
+- Bestätigt: Annahmen der Flexfill (E-48) und Rechte im Batch (E-49)
 
 **Demo:** `pnpm dev` neu starten, <http://localhost:5180> öffnen – die Linienübersicht zeigt die sechs
 Maschinen der Flexfill, der Isolator ist als „Fremd · Basis“ markiert.

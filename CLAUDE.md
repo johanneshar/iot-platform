@@ -480,4 +480,5 @@ Edge Device möglich ist. Die Mockup-Daten der Linien 1 und 2 nutzt nur noch Sto
 
 M0 bis M6 (Batch-Reporting mit e-Signatur) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
 Schritt: Plan für **M7** (Formatwechsel, Ersatzteilkatalog) vorlegen und auf Freigabe warten. Seit 2026-10-22 läuft und testet
-alles mit Linie 3 · Flexfill (E-47). Offen aus M5a/M6: Flexfill-Annahmen (O-28), Rechte im Batch (O-29), veraPDF-Prüfung (O-32).
+alles mit Linie 3 · Flexfill (E-47). Flexfill-Annahmen (E-48) und Rechte im
+Batch (E-49) sind bestätigt. Offen aus M6: veraPDF-Prüfung (O-32).

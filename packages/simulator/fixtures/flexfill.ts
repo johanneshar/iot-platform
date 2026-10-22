@@ -6,7 +6,7 @@ import type { FixtureLine } from './mockup';
  * (Gut-/Schlechtauslauf, Roboter) → Bördelmodul; alle eigene Maschinen, Stufe Voll. Dazu der Isolator als
  * Fremdmaschine der Stufe Basis (2026-10-22), damit Fremdmaschinen und Sammelstörung im Test vorkommen.
  *
- * ANNAHMEN (O-28, zu bestätigen): Sollleistung, Ist-Werte, Prozesswerte, Uhrzeiten der Alarme, Batch,
+ * ANNAHMEN (bestätigt, E-48): Sollleistung, Ist-Werte, Prozesswerte, Uhrzeiten der Alarme, Batch,
  * Format. Die Alarme der Füllmaschine stammen aus den Fehlerbäumen des Mockups.
  */
 export const flexfillLine: FixtureLine = {

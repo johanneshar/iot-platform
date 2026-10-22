@@ -50,9 +50,10 @@ Maschinen der Stufe Voll. 3D-Modell: `fixtures/models/flexfill_blockmodell.glb` 
 - **Zähler** steigen mit der Leistung der Maschine, solange sie in `Execute` ist.
 - Alle Nachrichten werden in den Tests gegen die Schemas geprüft.
 
-## Annahmen (O-28, zu bestätigen)
+## Annahmen {#annahmen}
 
-Diese Werte hat der Simulator festgelegt. Sie sind Platzhalter für die Entwicklung, keine Maschinendaten.
+Diese Werte hat der Simulator festgelegt; bestätigt am 2026-10-22 (E-48). Sie sind Platzhalter für die
+Entwicklung, keine Maschinendaten.
 
 | Thema                    | Annahme                                                                                                                                      |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |

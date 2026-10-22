@@ -35,8 +35,8 @@ angemeldeten Benutzer und steht deshalb nicht einzeln in der Tabelle.
 | `troubleshooting.use`         | geführte Fehlersuche durchlaufen                           |    ●     |      ●      |     ●     |     |   ●   |          |    ●    |
 | `troubleshooting.document`    | Lösung dokumentieren                                       |          |      ●      |     ●     |     |       |          |    ●    |
 | `batch.sign`                  | Linienfreigabe und Freigabe des Batchberichts (e-Signatur) |          |             |           |  ●  |       |          |    ●    |
-| `batch.review`                | Batchbericht prüfen (e-Signatur „Geprüft“, O-29 vorläufig) |          |             |     ●     |     |       |          |    ●    |
-| `batch.clear`                 | Linienräumung nach dem Batch bestätigen (O-29 vorläufig)   |    ●     |             |     ●     |     |       |          |    ●    |
+| `batch.review`                | Batchbericht prüfen (e-Signatur „Geprüft“, E-49)           |          |             |     ●     |     |       |          |    ●    |
+| `batch.clear`                 | Linienräumung nach dem Batch bestätigen (E-49)             |    ●     |             |     ●     |     |       |          |    ●    |
 | `batch.export`                | Batchbericht als PDF exportieren                           |          |             |           |  ●  |   ●   |          |    ●    |
 | `format.execute`              | Formatwechsel durchführen und Schritte bestätigen          |          |             |     ●     |     |       |          |    ●    |
 | `format.sign`                 | Formatwechsel abschließen (e-Signatur)                     |          |             |     ●     |     |       |          |    ●    |
