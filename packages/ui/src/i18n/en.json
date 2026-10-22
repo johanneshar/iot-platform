@@ -46,5 +46,22 @@
   "step": {
     "done": "done",
     "current": "current step"
+  },
+  "login": {
+    "title": "Sign in",
+    "username": "User",
+    "password": "Password",
+    "submit": "Sign in",
+    "busy": "Signing in …"
+  },
+  "signature": {
+    "title": "Electronic signature",
+    "meaning": "Meaning",
+    "hint": "Confirm the action with user name and password. The signature is recorded in the audit trail with its meaning and time.",
+    "username": "User",
+    "password": "Password",
+    "sign": "Sign",
+    "cancel": "Cancel",
+    "busy": "Signing …"
   }
 }

@@ -36,6 +36,7 @@
   --color-sidebar-text-muted: #dde2e2;
   --color-sidebar-overlay: rgba(255, 255, 255, 0.08);
   --color-sidebar-chip: rgba(255, 255, 255, 0.14);
+  --color-sidebar-backdrop: rgba(58, 58, 57, 0.55);
   --font-family: 'Helvetica Neue LT Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-size-overline: 11px;
   --font-size-caption: 12px;
@@ -112,6 +113,7 @@
   --size-main-min-width: 560px;
   --size-content-max-width: 1400px;
   --size-narrow-max-width: 720px;
+  --size-dialog-width: 440px;
   --size-wide-max-width: 860px;
   --size-text-max-width: 760px;
   --size-brand-mark: 40px;

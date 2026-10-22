@@ -43,6 +43,8 @@ export const color = {
   'sidebar-text-muted': '#dde2e2',
   'sidebar-overlay': 'rgba(255, 255, 255, 0.08)',
   'sidebar-chip': 'rgba(255, 255, 255, 0.14)',
+  // Nicht im Mockup: Abdunkelung hinter modalen Dialogen (M3b)
+  'sidebar-backdrop': 'rgba(58, 58, 57, 0.55)',
 } as const;
 
 export const font = {
@@ -155,6 +157,8 @@ export const size = {
   'main-min-width': '560px',
   'content-max-width': '1400px',
   'narrow-max-width': '720px',
+  // Nicht im Mockup: Anmeldung und Signaturdialog (M3b)
+  'dialog-width': '440px',
   'wide-max-width': '860px',
   'text-max-width': '760px',
   'brand-mark': '40px',

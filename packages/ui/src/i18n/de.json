@@ -46,5 +46,22 @@
   "step": {
     "done": "erledigt",
     "current": "aktueller Schritt"
+  },
+  "login": {
+    "title": "Anmelden",
+    "username": "Benutzer",
+    "password": "Passwort",
+    "submit": "Anmelden",
+    "busy": "Wird angemeldet …"
+  },
+  "signature": {
+    "title": "Elektronische Signatur",
+    "meaning": "Bedeutung",
+    "hint": "Mit Benutzer und Passwort bestätigen Sie den Vorgang. Die Signatur wird mit Bedeutung und Zeitpunkt im Audit Trail erfasst.",
+    "username": "Benutzer",
+    "password": "Passwort",
+    "sign": "Signieren",
+    "cancel": "Abbrechen",
+    "busy": "Wird signiert …"
   }
 }

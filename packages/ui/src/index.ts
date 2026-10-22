@@ -47,6 +47,7 @@ export {
   type LineSwitchProps,
 } from './components/LineSwitch/LineSwitch';
 export { LockedModule, type LockedModuleProps } from './components/LockedModule/LockedModule';
+export { LoginForm, type LoginFormProps } from './components/LoginForm/LoginForm';
 export { MachineCard, type MachineCardProps } from './components/MachineCard/MachineCard';
 export { ModuleCard, type ModuleCardProps } from './components/ModuleCard/ModuleCard';
 export { NavItem, type NavItemProps } from './components/NavItem/NavItem';
@@ -76,4 +77,8 @@ export {
   type StepTrailProps,
   type TrailStep,
 } from './components/StepList/StepList';
+export {
+  SignatureDialog,
+  type SignatureDialogProps,
+} from './components/SignatureDialog/SignatureDialog';
 export { SuccessNote, type SuccessNoteProps } from './components/SuccessNote/SuccessNote';

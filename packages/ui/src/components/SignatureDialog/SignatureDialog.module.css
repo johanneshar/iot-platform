@@ -1,0 +1,93 @@
+.dialog {
+  width: 100%;
+  max-width: var(--size-dialog-width);
+  padding: var(--space-28);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-text-body);
+}
+
+.dialog::backdrop {
+  background: var(--color-sidebar-backdrop);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  margin-top: var(--space-14);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-detail-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.subject {
+  font-size: var(--font-size-table);
+  color: var(--color-text-muted);
+}
+
+.meaning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+}
+
+.meaningLabel {
+  font-size: var(--font-size-caption);
+  color: var(--color-on-primary-tint);
+}
+
+.meaningValue {
+  font-size: var(--font-size-card-value);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--font-size-table);
+  line-height: var(--line-height-relaxed);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.label {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+}
+
+.input {
+  min-height: var(--size-control-height);
+  padding: 0 var(--space-14);
+  border: var(--border-width) solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-10) var(--space-14);
+  border-radius: var(--radius-md);
+  background: var(--color-fault-bg);
+  color: var(--color-fault-fg);
+  font-size: var(--font-size-table);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
