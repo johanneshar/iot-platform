@@ -171,8 +171,24 @@ export function usePageTitle(title: string | null): void {
 
 /** Fehler eines Aufrufs an das eigene Modul-Backend. */
 export class ModuleApiError extends Error {
-  constructor(readonly status: number) {
+  /** `errors` aus der Antwort des Backends (`{ errors: string[] }`), sonst leer */
+  constructor(
+    readonly status: number,
+    readonly errors: string[] = [],
+  ) {
     super(`HTTP ${String(status)}`);
+  }
+}
+
+/** Fehlermeldungen aus einer Antwort `{ errors: string[] }` – sonst leer. */
+async function responseErrors(response: Response): Promise<string[]> {
+  try {
+    const body = (await response.json()) as { errors?: unknown };
+    return Array.isArray(body.errors)
+      ? body.errors.filter((e): e is string => typeof e === 'string')
+      : [];
+  } catch {
+    return [];
   }
 }
 
@@ -202,7 +218,7 @@ function moduleApi(moduleId: string): ModuleApi {
         ? {}
         : { headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }),
     });
-    if (!response.ok) throw new ModuleApiError(response.status);
+    if (!response.ok) throw new ModuleApiError(response.status, await responseErrors(response));
     return (response.status === 204 ? undefined : await response.json()) as T;
   };
   return {
