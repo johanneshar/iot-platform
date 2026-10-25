@@ -148,10 +148,9 @@ test('Deep Link aus der Detailseite führt über die Shell zum Zielmodul', async
     .click();
   await page.getByRole('button', { name: 'Ersatzteile dieser Maschine' }).click();
   await expect(page).toHaveURL(/\/spares\?machine=l3-fill/);
-  // Ersatzteilkatalog ist gebucht, aber noch nicht installiert
-  await expect(
-    page.getByText('„Ersatzteilkatalog“ ist auf dem Edge Device dieser Linie nicht installiert.'),
-  ).toBeVisible();
+  // seit M7 installiert: nur die Teile dieser Maschine
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ersatzteilkatalog');
+  await expect(page.getByText(/\d+ Teile · Füll- und Verschließmaschine/)).toBeVisible();
 });
 
 test('3D-Ansicht: Markierung führt in die Fehlersuche, Maschine antippen in die Detailseite (A-01)', async ({

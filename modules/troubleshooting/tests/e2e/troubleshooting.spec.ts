@@ -69,6 +69,13 @@ test('Alarmliste: Fehlersuche per Deep Link bis zur dokumentierten Lösung', asy
 
   await page.getByRole('button', { name: '← Schritt zurück' }).click();
   await expect(page.getByRole('button', { name: 'Ja', exact: true })).toBeVisible();
+
+  // Deep Link in den Ersatzteilkatalog (M7): das Teil der Lösung ist hervorgehoben
+  await page.getByRole('button', { name: 'Ja', exact: true }).click();
+  await page.getByRole('button', { name: 'Ersatzteil ET-50100 anzeigen' }).click();
+  await expect(page).toHaveURL(/\/spares\?search=ET-50100/);
+  await expect(page.getByRole('article', { name: 'Wägezelle 0–50 g' })).toBeVisible();
+  await expect(page.getByText('1 Teil · alle Maschinen der Linie')).toBeVisible();
 });
 
 test('Dashboard: „Fehlersuche starten“ öffnet den Fehlerbaum; Operator dokumentiert nicht', async ({

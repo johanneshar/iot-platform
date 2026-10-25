@@ -11,6 +11,8 @@ const DASHBOARD_MODULE = 'http://localhost:4111';
 const ALARMS_MODULE = 'http://localhost:4112';
 const TROUBLESHOOTING_MODULE = 'http://localhost:4113';
 const BATCH_MODULE = 'http://localhost:4114';
+const FORMAT_MODULE = 'http://localhost:4115';
+const SPARES_MODULE = 'http://localhost:4116';
 const TEST_BROKER = 'mqtt://localhost:1885';
 const STORYBOOK_URL = 'http://localhost:5183';
 const E2E_DATA_DIR = fileURLToPath(new URL('./test-results/core-data', import.meta.url));
@@ -18,6 +20,15 @@ const E2E_MODULE_DATA = fileURLToPath(new URL('./test-results/module-data', impo
 // Frische Datenbank je Lauf
 const fresh = (dir: string) =>
   `node -e "require('fs').rmSync(process.argv[1],{recursive:true,force:true})" "${dir}"`;
+
+// Tests, die die simulierte Linie stoppen (pnpm sim stop), laufen nach den übrigen Shell-Tests
+const LINE_STOP_SPECS = 'modules/format/tests/e2e/**/*.spec.ts';
+const SHELL_USE = {
+  ...devices['Desktop Chrome'],
+  baseURL: SHELL_URL,
+  // WebGL ohne Grafikkarte (3D-Ansicht, M5a)
+  launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
+};
 
 export default defineConfig({
   forbidOnly: CI,
@@ -35,12 +46,15 @@ export default defineConfig({
     {
       name: 'shell',
       testMatch: ['apps/*/*/e2e/**/*.spec.ts', 'modules/*/tests/e2e/**/*.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: SHELL_URL,
-        // WebGL ohne Grafikkarte (3D-Ansicht, M5a)
-        launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
-      },
+      testIgnore: [LINE_STOP_SPECS],
+      use: SHELL_USE,
+    },
+    {
+      // Stoppt die simulierte Linie (Formatwechsel, M7) – erst nach allen anderen Shell-Tests
+      name: 'shell-line-stop',
+      testMatch: [LINE_STOP_SPECS],
+      dependencies: ['shell'],
+      use: SHELL_USE,
     },
     {
       // Läuft gegen das gebaute Storybook: vorher `pnpm storybook:build`
@@ -119,6 +133,28 @@ export default defineConfig({
         CORE_URL: CORE_BACKEND,
         MQTT_URL: TEST_BROKER,
         MODULE_DATA_DIR: `${E2E_MODULE_DATA}/batch`,
+      },
+      reuseExistingServer: false,
+    },
+    {
+      command: `${fresh(`${E2E_MODULE_DATA}/format`)} && pnpm --filter @iot/module-format build && pnpm --filter @iot/module-format start`,
+      url: `${FORMAT_MODULE}/entry.js`,
+      env: {
+        MODULE_PORT: '4115',
+        CORE_URL: CORE_BACKEND,
+        MQTT_URL: TEST_BROKER,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/format`,
+      },
+      reuseExistingServer: false,
+    },
+    {
+      command: `${fresh(`${E2E_MODULE_DATA}/spares`)} && pnpm --filter @iot/module-spares build && pnpm --filter @iot/module-spares start`,
+      url: `${SPARES_MODULE}/entry.js`,
+      env: {
+        MODULE_PORT: '4116',
+        CORE_URL: CORE_BACKEND,
+        MQTT_URL: TEST_BROKER,
+        MODULE_DATA_DIR: `${E2E_MODULE_DATA}/spares`,
       },
       reuseExistingServer: false,
     },
