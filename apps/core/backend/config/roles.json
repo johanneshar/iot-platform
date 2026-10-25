@@ -48,7 +48,7 @@
         "de": "QA",
         "en": "QA"
       },
-      "permissions": ["batch.sign", "batch.export", "core.audit.view"]
+      "permissions": ["batch.sign", "batch.export", "format.release", "core.audit.view"]
     },
     {
       "id": "admin",

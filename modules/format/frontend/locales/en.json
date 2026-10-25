@@ -1,0 +1,87 @@
+{
+  "loading": "Loading format change …",
+  "loadError": "The format change could not be loaded.",
+  "error": "That did not work. Please try again.",
+  "line": "Line",
+  "percent": "{{value}} %",
+  "signedBy": "{{user}} · {{time}}",
+  "choose": {
+    "current": "Current format",
+    "unknown": "Unknown",
+    "text": "Choose the target format – the platform puts together the matching work steps and format parts.",
+    "subtitle_one": "{{count}} step · target time {{minutes}} min",
+    "subtitle_other": "{{count}} steps · target time {{minutes}} min",
+    "none": "No procedure has been set up for this format yet.",
+    "noRecipe": "The machines have not reported a recipe yet – the current format is unknown.",
+    "noPermission": "Setup Man and Service may carry out format changes."
+  },
+  "change": {
+    "title": "Format change {{id}}",
+    "done": "{{done}} of {{total}} steps",
+    "progress": "Format change progress",
+    "steps": "Work steps",
+    "cancel": "Cancel",
+    "cancelled": "This format change was cancelled."
+  },
+  "step": {
+    "number": "Step {{number}} of {{total}}",
+    "part": "Format part",
+    "media": "[Video or image sequence for the work step]",
+    "confirm": "Confirm step",
+    "back": "Back",
+    "foreign": "Third-party machine: change over according to the manufacturer's instructions and confirm here.",
+    "scanFirst": "Confirmation only possible after scanning the format part.",
+    "stopFirst": "Confirmation only once all machines have stopped.",
+    "noPermission": "Setup Man and Service may confirm steps.",
+    "conflict": "The step no longer matches the current status – the page has been refreshed."
+  },
+  "check": {
+    "title": "Line state",
+    "stopped": "All machines report “Stopped”.",
+    "notStopped": "Not stopped yet: {{machines}}"
+  },
+  "scan": {
+    "part": "Code on the format part",
+    "slot": "Code at the mounting position ({{slot}})",
+    "ok": "✓ {{code}} checked",
+    "wrong": "{{code}} does not match – expected {{expected}}",
+    "matches": "Code checked · matches {{target}}"
+  },
+  "done": {
+    "title": "All steps done",
+    "text": "Signing completes the format change and records it in the audit trail. A second person then releases the line for {{target}}.",
+    "perform": "Complete format change (e-signature)",
+    "waitPerform": "Setup Man and Service may complete the change.",
+    "performed": "Performed",
+    "releaseText": "Release under the four-eyes principle: a second person reviews the record and releases the line.",
+    "release": "Release format change (e-signature)",
+    "waitRelease": "QA and Service may release.",
+    "hash": "Checksum of the record"
+  },
+  "sign": {
+    "subject": "Format change {{id}} → {{target}}",
+    "fourEyes": "Four-eyes principle: the release must be given by a different person than the one who performed the change."
+  },
+  "released": {
+    "title": "Format change completed.",
+    "text": "Performed by {{performer}}, released by {{releaser}} · duration {{minutes}} min (target {{planned}} min) · line ready for {{target}}.",
+    "next": "Plan a new format change"
+  },
+  "recipe": {
+    "pending": "Recipe check at the next batch start: all machines must report “{{recipe}}”.",
+    "ok": "✓ Batch {{batch}}: all machines report “{{recipe}}”.",
+    "mismatch": "Batch {{batch}}: different recipe – {{machines}}",
+    "deviation": "Recipe deviates"
+  },
+  "procedures": {
+    "title": "Format change procedures",
+    "subtitle": "Set up per format; new versions as a JSON file following the module's schema.",
+    "name": "Procedure",
+    "route": "From → To",
+    "version": "Version",
+    "steps": "Steps",
+    "import": "Import procedure (JSON)",
+    "imported": "Procedure {{id}} set up",
+    "noJson": "The file is not valid JSON."
+  }
+}

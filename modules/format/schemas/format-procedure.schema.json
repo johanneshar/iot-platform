@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/format-procedure.schema.json",
+  "title": "FormatProcedure",
+  "description": "Ablauf eines Formatwechsels (ADR-013): Arbeitsschritte je Maschine, Formatteile mit Code am Teil und am Einbauplatz (E-17), Zielrezept.",
+  "type": "object",
+  "required": ["id", "version", "title", "from", "to", "plannedMinutes", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "$ref": "#/$defs/text" },
+    "from": { "$ref": "#/$defs/format" },
+    "to": { "$ref": "#/$defs/format" },
+    "plannedMinutes": {
+      "description": "Vorgabezeit des Wechsels in Minuten",
+      "type": "integer",
+      "minimum": 1
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "machine", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "title": { "$ref": "#/$defs/text" },
+          "machine": {
+            "description": "machineId der Maschine; null = ganze Linie",
+            "type": ["string", "null"],
+            "minLength": 1
+          },
+          "text": { "$ref": "#/$defs/text" },
+          "check": {
+            "description": "Automatische Prüfung vor der Bestätigung: line-stopped = alle Maschinen melden Stopped",
+            "enum": ["line-stopped"]
+          },
+          "part": {
+            "description": "Formatteil: Code am Teil (Teilenummer) und am Einbauplatz",
+            "type": "object",
+            "required": ["id", "slot"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^[A-Z]{2}-[0-9]+$" },
+              "slot": { "type": "string", "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$" }
+            }
+          },
+          "media": {
+            "description": "Video oder Bildfolge zum Schritt (Adresse); bis dahin Platzhalter",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "object",
+      "required": ["de"],
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "format": {
+      "type": "object",
+      "required": ["format", "recipe"],
+      "additionalProperties": false,
+      "properties": {
+        "format": { "$ref": "#/$defs/text" },
+        "recipe": {
+          "type": "object",
+          "required": ["id", "version"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "version": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    }
+  }
+}

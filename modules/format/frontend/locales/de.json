@@ -1,0 +1,87 @@
+{
+  "loading": "Formatwechsel wird geladen …",
+  "loadError": "Der Formatwechsel konnte nicht geladen werden.",
+  "error": "Das hat nicht geklappt. Bitte erneut versuchen.",
+  "line": "Linie",
+  "percent": "{{value}} %",
+  "signedBy": "{{user}} · {{time}}",
+  "choose": {
+    "current": "Aktuelles Format",
+    "unknown": "Unbekannt",
+    "text": "Zielformat wählen – die Plattform stellt die passenden Arbeitsschritte und Formatteile zusammen.",
+    "subtitle_one": "{{count}} Schritt · Vorgabezeit {{minutes}} min",
+    "subtitle_other": "{{count}} Schritte · Vorgabezeit {{minutes}} min",
+    "none": "Für dieses Format ist noch kein Ablauf eingerichtet.",
+    "noRecipe": "Die Maschinen haben noch kein Rezept gemeldet – das aktuelle Format ist unbekannt.",
+    "noPermission": "Formatwechsel durchführen dürfen Setup Man und Service."
+  },
+  "change": {
+    "title": "Formatwechsel {{id}}",
+    "done": "{{done}} von {{total}} Schritten",
+    "progress": "Fortschritt Formatwechsel",
+    "steps": "Arbeitsschritte",
+    "cancel": "Abbrechen",
+    "cancelled": "Dieser Formatwechsel wurde abgebrochen."
+  },
+  "step": {
+    "number": "Schritt {{number}} von {{total}}",
+    "part": "Formatteil",
+    "media": "[Video oder Bildfolge zum Arbeitsschritt]",
+    "confirm": "Schritt bestätigen",
+    "back": "Zurück",
+    "foreign": "Fremdmaschine: Umstellung nach Herstelleranleitung durchführen und hier bestätigen.",
+    "scanFirst": "Bestätigung erst nach Scan des Formatteils möglich.",
+    "stopFirst": "Bestätigung erst, wenn alle Maschinen stehen.",
+    "noPermission": "Schritte bestätigen dürfen Setup Man und Service.",
+    "conflict": "Der Schritt passt nicht mehr zum Stand – die Seite wurde aktualisiert."
+  },
+  "check": {
+    "title": "Zustand der Linie",
+    "stopped": "Alle Maschinen melden „Stopped“.",
+    "notStopped": "Noch nicht gestoppt: {{machines}}"
+  },
+  "scan": {
+    "part": "Code am Formatteil",
+    "slot": "Code am Einbauplatz ({{slot}})",
+    "ok": "✓ {{code}} geprüft",
+    "wrong": "{{code}} passt nicht – erwartet {{expected}}",
+    "matches": "Code geprüft · passt zu {{target}}"
+  },
+  "done": {
+    "title": "Alle Schritte erledigt",
+    "text": "Mit der Signatur wird der Formatwechsel abgeschlossen und im Audit Trail erfasst. Danach gibt eine zweite Person die Linie für {{target}} frei.",
+    "perform": "Formatwechsel abschließen (e-Signatur)",
+    "waitPerform": "Abschließen dürfen Setup Man und Service.",
+    "performed": "Durchgeführt",
+    "releaseText": "Freigabe im Vier-Augen-Prinzip: Eine zweite Person prüft das Protokoll und gibt die Linie frei.",
+    "release": "Formatwechsel freigeben (e-Signatur)",
+    "waitRelease": "Freigeben dürfen QA und Service.",
+    "hash": "Prüfsumme des Protokolls"
+  },
+  "sign": {
+    "subject": "Formatwechsel {{id}} → {{target}}",
+    "fourEyes": "Vier-Augen-Prinzip: Die Freigabe muss eine andere Person erteilen als die Durchführung."
+  },
+  "released": {
+    "title": "Formatwechsel abgeschlossen.",
+    "text": "Durchgeführt von {{performer}}, freigegeben von {{releaser}} · Dauer {{minutes}} min (Vorgabe {{planned}} min) · Linie bereit für {{target}}.",
+    "next": "Neuen Formatwechsel planen"
+  },
+  "recipe": {
+    "pending": "Rezeptprüfung beim nächsten Batchstart: Alle Maschinen müssen „{{recipe}}“ melden.",
+    "ok": "✓ Batch {{batch}}: Alle Maschinen melden „{{recipe}}“.",
+    "mismatch": "Batch {{batch}}: abweichendes Rezept – {{machines}}",
+    "deviation": "Rezept weicht ab"
+  },
+  "procedures": {
+    "title": "Formatwechsel-Abläufe",
+    "subtitle": "Je Format eingerichtet; neue Versionen als JSON-Datei nach dem Schema des Moduls.",
+    "name": "Ablauf",
+    "route": "Von → Nach",
+    "version": "Version",
+    "steps": "Schritte",
+    "import": "Ablauf importieren (JSON)",
+    "imported": "Ablauf {{id}} eingerichtet",
+    "noJson": "Die Datei ist kein gültiges JSON."
+  }
+}

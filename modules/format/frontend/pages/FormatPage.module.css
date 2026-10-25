@@ -1,0 +1,145 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.choose {
+  max-width: var(--size-wide-max-width);
+}
+
+.targets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-choice-min), 1fr));
+  gap: var(--space-12);
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.barTitle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.route {
+  font-size: var(--font-size-card-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.progress {
+  display: flex;
+  flex: 1 1 var(--grid-tile-min);
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--size-dialog-width);
+}
+
+.progressText {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-table);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: flex-start;
+}
+
+.steps {
+  flex: 1 1 var(--grid-column-steps);
+  min-width: 0;
+}
+
+.detail {
+  flex: 2 1 var(--grid-column-main);
+  min-width: 0;
+}
+
+.stepHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepTitle {
+  margin: 0;
+  font-size: var(--font-size-detail-title-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-loose);
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--font-size-table);
+  color: var(--color-fault-fg);
+}
+
+.errors {
+  margin: 0;
+  padding-left: var(--space-20);
+  font-size: var(--font-size-table);
+  color: var(--color-fault-fg);
+}
+
+.scans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-tile-min), 1fr));
+  gap: var(--space-12);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
+
+.start {
+  align-self: flex-start;
+}
+
+.hash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.code {
+  font-size: var(--font-size-caption);
+  overflow-wrap: anywhere;
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  font-size: var(--font-size-table);
+}
+
+.uploadLabel {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+}

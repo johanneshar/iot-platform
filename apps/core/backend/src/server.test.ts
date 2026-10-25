@@ -78,7 +78,12 @@ describe('Anmeldung', () => {
   it('liefert Benutzer mit Rollen und Rechten', async () => {
     const qa = (await get('/api/auth/me', await login('qa'))).json<SessionUser>();
     expect(qa.roles.map((r) => r.id)).toEqual(['qa']);
-    expect(qa.permissions).toEqual(['batch.export', 'batch.sign', 'core.audit.view']);
+    expect(qa.permissions).toEqual([
+      'batch.export',
+      'batch.sign',
+      'core.audit.view',
+      'format.release',
+    ]);
     const service = (await get('/api/auth/me', await login('service'))).json<SessionUser>();
     expect(service.permissions).toEqual(['*']);
   });
