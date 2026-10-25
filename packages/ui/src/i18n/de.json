@@ -74,5 +74,16 @@
     "error": "Das 3D-Modell konnte nicht angezeigt werden.",
     "legendFault": "Störung",
     "legendWarning": "Warnung"
+  },
+  "part": {
+    "image": "[Teilebild]",
+    "stock": "{{count}} vor Ort",
+    "outOfStock": "Nicht vorrätig",
+    "lead": "Lieferzeit {{lead}}",
+    "add": "Zur Anfrage hinzufügen",
+    "added": "In der Anfrageliste"
+  },
+  "scan": {
+    "placeholder": "Scannen oder Code eingeben, Enter"
   }
 }

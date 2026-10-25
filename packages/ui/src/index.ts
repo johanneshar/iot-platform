@@ -61,8 +61,15 @@ export {
 export { ModuleCard, type ModuleCardProps } from './components/ModuleCard/ModuleCard';
 export { NavItem, type NavItemProps } from './components/NavItem/NavItem';
 export { Panel, type PanelProps } from './components/Panel/Panel';
+export { PartCard, type PartCardProps } from './components/PartCard/PartCard';
 export { Placeholder, type PlaceholderProps } from './components/Placeholder/Placeholder';
 export { ProgressBar, type ProgressBarProps } from './components/ProgressBar/ProgressBar';
+export {
+  ScanInput,
+  scanSource,
+  type ScanInputProps,
+  type ScanSource,
+} from './components/ScanInput/ScanInput';
 export { SearchInput, type SearchInputProps } from './components/SearchInput/SearchInput';
 export {
   Sidebar,

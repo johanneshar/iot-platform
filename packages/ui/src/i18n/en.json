@@ -74,5 +74,16 @@
     "error": "The 3D model could not be displayed.",
     "legendFault": "Fault",
     "legendWarning": "Warning"
+  },
+  "part": {
+    "image": "[Part image]",
+    "stock": "{{count}} on site",
+    "outOfStock": "Out of stock",
+    "lead": "Lead time {{lead}}",
+    "add": "Add to request",
+    "added": "In request list"
+  },
+  "scan": {
+    "placeholder": "Scan or type code, Enter"
   }
 }
