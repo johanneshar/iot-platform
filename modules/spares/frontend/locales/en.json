@@ -1,0 +1,36 @@
+{
+  "loading": "Loading catalogue …",
+  "loadError": "The spare parts catalogue could not be loaded.",
+  "search": {
+    "label": "Search",
+    "placeholder": "Part number or description"
+  },
+  "groups": {
+    "label": "Filter by assembly",
+    "all": "All"
+  },
+  "count_one": "{{count}} part",
+  "count_other": "{{count}} parts",
+  "scope": {
+    "allMachines": "all machines of the line",
+    "showAll": "Show all parts",
+    "foreign": "Third-party machine: spare parts and service via the respective manufacturer."
+  },
+  "none": "No part found.",
+  "lead": {
+    "none": "—",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days"
+  },
+  "request": {
+    "title": "Request list",
+    "empty": "No parts selected yet.",
+    "remove": "Remove: {{name}}",
+    "send": "Send request to service",
+    "sent": "Request sent.",
+    "sentText": "With machine no., line and current state – case {{ticket}}",
+    "noPermission": "Maintenance, Setup Man and Admin may send requests.",
+    "forbidden": "You lack the permission to send requests.",
+    "error": "The request could not be sent. Please try again."
+  }
+}

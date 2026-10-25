@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iot-platform.local/v1/spares-catalog.schema.json",
+  "title": "SparesCatalog",
+  "description": "Ersatzteilkatalog einer Linie – bis zur PLM-Anbindung (O-02) als Datei.",
+  "type": "object",
+  "required": ["lineId", "groups", "parts"],
+  "additionalProperties": false,
+  "properties": {
+    "lineId": { "type": "string", "minLength": 1 },
+    "groups": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "group", "machines", "stock", "leadDays"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z]{2}-[0-9]+$" },
+          "name": {
+            "type": "object",
+            "required": ["de"],
+            "additionalProperties": { "type": "string", "minLength": 1 }
+          },
+          "group": { "type": "string", "minLength": 1 },
+          "machines": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "stock": { "type": "integer", "minimum": 0 },
+          "leadDays": { "type": ["integer", "null"], "minimum": 0 }
+        }
+      }
+    }
+  }
+}

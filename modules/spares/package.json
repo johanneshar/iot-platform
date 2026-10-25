@@ -1,0 +1,32 @@
+{
+  "name": "@iot/module-spares",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ersatzteilkatalog – Modul der IoT-Plattform",
+  "scripts": {
+    "dev": "node ../../tooling/scripts/module-dev.mjs",
+    "build": "vite build --configLoader runner",
+    "start": "tsx backend/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --configLoader runner"
+  },
+  "dependencies": {
+    "@iot/module-sdk": "workspace:*",
+    "fastify": "5.12.7",
+    "@iot/interface-schema": "workspace:*",
+    "ajv": "8.20.0",
+    "better-sqlite3": "13.0.3"
+  },
+  "devDependencies": {
+    "@iot/ui": "workspace:*",
+    "@types/react": "18.3.31",
+    "@vitejs/plugin-react": "6.1.2",
+    "i18next": "26.5.3",
+    "react": "18.3.1",
+    "react-i18next": "17.1.0",
+    "tsx": "4.23.15",
+    "vite": "8.3.4",
+    "@types/better-sqlite3": "9.6.0"
+  }
+}

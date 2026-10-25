@@ -1,0 +1,36 @@
+{
+  "loading": "Katalog wird geladen …",
+  "loadError": "Der Ersatzteilkatalog konnte nicht geladen werden.",
+  "search": {
+    "label": "Suche",
+    "placeholder": "Teilenummer oder Bezeichnung"
+  },
+  "groups": {
+    "label": "Baugruppe filtern",
+    "all": "Alle"
+  },
+  "count_one": "{{count}} Teil",
+  "count_other": "{{count}} Teile",
+  "scope": {
+    "allMachines": "alle Maschinen der Linie",
+    "showAll": "Alle Teile anzeigen",
+    "foreign": "Fremdmaschine: Ersatzteile und Service über den jeweiligen Hersteller."
+  },
+  "none": "Kein Teil gefunden.",
+  "lead": {
+    "none": "—",
+    "days_one": "{{count}} Tag",
+    "days_other": "{{count}} Tage"
+  },
+  "request": {
+    "title": "Anfrageliste",
+    "empty": "Noch keine Teile ausgewählt.",
+    "remove": "Entfernen: {{name}}",
+    "send": "Anfrage an Service senden",
+    "sent": "Anfrage übermittelt.",
+    "sentText": "Mit Maschinen-Nr., Linie und aktuellem Zustand – Vorgang {{ticket}}",
+    "noPermission": "Anfragen senden dürfen Maintenance, Setup Man und Admin.",
+    "forbidden": "Für Anfragen fehlt das Recht.",
+    "error": "Die Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."
+  }
+}
