@@ -1,3 +1,16 @@
-export { buildLines, SITE_TIME_ZONE, type SimLine, type SimMachine } from './config';
+export {
+  buildLines,
+  RECIPE_CATALOG,
+  SITE_TIME_ZONE,
+  type SimLine,
+  type SimMachine,
+  type SimRecipe,
+} from './config';
 export { startupMessages, type Outgoing } from './messages';
-export { Simulator, type Publish, type SimulatorOptions } from './simulator';
+export {
+  controlTopic,
+  Simulator,
+  type Publish,
+  type SimCommand,
+  type SimulatorOptions,
+} from './simulator';

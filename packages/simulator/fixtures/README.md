@@ -7,3 +7,7 @@ Beispieldaten für Simulator und Tests. Daten werden ausschließlich aus dem UI-
 `flexfill.ts` beschreibt Linie 3 · Flexfill – nicht aus dem Mockup, sondern nach Beschreibung vom 2026-10-22; inklusive Isolator als Fremdmaschine der Stufe Basis; alle
 übrigen Werte sind Annahmen (bestätigt, E-48). `models/` enthält das Flexfill-Blockmodell (`.glb`) und seine Zuordnung
 (`flexfill.model.json`, ADR-010).
+
+`format-procedures/` enthält den Formatwechsel-Ablauf „Flexfill: Vial im Nest → Spritze im Nest“ (ADR-013),
+`spares/` den Ersatzteilkatalog der Flexfill. Der Ablauf und die Formatteile `FT-33…` sind auf Wunsch des
+Projektverantwortlichen erfunden (2026-10-25, E-51); die übrigen Teile stammen aus dem Mockup.

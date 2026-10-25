@@ -1,0 +1,253 @@
+{
+  "id": "flexfill-vial-spritze",
+  "version": 1,
+  "title": {
+    "de": "Flexfill: Vial im Nest → Spritze im Nest"
+  },
+  "from": {
+    "format": { "de": "Vial im Nest", "en": "Vial in nest" },
+    "recipe": { "id": "vial-nest", "version": 1 }
+  },
+  "to": {
+    "format": { "de": "Spritze im Nest", "en": "Syringe in nest" },
+    "recipe": { "id": "syringe-nest", "version": 1 }
+  },
+  "plannedMinutes": 90,
+  "steps": [
+    {
+      "id": "leerfahren",
+      "title": { "de": "Linie leerfahren" },
+      "machine": null,
+      "text": {
+        "de": "Letzte Tubs abarbeiten, keine neuen Beutel aufgeben und alle Maschinen in den Zustand „Stopped“ bringen. Die Plattform prüft den Zustand aller Maschinen automatisch."
+      },
+      "check": "line-stopped"
+    },
+    {
+      "id": "raeumung",
+      "title": { "de": "Linienräumung prüfen" },
+      "machine": null,
+      "text": {
+        "de": "Sicherstellen, dass keine Vials, Stopfen, Kappen oder Nester des letzten Batches mehr in der Linie liegen. Die Linienräumung im Batch-Reporting muss bestätigt sein."
+      }
+    },
+    {
+      "id": "iso-handschuhe",
+      "title": { "de": "Handschuhe des Isolators prüfen" },
+      "machine": "l3-iso",
+      "text": {
+        "de": "Handschuheingriffe auf Beschädigungen sichtprüfen und die Dichtheitsprüfung nach Herstelleranleitung des Isolators durchführen."
+      }
+    },
+    {
+      "id": "iso-einschleusen",
+      "title": { "de": "Formatteile einschleusen" },
+      "machine": "l3-iso",
+      "text": {
+        "de": "Alle Formatteile für Spritze im Nest über die Materialschleuse in den Isolator einschleusen. Verpackung erst im Isolator öffnen."
+      }
+    },
+    {
+      "id": "debag-fuehrung",
+      "title": { "de": "Tubführung wechseln" },
+      "machine": "l3-debag",
+      "text": {
+        "de": "Tubführung für Vial-Tubs über die beiden Rändelschrauben lösen und die Tubführung für Spritzen-Tubs einsetzen."
+      },
+      "part": { "id": "FT-3301", "slot": "PLATZ-DEBAG-01" }
+    },
+    {
+      "id": "debag-schnitt",
+      "title": { "de": "Schnitthöhe einstellen" },
+      "machine": "l3-debag",
+      "text": {
+        "de": "Schnitthöhe des Beutelmessers am HMI auf das Format Spritzen-Tub stellen und das Messer auf Beschädigungen prüfen."
+      }
+    },
+    {
+      "id": "delid-greifer",
+      "title": { "de": "Abzugsgreifer Folie wechseln" },
+      "machine": "l3-delid",
+      "text": {
+        "de": "Abzugsgreifer für die Tyvek-Folie des Vial-Tubs ausbauen und den Abzugsgreifer für den Spritzen-Tub einsetzen."
+      },
+      "part": { "id": "FT-3311", "slot": "PLATZ-DELID-01" }
+    },
+    {
+      "id": "delid-saugplatte",
+      "title": { "de": "Saugplatte Vlies wechseln" },
+      "machine": "l3-delid",
+      "text": {
+        "de": "Saugplatte zur Vliesentnahme tauschen. Saugnäpfe der neuen Platte auf Risse prüfen."
+      },
+      "part": { "id": "FT-3312", "slot": "PLATZ-DELID-02" }
+    },
+    {
+      "id": "delid-abzugskraft",
+      "title": { "de": "Abzugskraft prüfen" },
+      "machine": "l3-delid",
+      "text": {
+        "de": "Einen leeren Spritzen-Tub im Einrichtbetrieb öffnen und die angezeigte Abzugskraft der Folie am HMI ablesen. Sie muss im Bereich des Rezepts liegen."
+      }
+    },
+    {
+      "id": "fill-nestaufnahme",
+      "title": { "de": "Nestaufnahme wechseln" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Nestaufnahme für Vial-Nester ausbauen und die Nestaufnahme für Spritzen-Nester einsetzen. Beide Zentrierstifte müssen spürbar einrasten."
+      },
+      "part": { "id": "FT-3320", "slot": "PLATZ-FILL-01" }
+    },
+    {
+      "id": "fill-nadeln",
+      "title": { "de": "Füllnadeln wechseln" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Füllnadeln an allen Stationen gegen die Spritzen-Füllnadeln tauschen. Nadeltyp gemäß Rezept."
+      },
+      "part": { "id": "FT-3321", "slot": "PLATZ-FILL-02" }
+    },
+    {
+      "id": "fill-schlauchset",
+      "title": { "de": "Schlauchset tauschen" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Sterilisiertes Schlauchset für den Produktweg einsetzen. Verfallsdatum und Unversehrtheit der Verpackung prüfen."
+      },
+      "part": { "id": "FT-3322", "slot": "PLATZ-FILL-03" }
+    },
+    {
+      "id": "fill-setzrohre",
+      "title": { "de": "Setzrohre umrüsten" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Setzrohre des Stopfensetzers gegen die Setzrohre für Spritzenstopfen tauschen."
+      },
+      "part": { "id": "FT-3323", "slot": "PLATZ-FILL-04" }
+    },
+    {
+      "id": "fill-sortiertopf",
+      "title": { "de": "Sortiertopf wechseln" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Sortiertopf der Stopfenzuführung leeren, die Vial-Stopfen ausschleusen und den Sortiertopf für Spritzenstopfen einsetzen."
+      },
+      "part": { "id": "FT-3324", "slot": "PLATZ-FILL-05" }
+    },
+    {
+      "id": "fill-verschliessen",
+      "title": { "de": "Verschließstation abwählen" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Spritzen werden gestopft, nicht verschlossen: Verschließstation am HMI abwählen und in die Parkposition fahren."
+      }
+    },
+    {
+      "id": "fill-waegezellen",
+      "title": { "de": "Wägezellen prüfen" },
+      "machine": "l3-fill",
+      "text": {
+        "de": "Alle Wägezellen tarieren und mit dem Prüfgewicht kontrollieren. Abweichung höchstens 0,01 g."
+      }
+    },
+    {
+      "id": "trf-greifer",
+      "title": { "de": "Robotergreifer wechseln" },
+      "machine": "l3-transfer",
+      "text": {
+        "de": "Greifer für das Vial-Nest am Werkzeugwechsler ablegen und den Greifer für das Spritzen-Nest aufnehmen."
+      },
+      "part": { "id": "FT-3330", "slot": "PLATZ-TRF-01" }
+    },
+    {
+      "id": "trf-auslauf",
+      "title": { "de": "Auslaufschienen umstellen" },
+      "machine": "l3-transfer",
+      "text": {
+        "de": "Auslaufschienen für den Gut- und Schlechtauslauf der Spritzen einsetzen."
+      },
+      "part": { "id": "FT-3331", "slot": "PLATZ-TRF-02" }
+    },
+    {
+      "id": "trf-aushebeplatte",
+      "title": { "de": "Aushebeplatte parken" },
+      "machine": "l3-transfer",
+      "text": {
+        "de": "Aushebeplatte und Manipulator werden nur für Vials gebraucht: beide in die Parkposition fahren und sichern."
+      }
+    },
+    {
+      "id": "trf-bahnen",
+      "title": { "de": "Roboterbahnen prüfen" },
+      "machine": "l3-transfer",
+      "text": {
+        "de": "Roboterbahnen für das Spritzen-Nest im Handbetrieb mit reduzierter Geschwindigkeit abfahren, einschließlich der Einzelentnahme."
+      }
+    },
+    {
+      "id": "cap-bypass",
+      "title": { "de": "Bördelmodul abwählen" },
+      "machine": "l3-cap",
+      "text": {
+        "de": "Spritzen werden am Transfermodul ausgeschleust: Einlaufband des Bördelmoduls sperren und das Modul am HMI abwählen."
+      }
+    },
+    {
+      "id": "cap-abdecken",
+      "title": { "de": "Bördelköpfe abdecken" },
+      "machine": "l3-cap",
+      "text": {
+        "de": "Bördelköpfe in die Parkposition fahren und mit den Schutzhauben abdecken."
+      }
+    },
+    {
+      "id": "iso-ausschleusen",
+      "title": { "de": "Vial-Formatteile ausschleusen" },
+      "machine": "l3-iso",
+      "text": {
+        "de": "Ausgebaute Formatteile für Vials über die Materialschleuse ausschleusen und zur Reinigung geben."
+      }
+    },
+    {
+      "id": "iso-dekontamination",
+      "title": { "de": "Isolator dekontaminieren" },
+      "machine": "l3-iso",
+      "text": {
+        "de": "Dekontaminationszyklus des Isolators nach Herstelleranleitung starten und das Ende abwarten. Den Zyklusbericht des Isolators aufbewahren."
+      }
+    },
+    {
+      "id": "rezept",
+      "title": { "de": "Rezept laden" },
+      "machine": null,
+      "text": {
+        "de": "Rezept „Spritze im Nest“ (syringe-nest, Version 1) an allen Maschinen laden. Die Plattform prüft beim nächsten Batchstart, ob alle Maschinen dieses Rezept melden."
+      }
+    },
+    {
+      "id": "trockenlauf",
+      "title": { "de": "Trockenlauf" },
+      "machine": null,
+      "text": {
+        "de": "Zwei leere Spritzen-Tubs ohne Produkt durch die ganze Linie fahren. Übergaben zwischen den Maschinen beobachten."
+      }
+    },
+    {
+      "id": "testlauf",
+      "title": { "de": "Testlauf" },
+      "machine": null,
+      "text": {
+        "de": "Ein Nest mit Produkt füllen und stopfen. Füllgewicht und Stopfenposition prüfen; die Testspritzen werden im Schlechtauslauf ausgeschleust."
+      }
+    },
+    {
+      "id": "rueckmeldung",
+      "title": { "de": "Formatteile zurückmelden" },
+      "machine": null,
+      "text": {
+        "de": "Ausgebaute Formatteile im Formatteillager einlagern und den Lagerplatz zurückmelden."
+      }
+    }
+  ]
+}

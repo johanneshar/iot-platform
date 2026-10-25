@@ -25,7 +25,8 @@
     "storybook": "pnpm --filter @iot/ui storybook",
     "storybook:build": "pnpm --filter @iot/ui storybook:build",
     "create-module": "node tooling/scripts/create-module.mjs",
-    "dev:mosquitto": "IOT_BROKER=mosquitto node tooling/scripts/dev.mjs"
+    "dev:mosquitto": "IOT_BROKER=mosquitto node tooling/scripts/dev.mjs",
+    "sim": "pnpm --silent --filter @iot/simulator control"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

@@ -191,6 +191,8 @@ export interface BatchRef {
   batchId: string;
   startedAt: Date;
   targetQuantity?: number;
+  /** geladenes Rezept, falls abweichend vom Rezept beim Start (Formatwechsel, E-51) */
+  recipe?: { id: string; version: number; formatParts: string[] };
 }
 
 export function batchEvent(
@@ -200,7 +202,11 @@ export function batchEvent(
   at: Date,
 ): Outgoing | null {
   if (!machine.batch) return null;
-  const { recipe, formatParts, productName } = machine.batch;
+  const { productName } = machine.batch;
+  const recipe = batch.recipe
+    ? { id: batch.recipe.id, version: batch.recipe.version }
+    : machine.batch.recipe;
+  const formatParts = batch.recipe?.formatParts ?? machine.batch.formatParts;
   return envelope(
     machine,
     'batch',

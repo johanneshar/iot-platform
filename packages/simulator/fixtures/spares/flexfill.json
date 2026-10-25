@@ -1,0 +1,166 @@
+{
+  "lineId": "l3",
+  "groups": ["Dosierung", "Verschließen", "Wägung", "Stopfensetzen", "Formatteile"],
+  "parts": [
+    {
+      "id": "ET-10233",
+      "name": { "de": "Pumpenkopf Dosierpumpe" },
+      "group": "Dosierung",
+      "machines": ["l3-fill"],
+      "stock": 2,
+      "leadDays": 3
+    },
+    {
+      "id": "ET-10240",
+      "name": { "de": "Dichtungssatz Dosierpumpe" },
+      "group": "Dosierung",
+      "machines": ["l3-fill"],
+      "stock": 6,
+      "leadDays": 2
+    },
+    {
+      "id": "ET-20418",
+      "name": { "de": "Magnetkupplung Verschließkopf" },
+      "group": "Verschließen",
+      "machines": ["l3-fill"],
+      "stock": 0,
+      "leadDays": 10
+    },
+    {
+      "id": "ET-20430",
+      "name": { "de": "Greiferbacken Verschließkopf" },
+      "group": "Verschließen",
+      "machines": ["l3-fill"],
+      "stock": 8,
+      "leadDays": 3
+    },
+    {
+      "id": "ET-50100",
+      "name": { "de": "Wägezelle 0–50 g" },
+      "group": "Wägung",
+      "machines": ["l3-fill"],
+      "stock": 1,
+      "leadDays": 14
+    },
+    {
+      "id": "ET-50112",
+      "name": { "de": "Anschlusskabel Wägezelle" },
+      "group": "Wägung",
+      "machines": ["l3-fill"],
+      "stock": 4,
+      "leadDays": 2
+    },
+    {
+      "id": "ET-30871",
+      "name": { "de": "Vakuumpumpe Stopfensetzer" },
+      "group": "Stopfensetzen",
+      "machines": ["l3-fill"],
+      "stock": 0,
+      "leadDays": 21
+    },
+    {
+      "id": "ET-30905",
+      "name": { "de": "Saugnapf-Set Stopfensetzer" },
+      "group": "Stopfensetzen",
+      "machines": ["l3-fill"],
+      "stock": 12,
+      "leadDays": 2
+    },
+    {
+      "id": "FT-2041",
+      "name": { "de": "Einlaufstern Format 20 ml" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3110",
+      "name": { "de": "Füllnadel-Set 1,2 mm" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 2,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3301",
+      "name": { "de": "Tubführung Spritzen-Tub" },
+      "group": "Formatteile",
+      "machines": ["l3-debag"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3311",
+      "name": { "de": "Abzugsgreifer Folie Spritzen-Tub" },
+      "group": "Formatteile",
+      "machines": ["l3-delid"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3312",
+      "name": { "de": "Saugplatte Vlies Spritzen-Tub" },
+      "group": "Formatteile",
+      "machines": ["l3-delid"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3320",
+      "name": { "de": "Nestaufnahme Spritzen-Nest" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3321",
+      "name": { "de": "Füllnadel-Set Spritze" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 2,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3322",
+      "name": { "de": "Schlauchset Produktweg" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 4,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3323",
+      "name": { "de": "Setzrohre Spritzenstopfen" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3324",
+      "name": { "de": "Sortiertopf Spritzenstopfen" },
+      "group": "Formatteile",
+      "machines": ["l3-fill"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3330",
+      "name": { "de": "Robotergreifer Spritzen-Nest" },
+      "group": "Formatteile",
+      "machines": ["l3-transfer"],
+      "stock": 1,
+      "leadDays": null
+    },
+    {
+      "id": "FT-3331",
+      "name": { "de": "Auslaufschienen Spritze" },
+      "group": "Formatteile",
+      "machines": ["l3-transfer"],
+      "stock": 1,
+      "leadDays": null
+    }
+  ]
+}

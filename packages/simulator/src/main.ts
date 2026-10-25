@@ -1,5 +1,5 @@
 import mqtt from 'mqtt';
-import { Simulator } from './simulator';
+import { controlTopic, Simulator, type SimCommand } from './simulator';
 
 const url = process.env['MQTT_URL'] ?? 'mqtt://localhost:1883';
 const client = mqtt.connect(url, { clientId: 'iot-simulator', reconnectPeriod: 5_000 });
@@ -38,6 +38,26 @@ client.once('connect', () => {
     `Simulator: verbunden mit ${url}, sende ${simulator.lines.map((l) => l.name).join(', ')}`,
   );
   simulator.start();
+  // Bedienung am HMI nachspielen (nur Entwicklung, E-51): pnpm sim stop|start|recipe <id>
+  for (const line of simulator.lines) client.subscribe(controlTopic(line.id), { qos: 1 });
+});
+
+client.on('message', (topic, payload) => {
+  const line = simulator.lines.find((l) => controlTopic(l.id) === topic);
+  if (!line) return;
+  let command: SimCommand;
+  try {
+    command = JSON.parse(payload.toString()) as SimCommand;
+  } catch {
+    console.warn(`Simulator: Befehl auf ${topic} ist kein JSON`);
+    return;
+  }
+  const error = simulator.control(line.id, command);
+  console.log(
+    error
+      ? `Simulator: Befehl ${JSON.stringify(command)} abgelehnt – ${error}`
+      : `Simulator: ${line.name} – ${JSON.stringify(command)} ausgeführt`,
+  );
 });
 
 const shutdown = () => {

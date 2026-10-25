@@ -138,9 +138,39 @@ const ALARMS: AlarmConfig[] = [
   },
 ];
 
-/** Batch-Rezept der Flexfill – Annahme (O-28). */
-const RECIPES: Record<string, { id: string; version: number; formatParts: string[] }> = {
-  l3: { id: 'vial-nest', version: 1, formatParts: [] },
+export interface SimRecipe {
+  id: string;
+  version: number;
+  formatParts: string[];
+}
+
+/**
+ * Rezepte der Flexfill – Annahmen (E-48, E-51). `syringe-nest` lädt der Simulator nur auf Befehl
+ * (`pnpm sim recipe syringe-nest`), so wie der Bediener nach dem Formatwechsel am HMI.
+ */
+export const RECIPE_CATALOG: Record<string, SimRecipe> = {
+  'vial-nest': { id: 'vial-nest', version: 1, formatParts: [] },
+  'syringe-nest': {
+    id: 'syringe-nest',
+    version: 1,
+    formatParts: [
+      'FT-3301',
+      'FT-3311',
+      'FT-3312',
+      'FT-3320',
+      'FT-3321',
+      'FT-3322',
+      'FT-3323',
+      'FT-3324',
+      'FT-3330',
+      'FT-3331',
+    ],
+  },
+};
+
+/** Rezept beim Start je Linie */
+const RECIPES: Record<string, SimRecipe | undefined> = {
+  l3: RECIPE_CATALOG['vial-nest'],
 };
 
 export interface SimAlarm {

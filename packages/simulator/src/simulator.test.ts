@@ -340,3 +340,87 @@ describe('Batch-Zyklus (M6)', () => {
     sim.stop();
   });
 });
+
+describe('Bedienung am HMI nachspielen (E-51)', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const setup = () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+    const published: Outgoing[] = [];
+    const sim = new Simulator((o) => published.push(o), {});
+    sim.start();
+    return { sim, published, since: published.length };
+  };
+  // Testhilfe: Nutzdaten in der erwarteten Form lesen
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+  const data = <T>(o: Outgoing | undefined) => o?.message.data as T;
+
+  it('stop beendet den Batch und stoppt alle Maschinen, auch den Isolator', () => {
+    const { sim, published, since } = setup();
+    expect(sim.control('l3', { command: 'stop' })).toBeNull();
+    const after = published.slice(since);
+    const states = after.filter((o) => o.topic.endsWith('/state'));
+    expect(states.map((o) => o.topic.split('/')[3])).toEqual([
+      'l3-iso',
+      'l3-debag',
+      'l3-delid',
+      'l3-fill',
+      'l3-transfer',
+      'l3-cap',
+    ]);
+    expect(states.every((o) => data<{ state: string }>(o).state === 'Stopped')).toBe(true);
+    expect(
+      data<{ event: string }>(after.find((o) => o.topic === 'iot/v1/l3/l3-fill/batch')).event,
+    ).toBe('ended');
+    // gestoppt: kein neuer Batch, kein Zustandswechsel des Bördelmoduls, kein Zählerzuwachs
+    const count = published.length;
+    vi.advanceTimersByTime(20 * 60_000);
+    const later = published.slice(count);
+    expect(later.some((o) => o.topic.endsWith('/batch') || o.topic.endsWith('/state'))).toBe(false);
+    const counters = later.filter((o) => o.topic === 'iot/v1/l3/l3-fill/counters');
+    expect(new Set(counters.map((o) => data<{ total: number }>(o).total)).size).toBe(1);
+    sim.stop();
+  });
+
+  it('recipe wirkt ab dem nächsten Batch, start lässt die Linie mit neuem Batch anlaufen', () => {
+    const { sim, published } = setup();
+    sim.control('l3', { command: 'stop' });
+    expect(sim.control('l3', { command: 'recipe', recipe: 'syringe-nest' })).toBeNull();
+    const count = published.length;
+    expect(sim.control('l3', { command: 'start' })).toBeNull();
+    const after = published.slice(count);
+    expect(
+      after
+        .filter((o) => o.topic.endsWith('/state'))
+        .every((o) => data<{ state: string }>(o).state === 'Execute'),
+    ).toBe(true);
+    const started = data<{
+      event: string;
+      batchId: string;
+      recipe: unknown;
+      formatParts: string[];
+    }>(after.find((o) => o.topic === 'iot/v1/l3/l3-fill/batch'));
+    expect(started).toMatchObject({
+      event: 'started',
+      batchId: 'B-2026-3002',
+      recipe: { id: 'syringe-nest', version: 1 },
+    });
+    expect(started.formatParts).toContain('FT-3320');
+    for (const o of after)
+      expect(
+        validateMessage(parseTopic(o.topic)?.dataClass as DataClass, o.message).errors,
+      ).toEqual([]);
+    sim.stop();
+  });
+
+  it('lehnt unbekannte Rezepte und Linien ab', () => {
+    const { sim } = setup();
+    expect(sim.control('l3', { command: 'recipe', recipe: 'unbekannt' })).toMatch(/unbekannt/);
+    expect(sim.control('l9', { command: 'stop' })).toMatch(/l9/);
+    expect(sim.control('l3', { command: 'start' })).toMatch(/läuft bereits/);
+    sim.stop();
+  });
+});

@@ -2,10 +2,12 @@ import {
   BATCH_PAUSE_MS,
   BATCH_RUN_MS,
   buildLines,
+  RECIPE_CATALOG,
   RUN_PHASE_MS,
   STOP_PHASE_MS,
   type SimLine,
   type SimMachine,
+  type SimRecipe,
 } from './config';
 import {
   activeAlarmsMessage,
@@ -58,7 +60,21 @@ interface LineBatch {
   running: boolean;
   /** Beginn der aktuellen Phase (Lauf oder Pause) */
   since: number;
+  /** Linie per Befehl gestoppt (Formatwechsel): kein Batch-Zyklus, keine Zustandswechsel */
+  halted: boolean;
+  /** per Befehl geladenes Rezept; gilt ab dem nächsten Batch */
+  recipe?: SimRecipe;
 }
+
+/**
+ * Befehle an den Simulator – spielen die Bedienung am HMI nach, nur in der Entwicklung (E-51).
+ * Topic `sim/v1/{lineId}/control`, außerhalb der Schnittstelle `iot/v1`: Die Plattform schreibt nie.
+ */
+export type SimCommand =
+  { command: 'stop' } | { command: 'start' } | { command: 'recipe'; recipe: string };
+
+/** Topic der Simulator-Befehle einer Linie */
+export const controlTopic = (lineId: string) => `sim/v1/${lineId}/control`;
 
 /** Nächste Batchnummer: letzte Zahl um eins erhöht (B-2026-1042 → B-2026-1043). */
 export const nextBatchId = (id: string) =>
@@ -129,6 +145,7 @@ export class Simulator {
           targetQuantity: batch?.targetQuantity ?? 0,
           running: true,
           since: now.getTime(),
+          halted: false,
         }));
       this.timers.push(
         setInterval(() => {
@@ -177,7 +194,7 @@ export class Simulator {
     const now = this.now();
     for (const runtime of this.runtimes) {
       const { machine } = runtime;
-      if (!machine.cycle) continue;
+      if (!machine.cycle || this.halted(machine.lineId)) continue;
       const running = runtime.state === 'Execute';
       const phase = running ? RUN_PHASE_MS : STOP_PHASE_MS;
       if (now.getTime() - runtime.phaseStart < phase) continue;
@@ -205,6 +222,7 @@ export class Simulator {
   tickBatches(): void {
     const now = this.now();
     for (const b of this.batches) {
+      if (b.halted) continue;
       const elapsed = now.getTime() - b.since;
       const machines = b.line.machines.filter((m) => m.batch);
       if (b.running && elapsed >= (this.options.batchRunMs ?? BATCH_RUN_MS)) {
@@ -215,27 +233,96 @@ export class Simulator {
         b.running = false;
         b.since = now.getTime();
       } else if (!b.running && elapsed >= (this.options.batchPauseMs ?? BATCH_PAUSE_MS)) {
-        b.batchId = nextBatchId(b.batchId);
-        b.startedAt = now;
-        // Annahme: Sollmenge = was die Linie in einem Batch-Lauf schafft (Leistung der ersten Maschine)
-        const first = machines[0];
-        const rate = first ? (first.cycle?.runRate ?? first.rate) : 0;
-        b.targetQuantity =
-          Math.round((rate * (this.options.batchRunMs ?? BATCH_RUN_MS)) / 60_000 / 100) * 100 ||
-          100;
-        b.running = true;
-        b.since = now.getTime();
-        for (const runtime of this.runtimes.filter((r) => machines.includes(r.machine))) {
-          // Zähler der Maschine beginnen mit dem neuen Batch bei null
-          this.advance(runtime, now.getTime());
-          runtime.produced = 0;
-          runtime.counterBase = { good: 0, bad: 0, resetAt: now };
-          this.publish(countersFor(runtime.machine, 0, now, runtime.counterBase));
+        this.startBatch(b, now);
+      }
+    }
+  }
+
+  private halted(lineId: string): boolean {
+    return this.batches.some((b) => b.line.id === lineId && b.halted);
+  }
+
+  private startBatch(b: LineBatch, now: Date): void {
+    const machines = b.line.machines.filter((m) => m.batch);
+    b.batchId = nextBatchId(b.batchId);
+    b.startedAt = now;
+    // Annahme: Sollmenge = was die Linie in einem Batch-Lauf schafft (Leistung der ersten Maschine)
+    const first = machines[0];
+    const rate = first ? (first.cycle?.runRate ?? first.rate) : 0;
+    b.targetQuantity =
+      Math.round((rate * (this.options.batchRunMs ?? BATCH_RUN_MS)) / 60_000 / 100) * 100 || 100;
+    b.running = true;
+    b.since = now.getTime();
+    for (const runtime of this.runtimes.filter((r) => machines.includes(r.machine))) {
+      // Zähler der Maschine beginnen mit dem neuen Batch bei null
+      this.advance(runtime, now.getTime());
+      runtime.produced = 0;
+      runtime.counterBase = { good: 0, bad: 0, resetAt: now };
+      this.publish(countersFor(runtime.machine, 0, now, runtime.counterBase));
+    }
+    for (const m of machines) {
+      const out = batchEvent(m, 'started', b, now);
+      if (out) this.publish(out);
+    }
+  }
+
+  private setState(runtime: Runtime, state: SimMachine['state'], now: Date): void {
+    this.advance(runtime, now.getTime());
+    runtime.state = state;
+    runtime.reason = null;
+    runtime.phaseStart = now.getTime();
+    this.publish(stateChange(runtime.machine, state, null, now));
+    // Alarme, die mit dem Stillstand kommen und gehen (O-24), gehen mit
+    const cycleAlarms = runtime.machine.cycle ? runtime.machine.alarms.filter((a) => a.active) : [];
+    for (const alarm of cycleAlarms) {
+      const key = `${runtime.machine.id}/${alarm.alarmId}`;
+      if (!this.active.has(key)) continue;
+      this.active.delete(key);
+      this.publish(alarmEvent(runtime.machine, alarm, 'cleared', now));
+    }
+    if (cycleAlarms.length > 0) {
+      const own = [...this.active.values()].filter((a) => a.machine === runtime.machine);
+      this.publish(activeAlarmsMessage(runtime.machine, own, now));
+    }
+  }
+
+  /**
+   * Bedienung am HMI nachspielen (E-51): `stop` beendet den laufenden Batch und stoppt alle Maschinen,
+   * `recipe` lädt ein Rezept für den nächsten Batch, `start` lässt die Linie mit neuem Batch anlaufen.
+   * Liefert eine Fehlermeldung oder `null`.
+   */
+  control(lineId: string, command: SimCommand): string | null {
+    const b = this.batches.find((x) => x.line.id === lineId);
+    const runtimes = this.runtimes.filter((r) => r.machine.lineId === lineId);
+    if (!b || runtimes.length === 0) return `Linie ${lineId} unbekannt oder ohne Batch-Zyklus`;
+    const now = this.now();
+    switch (command.command) {
+      case 'stop': {
+        if (b.running) {
+          for (const m of b.line.machines.filter((x) => x.batch)) {
+            const out = batchEvent(m, 'ended', b, now);
+            if (out) this.publish(out);
+          }
+          b.running = false;
+          b.since = now.getTime();
         }
-        for (const m of machines) {
-          const out = batchEvent(m, 'started', b, now);
-          if (out) this.publish(out);
-        }
+        b.halted = true;
+        for (const runtime of runtimes) this.setState(runtime, 'Stopped', now);
+        return null;
+      }
+      case 'start': {
+        if (!b.halted) return 'Linie läuft bereits';
+        b.halted = false;
+        for (const runtime of runtimes) this.setState(runtime, 'Execute', now);
+        this.startBatch(b, now);
+        return null;
+      }
+      case 'recipe': {
+        const recipe = RECIPE_CATALOG[command.recipe];
+        if (!recipe)
+          return `Rezept ${command.recipe} unbekannt (bekannt: ${Object.keys(RECIPE_CATALOG).join(', ')})`;
+        b.recipe = recipe;
+        return null;
       }
     }
   }
