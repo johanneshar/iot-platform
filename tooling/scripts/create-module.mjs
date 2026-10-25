@@ -44,7 +44,10 @@ const replace = (file) => {
   const text = readFileSync(file, 'utf8')
     .replaceAll('__MODULE_ID__', id)
     .replaceAll('__MODULE_NAME__', name)
-    .replaceAll('__MODULE_PORT__', port);
+    .replaceAll('__MODULE_PORT__', port)
+    // Prettier schreibt die Platzhalter in Markdown als **…** (Fettdruck)
+    .replaceAll('**MODULE_NAME**', name)
+    .replaceAll('**MODULE_PORT**', port);
   writeFileSync(file, text);
 };
 const walk = (path) => {
