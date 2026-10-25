@@ -37,42 +37,44 @@ Das Mockup verwendet Farben, die nicht in CLAUDE.md 7.1 stehen. Sie sind als eig
 Alle Komponenten liegen in `packages/ui/src/components/` und haben Stories in Storybook (`pnpm storybook`,
 Port 5182).
 
-| Komponente                   | Zweck                                                                        |
-| ---------------------------- | ---------------------------------------------------------------------------- |
-| `AppShell`, `Stack`          | Grundlayout; Seitenleiste bricht unter 820 px unter den Inhalt um            |
-| `Sidebar`, `SidebarStatus`   | Seitenleiste mit Marke, Abschnitten und Statusblock                          |
-| `NavItem`                    | Navigationseintrag mit Zähler und Schloss                                    |
-| `Header`, `UserBadge`        | Seitenkopf mit Titel, Werkzeugleiste und Benutzer                            |
-| `LineSwitch`                 | Linienwahl                                                                   |
-| `Card`, `CardHeader`         | Karte mit Überschrift, Beschriftung, Untertitel                              |
-| `KpiTile`                    | Kennzahl, Variante `main`                                                    |
-| `InfoTile`                   | graue Kachel mit Beschriftung und Wert                                       |
-| `Chip`, `StateChip`          | Chips; PackML-Zustände                                                       |
-| `Button`                     | `primary`, `outline`, `ghost`, `accent`; Größe `sm`                          |
-| `ChoiceButton`               | Einstieg wählen (Fehlerbaum, Zielformat)                                     |
-| `FilterGroup`                | Filterschalter                                                               |
-| `DataTable`                  | Tabelle mit horizontalem Scrollen                                            |
-| `ProgressBar`                | Fortschritt und Anteile                                                      |
-| `StepList`, `StepTrail`      | Schrittfolgen (Batch, Formatwechsel), bisheriger Weg der Fehlersuche         |
-| `MachineCard`, `LineFlow`    | Maschinenkarte, Linienfluss mit Legende                                      |
-| `AlarmItem`                  | anstehender Alarm                                                            |
-| `HealthCard`                 | Zustand einer Komponente                                                     |
-| `ModuleCard`, `LockedModule` | Baukasten-Kachel, Sperrbildschirm                                            |
-| `SuccessNote`                | Erfolgsmeldung                                                               |
-| `Placeholder`                | Platzhalter für Bilder und Videos                                            |
-| `SearchInput`                | Suchfeld                                                                     |
-| `Icon`                       | Icons aus dem Mockup                                                         |
-| `Panel`                      | Frage bzw. Lösung der Fehlersuche (M5)                                       |
-| `BackLink`                   | „← Linienübersicht“: zurück zur übergeordneten Seite (M5a)                   |
-| `StateTimeline`              | Zeitbalken der PackML-Zustände (M5a)                                         |
-| `BarChart`                   | Balken je Zeitabschnitt mit Soll- oder Grenzlinie (M5a)                      |
-| `ValueTrend`                 | Prozesswert mit Verlauf und Grenzband (M5a)                                  |
-| `ModelViewer`                | 3D-Ansicht (three.js, nachgeladen) mit Markierungen und Maschinennamen (M5a) |
+| Komponente                   | Zweck                                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `AppShell`, `Stack`          | Grundlayout; Seitenleiste bricht unter 820 px unter den Inhalt um             |
+| `Sidebar`, `SidebarStatus`   | Seitenleiste mit Marke, Abschnitten und Statusblock                           |
+| `NavItem`                    | Navigationseintrag mit Zähler und Schloss                                     |
+| `Header`, `UserBadge`        | Seitenkopf mit Titel, Werkzeugleiste und Benutzer                             |
+| `LineSwitch`                 | Linienwahl                                                                    |
+| `Card`, `CardHeader`         | Karte mit Überschrift, Beschriftung, Untertitel                               |
+| `KpiTile`                    | Kennzahl, Variante `main`                                                     |
+| `InfoTile`                   | graue Kachel mit Beschriftung und Wert                                        |
+| `Chip`, `StateChip`          | Chips; PackML-Zustände                                                        |
+| `Button`                     | `primary`, `outline`, `ghost`, `accent`; Größe `sm`                           |
+| `ChoiceButton`               | Einstieg wählen (Fehlerbaum, Zielformat)                                      |
+| `FilterGroup`                | Filterschalter                                                                |
+| `DataTable`                  | Tabelle mit horizontalem Scrollen                                             |
+| `ProgressBar`                | Fortschritt und Anteile                                                       |
+| `StepList`, `StepTrail`      | Schrittfolgen (Batch, Formatwechsel), bisheriger Weg der Fehlersuche          |
+| `MachineCard`, `LineFlow`    | Maschinenkarte, Linienfluss mit Legende                                       |
+| `AlarmItem`                  | anstehender Alarm                                                             |
+| `HealthCard`                 | Zustand einer Komponente                                                      |
+| `ModuleCard`, `LockedModule` | Baukasten-Kachel, Sperrbildschirm                                             |
+| `SuccessNote`                | Erfolgsmeldung                                                                |
+| `Placeholder`                | Platzhalter für Bilder und Videos                                             |
+| `SearchInput`                | Suchfeld                                                                      |
+| `Icon`                       | Icons aus dem Mockup                                                          |
+| `Panel`                      | Frage bzw. Lösung der Fehlersuche (M5)                                        |
+| `BackLink`                   | „← Linienübersicht“: zurück zur übergeordneten Seite (M5a)                    |
+| `StateTimeline`              | Zeitbalken der PackML-Zustände (M5a)                                          |
+| `BarChart`                   | Balken je Zeitabschnitt mit Soll- oder Grenzlinie (M5a)                       |
+| `ValueTrend`                 | Prozesswert mit Verlauf und Grenzband (M5a)                                   |
+| `ModelViewer`                | 3D-Ansicht (three.js, nachgeladen) mit Markierungen und Maschinennamen (M5a)  |
+| `PartCard`                   | Ersatzteil im Katalog: Bild, Nummer, Bestand, Lieferzeit, Anfrage (M7)        |
+| `ScanInput`                  | Eingabe für Handscanner mit Prüfergebnis; erkennt Scanner am Tippabstand (M7) |
 
 `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack` und `Icon` sind zu den 23
 Komponenten aus CLAUDE.md 7.4 hinzugekommen, weil das Mockup diese Muster mehrfach verwendet. `Panel` kam mit
 M5 dazu, `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend` und `ModelViewer` mit der Maschinen-Detailseite und
-der 3D-Ansicht (M5a).
+der 3D-Ansicht (M5a), `PartCard` und `ScanInput` mit Ersatzteilkatalog und Formatwechsel (M7).
 
 ## Bewusste Abweichungen vom Mockup
 

@@ -64,6 +64,8 @@ Entwicklung, keine Maschinendaten.
 | Bördelmodul              | wechselt zwischen „Suspended – Einlauf leer“ (Alarm `CAP-INF-0001` „Einlauf: keine Vials“) und Lauf                                          |
 | Alarme                   | `FILL-WGT-0003` (steht an), `FILL-STP-0001` (vergangen), `TRF-ROB-0001` Roboter (steht an, ohne Fehlerbaum), `CAP-INF-0001`, `COMMON-FAULT`  |
 | Batch                    | `B-2026-3001`, Start 06:05, Rezept `vial-nest` v1, Produktname „[Produktname]“                                                               |
+| Formatwechsel            | Ablauf Vial im Nest → Spritze im Nest (28 Schritte, 10 Formatteile `FT-33…`, Vorgabe 90 min) in `fixtures/format-procedures/` (E-51)         |
+| Ersatzteile              | `fixtures/spares/flexfill.json`: Teile des Mockups an der Füllmaschine, dazu die Formatteile (E-51)                                          |
 | Hersteller, Seriennummer | Platzhalter „[Hersteller]“, „[Seriennummer]“                                                                                                 |
 | Betriebsart              | immer `Production`                                                                                                                           |
 | 3D-Modell                | Positionen der Alarmstellen im Blockmodell; mit dem CAD-Export nach Namensregel (ADR-010) entfallen die Koordinaten                          |
@@ -74,6 +76,39 @@ Annahme für die Entwicklung: Ein Batch läuft 15 min; nach 2 min Pause startet 
 Nummer (B-2026-3001 → B-2026-3002), die Zähler der Maschinen mit Batch beginnen bei null (`resetAt` =
 Batchstart). Alle Maschinen der Stufe Voll einer Linie gehören zum selben Batch. Verkürzbar mit
 `SIM_BATCH_RUN_MS` und `SIM_BATCH_PAUSE_MS` (E2E: 20 s / 5 s).
+
+## Bedienung am HMI nachspielen (M7)
+
+Die Plattform liest nur. Was der Bediener am HMI tut – Linie stoppen, Rezept laden, anfahren – spielt in der
+Entwicklung der Simulator nach (E-51). Die Befehle gehen über das Topic `sim/v1/{lineId}/control`, außerhalb der
+Schnittstelle `iot/v1`.
+
+1. **Linie stoppen**
+
+   ```bash
+   pnpm sim stop
+   ```
+
+   _Ergebnis:_ Der laufende Batch endet, alle Maschinen melden `Stopped`, der Batch-Zyklus ruht.
+
+2. **Rezept laden**
+
+   ```bash
+   pnpm sim recipe syringe-nest
+   ```
+
+   _Ergebnis:_ Der nächste Batch meldet das Rezept `syringe-nest` v1 mit den Formatteilen für Spritze im Nest.
+   Bekannt sind `vial-nest` und `syringe-nest`.
+
+3. **Linie anfahren**
+
+   ```bash
+   pnpm sim start
+   ```
+
+   _Ergebnis:_ Alle Maschinen gehen in `Execute`, sofort startet ein neuer Batch mit dem geladenen Rezept.
+
+Andere Linie oder Broker: `SIM_LINE=l3`, `MQTT_URL=mqtt://host:1883`.
 
 ## Einschränkungen
 

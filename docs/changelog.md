@@ -2,6 +2,32 @@
 
 Für alle im Projekt: Was mit jedem Meilenstein fertig wurde, mit kurzer Demo-Notiz.
 
+## M7 – Formatwechsel und Ersatzteilkatalog (2026-10-25)
+
+**Neu**
+
+- Modul `format` (GxP): geführter Formatwechsel nach Mockup – Zielformat, 28 Schritte Vial im Nest → Spritze
+  im Nest, Formatteil-Scan mit Code am Teil und am Einbauplatz (E-17), automatische Prüfung „Linie
+  leerfahren“, Zurück und Abbrechen; jeder Schritt im Audit Trail
+- Abschluss im Vier-Augen-Prinzip: „Durchgeführt“ (Setup Man) und „Freigabe“ (QA, neues Recht
+  `format.release`), an den Protokoll-Hash gebunden; Rezeptprüfung beim nächsten Batchstart
+  ([ADR-013](/adr/ADR-013-formatwechsel-ersatzteile); E-50, E-51)
+- Abläufe versioniert, Einrichten als JSON-Datei (`format.configure`)
+- Modul `spares`: Ersatzteilkatalog nach Mockup – Suche, Baugruppen, Bestand, Lieferzeit, Anfrageliste mit
+  Zähler in der Navigation, Anfrage an den Service mit Maschinen-Nr., Linie und Zustand (Postausgang, O-03)
+- Deep Links aus Fehlersuche („Ersatzteil … anzeigen“) und Maschinen-Detailseite funktionieren jetzt
+- `@iot/ui`: `PartCard`, `ScanInput`; SDK: `ModuleApiError.errors` mit den Fehlermeldungen des Backends
+- Simulator: `pnpm sim stop|start|recipe <id>` spielt die Bedienung am HMI nach
+- `create-module` ersetzt die Platzhalter auch in den Markdown-Dateien der Vorlage
+
+**Demo**
+
+1. `pnpm dev` neu starten; als `setup` „Formatwechsel“ öffnen und „Spritze im Nest“ wählen.
+2. `pnpm sim stop` – Schritt 1 wird frei; Schritte bestätigen, Formatteile scannen (Codes stehen im Schritt).
+3. Als `setup` abschließen, als `qa` freigeben; dann `pnpm sim recipe syringe-nest` und `pnpm sim start` –
+   die Seite meldet die Rezeptprüfung.
+4. „Ersatzteilkatalog“: Teil suchen, zur Anfrage hinzufügen, senden.
+
 ## Nach M6: nur noch Linie 3 · Flexfill (2026-10-22)
 
 - Simulator, Core und Tests laufen nur noch mit Linie 3 · Flexfill (E-47); Linien 1 und 2 bleiben als

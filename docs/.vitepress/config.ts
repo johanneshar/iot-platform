@@ -55,6 +55,10 @@ export default defineConfig({
           { text: 'ADR-010 3D-Ansicht', link: '/adr/ADR-010-3d-ansicht' },
           { text: 'ADR-011 Batchbericht', link: '/adr/ADR-011-batchbericht' },
           { text: 'ADR-012 Alarme und Batch retained', link: '/adr/ADR-012-retained-alarme-batch' },
+          {
+            text: 'ADR-013 Formatwechsel und Ersatzteile',
+            link: '/adr/ADR-013-formatwechsel-ersatzteile',
+          },
         ],
       },
       {
@@ -65,6 +69,8 @@ export default defineConfig({
           { text: 'Alarm-Analytics', link: '/module/alarms' },
           { text: 'Geführte Fehlersuche', link: '/module/troubleshooting' },
           { text: 'Batch-Reporting', link: '/module/batch' },
+          { text: 'Geführter Formatwechsel', link: '/module/format' },
+          { text: 'Ersatzteilkatalog', link: '/module/spares' },
         ],
       },
       {

@@ -108,7 +108,7 @@ Anmeldung lokal oder – wenn vom Kunden gewünscht – über LDAP. Standardroll
 `Setup Man`, `QA`, `Admin`, `IT Admin`. Zusätzlich gibt es in jeder Installation unseren Zugang `Service` mit
 allen Rechten. Module buchen darf nur der `Admin` des Kunden; der Lizenzstatus kommt vom IEM.
 e-Signatur = erneute Eingabe von Benutzer und Passwort plus Bedeutung. Rechte je Rolle: `apps/core/backend/config/roles.json`
-(QA signiert den Batchbericht; Service hat alle Rechte, auch GxP-Signaturen; mehrere Rollen je Benutzer).
+(QA signiert den Batchbericht und gibt Formatwechsel frei; Service hat alle Rechte, auch GxP-Signaturen; mehrere Rollen je Benutzer).
 Umsetzung: ADR-004.
 
 **Daten außerhalb der Maschinenschnittstelle**
@@ -303,7 +303,7 @@ Aus dem Mockup abgeleitet, jede Komponente mit Storybook-Story:
 (für Bilder/Videos), `SearchInput`.
 
 Seit M1 zusätzlich: `InfoTile`, `ChoiceButton`, `UserBadge`, `SidebarStatus`, `StepTrail`, `Stack`, `Icon`,
-`Panel` (M5), `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend`, `ModelViewer` (M5a);
+`Panel` (M5), `BackLink`, `StateTimeline`, `BarChart`, `ValueTrend`, `ModelViewer` (M5a), `PartCard`, `ScanInput` (M7);
 `Button` hat außerdem die Variante `accent` (Mint, aktiver Umschalter). `LineSwitch` ist eine Auswahlliste
 (Dropdown), weil Kunden mehr als zwei Linien haben. Feste Texte der Bibliothek stehen
 im i18n-Namespace `ui`, den die Shell mit registriert. Storybook läuft auf Port 5182.
@@ -340,7 +340,7 @@ iot-platform/
 ├── tooling/
 │   ├── module-template/          # Vorlage für pnpm create-module
 │   ├── example/                  # Beispielmodul aus der Vorlage (Anleitung, E2E der Shell) – kein Produktmodul
-│   └── scripts/                  # dev, create-module, module-dev, dev-line2, serve-static
+│   └── scripts/                  # dev, create-module, module-dev, test-broker, serve-static
 ├── deploy/
 │   ├── docker-compose.dev.yml    # Mosquitto + Simulator + Core + alle Module
 │   └── edge/                     # Paketierung, iectl-Skripte
@@ -466,19 +466,19 @@ pnpm test:e2e       # E2E + axe (Playwright)
 ```
 
 Port 5173 ist auf dem Entwicklungsrechner belegt; die Shell läuft deshalb auf 5180. Weitere Ports:
-Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, Batch 4104, Storybook 5182,
-Doku 5181, E2E-Tests 4010/4110–4114/5185.
+Backend 4000, Beispielmodul 4100, Dashboard 4101, Alarme 4102, Fehlersuche 4103, Batch 4104, Formatwechsel 4105,
+Ersatzteile 4106, Storybook 5182, Doku 5181, E2E-Tests 4010/4110–4116/5185.
 
 Im Dev-Betrieb ersetzt ein MQTT-Broker im Prozess (`aedes`) den Databus; `pnpm dev:mosquitto` nutzt Mosquitto in
 Docker. Anmelden mit den Beispielbenutzern (Passwort `entwicklung`). Der Simulator erzeugt die Daten der
 Linie 3 · Flexfill (Isolator als Fremdmaschine der Stufe Basis, E-47), damit Entwicklung ohne Maschine und ohne
 Edge Device möglich ist. Die Mockup-Daten der Linien 1 und 2 nutzt nur noch Storybook.
+`pnpm sim stop|start|recipe <id>` spielt die Bedienung am HMI nach (Linie stoppen, Rezept laden; E-51).
 
 ---
 
 ## 14. Stand
 
-M0 bis M6 (Batch-Reporting mit e-Signatur) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
-Schritt: Plan für **M7** (Formatwechsel, Ersatzteilkatalog) vorlegen und auf Freigabe warten. Seit 2026-10-22 läuft und testet
-alles mit Linie 3 · Flexfill (E-47). Flexfill-Annahmen (E-48) und Rechte im
-Batch (E-49) sind bestätigt. Offen aus M6: veraPDF-Prüfung (O-32).
+M0 bis M7 (Formatwechsel, Ersatzteilkatalog) sind abgeschlossen (siehe `docs/changelog.md`). Nächster
+Schritt: Plan für **M8** (Condition Monitoring, Predictive Maintenance) vorlegen und auf Freigabe warten.
+Offen: veraPDF-Prüfung (O-32), Rezept-Sollwerte (O-34), Rüsten im Batch (O-35), Abläufe einrichten (O-36).

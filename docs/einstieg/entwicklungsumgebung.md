@@ -72,16 +72,16 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 
 ## Ports
 
-| Port                  | Dienst                                       |
-| --------------------- | -------------------------------------------- |
-| 1883                  | MQTT-Broker (Mosquitto, nur Entwicklung)     |
-| 4000                  | Core-Backend                                 |
-| 5180                  | Shell (Core-Frontend)                        |
-| 5181                  | Doku                                         |
-| 5182                  | Storybook                                    |
-| 4100                  | Beispielmodul (`tooling/example`)            |
-| 4101–4104             | Module Dashboard, Alarme, Fehlersuche, Batch |
-| 4010, 4110–4114, 5185 | E2E-Tests (`pnpm test:e2e`)                  |
+| Port                  | Dienst                                                                   |
+| --------------------- | ------------------------------------------------------------------------ |
+| 1883                  | MQTT-Broker (Mosquitto, nur Entwicklung)                                 |
+| 4000                  | Core-Backend                                                             |
+| 5180                  | Shell (Core-Frontend)                                                    |
+| 5181                  | Doku                                                                     |
+| 5182                  | Storybook                                                                |
+| 4100                  | Beispielmodul (`tooling/example`)                                        |
+| 4101–4106             | Module Dashboard, Alarme, Fehlersuche, Batch, Formatwechsel, Ersatzteile |
+| 4010, 4110–4116, 5185 | E2E-Tests (`pnpm test:e2e`)                                              |
 
 ## Weitere Befehle
 
@@ -92,6 +92,7 @@ Neu anfangen: `apps/core/backend/.data/` löschen – Datenbank, Benutzer und Au
 | `pnpm format`                                    | Code formatieren                                                                                            |
 | `pnpm dev:mosquitto`                             | wie `pnpm dev`, aber mit Mosquitto in Docker                                                                |
 | `pnpm dev:broker:stop`                           | MQTT-Broker beenden                                                                                         |
+| `pnpm sim stop` / `start` / `recipe <id>`        | Bedienung am HMI nachspielen: Linie stoppen, anfahren, Rezept laden ([Simulator](/anleitungen/simulator))   |
 | `pnpm create-module <id> "<Name>" --port <port>` | neues Modul aus der Vorlage ([Anleitung](/anleitungen/neues-modul))                                         |
 
 ## Commits

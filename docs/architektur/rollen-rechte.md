@@ -40,6 +40,7 @@ angemeldeten Benutzer und steht deshalb nicht einzeln in der Tabelle.
 | `batch.export`                | Batchbericht als PDF exportieren                           |          |             |           |  ●  |   ●   |          |    ●    |
 | `format.execute`              | Formatwechsel durchführen und Schritte bestätigen          |          |             |     ●     |     |       |          |    ●    |
 | `format.sign`                 | Formatwechsel abschließen (e-Signatur)                     |          |             |     ●     |     |       |          |    ●    |
+| `format.release`              | Formatwechsel freigeben (e-Signatur, Vier-Augen, E-50)     |          |             |           |  ●  |       |          |    ●    |
 | `format.configure`            | Formatwechsel-Abläufe je Format einrichten (E-15)          |          |             |           |     |   ●   |          |    ●    |
 | `spares.view`                 | Ersatzteilkatalog einsehen                                 |    ●     |      ●      |     ●     |     |   ●   |          |    ●    |
 | `spares.request`              | Anfrage an den Service senden                              |          |      ●      |     ●     |     |   ●   |          |    ●    |
