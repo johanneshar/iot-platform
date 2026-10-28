@@ -14,7 +14,7 @@
   "dependencies": {
     "@iot/module-sdk": "workspace:*",
     "@iot/ui": "workspace:*",
-    "i18next": "26.5.3",
+    "i18next": "26.5.10",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-i18next": "17.1.0"
