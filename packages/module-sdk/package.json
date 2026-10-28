@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "i18next": "26.5.3",
-    "react-i18next": "17.1.0",
+    "react-i18next": "17.1.8",
     "@iot/interface-schema": "workspace:*",
     "mqtt": "5.16.1"
   },
