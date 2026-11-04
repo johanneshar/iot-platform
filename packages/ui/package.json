@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@iot/design-tokens": "workspace:*",
-    "three": "0.186.1"
+    "three": "0.187.0"
   },
   "peerDependencies": {
     "i18next": "^26.5.3",
@@ -41,6 +41,6 @@
     "react-i18next": "17.1.0",
     "storybook": "10.6.2",
     "vite": "8.3.4",
-    "@types/three": "0.186.0"
+    "@types/three": "0.187.0"
   }
 }
